@@ -1,6 +1,6 @@
 ---
 layout: base.njk
-title: Welcome to Neomania Site
+title: About Neomania Site
 ---
 
 # Welcome to Neomania Site

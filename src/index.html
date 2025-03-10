@@ -1,0 +1,132 @@
+---
+permalink: /index.html
+---
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="." />
+    <meta charset="UTF-8" />
+    <title>Neomania - Roboto Flex Animation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,slnt,wdth,wght,GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC@8..144,-10..0,25..151,100..1000,-200..150,27..175,323..603,25..135,649..854,-305..-98,560..788,416..570,528..760&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #1a1a1a;
+        color: #ffffff;
+        overflow: hidden;
+      }
+
+      .text {
+        font-family: "Roboto Flex";
+        font-size: 8vw;
+        text-align: center;
+      }
+
+      .letter {
+        display: inline-block;
+        font-variation-settings: "wght" 400, "wdth" 100, "opsz" 48, "GRAD" 0,
+          "slnt" 0, "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203,
+          "YTFI" 738, "YTLC" 514, "YTUC" 712;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+          0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text">
+      <span class="letter">N</span>
+      <span class="letter">e</span>
+      <span class="letter">o</span>
+      <span class="letter">m</span>
+      <span class="letter">a</span>
+      <span class="letter">n</span>
+      <span class="letter">i</span>
+      <span class="letter">a</span>
+    </div>
+
+    <script>
+      const letters = document.querySelectorAll(".letter");
+
+      const axes = {
+        wght: { min: 300, max: 800 }, // Reduced range for better legibility
+        wdth: { min: 50, max: 130 }, // Reduced range
+        opsz: { min: 14, max: 120 }, // Adjusted minimum
+        GRAD: { min: -100, max: 100 }, // Reduced range
+        slnt: { min: -5, max: 0 }, // Reduced slant
+        XOPQ: { min: 40, max: 150 }, // Adjusted range
+        XTRA: { min: 350, max: 550 }, // Reduced range
+        YOPQ: { min: 35, max: 120 }, // Adjusted range
+        YTAS: { min: 700, max: 850 }, // Reduced range
+        YTDE: { min: -250, max: -120 }, // Reduced range
+        YTFI: { min: 600, max: 750 }, // Reduced range
+        YTLC: { min: 450, max: 550 }, // Reduced range
+        YTUC: { min: 550, max: 700 }, // Reduced range
+      };
+
+      // Create arrays to store values and directions for each letter
+      const letterStates = Array.from(letters).map(() => ({
+        currentValues: Object.fromEntries(
+          Object.entries(axes).map(([axis, range]) => [
+            axis,
+            Math.random() * (range.max - range.min) + range.min,
+          ])
+        ),
+        directions: Object.fromEntries(
+          Object.keys(axes).map((axis) => [axis, Math.random() < 0.5 ? -1 : 1])
+        ),
+      }));
+
+      function animate() {
+        letters.forEach((letter, index) => {
+          const state = letterStates[index];
+
+          // Update values for each axis
+          for (let axis in axes) {
+            // Random chance to change direction (reduced frequency)
+            if (Math.random() < 0.01) {
+              state.directions[axis] *= -1;
+            }
+
+            // Update value (slightly reduced speed)
+            state.currentValues[axis] +=
+              state.directions[axis] *
+              (axes[axis].max - axes[axis].min) *
+              0.008;
+
+            // Check bounds
+            if (state.currentValues[axis] <= axes[axis].min) {
+              state.currentValues[axis] = axes[axis].min;
+              state.directions[axis] = 1;
+            } else if (state.currentValues[axis] >= axes[axis].max) {
+              state.currentValues[axis] = axes[axis].max;
+              state.directions[axis] = -1;
+            }
+          }
+
+          // Apply settings to individual letter
+          letter.style.fontVariationSettings = Object.entries(
+            state.currentValues
+          )
+            .map(([axis, value]) => `'${axis}' ${value.toFixed(1)}`)
+            .join(", ");
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    </script>
+  </body>
+</html>
