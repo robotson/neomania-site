@@ -2,6 +2,9 @@ module.exports = function (eleventyConfig) {
   // Copy the `css` directory to the output
   eleventyConfig.addPassthroughCopy("css");
 
+  // Copy images directory
+  eleventyConfig.addPassthroughCopy("images");
+
   // Return your configuration object
   return {
     dir: {
