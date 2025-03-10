@@ -7,6 +7,7 @@ permalink: /index.html
   <head>
     <base href="." />
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Neomania - Roboto Flex Animation</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,17 +22,24 @@ permalink: /index.html
         margin: 0;
         min-height: 100vh;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         background: #1a1a1a;
         color: #ffffff;
         overflow: hidden;
+        padding: 1rem;
+        box-sizing: border-box;
       }
 
       .text {
         font-family: "Roboto Flex";
-        font-size: 8vw;
+        font-size: 12vw; /* Adjusted size to prevent wrapping */
         text-align: center;
+        margin-bottom: 2rem;
+        width: 100%;
+        max-width: 1200px;
+        white-space: nowrap; /* Prevent wrapping */
       }
 
       .letter {
@@ -41,6 +49,81 @@ permalink: /index.html
           "YTFI" 738, "YTLC" 514, "YTUC" 712;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
           0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+      }
+
+      .links {
+        display: flex;
+        flex-wrap: wrap; /* Allow links to wrap on small screens */
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        font-family: "Roboto Flex";
+        font-size: 1.2rem;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .links a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        padding: 0.5rem 1rem; /* Reverted to original size */
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        text-align: center;
+      }
+
+      .links a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+      }
+
+      .email-protection {
+        cursor: pointer;
+      }
+
+      /* Toast notification for email copy instead of alert */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 4px;
+        font-family: "Roboto Flex";
+        font-size: 1rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 1000;
+        text-align: center;
+        max-width: 90%;
+      }
+
+      .toast.show {
+        opacity: 1;
+      }
+
+      /* Media queries for better responsiveness */
+      @media (max-width: 600px) {
+        .text {
+          font-size: 14vw; /* Adjusted for small screens */
+        }
+
+        .links {
+          gap: 1rem;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .text {
+          font-size: 100px; /* Cap the size on large screens */
+        }
       }
     </style>
   </head>
@@ -56,7 +139,21 @@ permalink: /index.html
       <span class="letter">a</span>
     </div>
 
+    <div class="links">
+      <a href="https://creators.spotify.com/pod/show/neomania" target="_blank"
+        >Listen</a
+      >
+      <a href="https://twitter.com/robotson" target="_blank">Twitter</a>
+      <a href="#" class="email-protection" id="email-link">Contact</a>
+    </div>
+
+    <!-- Toast notification element for email copy -->
+    <div id="toast" class="toast">
+      Email copied to clipboard: contact@neomania.net
+    </div>
+
     <script>
+      // Animation script for the letters
       const letters = document.querySelectorAll(".letter");
 
       const axes = {
@@ -127,6 +224,34 @@ permalink: /index.html
       }
 
       animate();
+
+      // Email protection script with toast notification instead of alert
+      document
+        .getElementById("email-link")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          // Construct the email address from parts to avoid simple scraping
+          const user = "contact";
+          const domain = "neomania.net";
+          const emailAddress = user + "@" + domain;
+
+          // Create a temporary textarea to copy the email to clipboard
+          const textarea = document.createElement("textarea");
+          textarea.value = emailAddress;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+
+          // Show toast notification instead of alert
+          const toast = document.getElementById("toast");
+          toast.classList.add("show");
+
+          // Hide toast after 3 seconds
+          setTimeout(function () {
+            toast.classList.remove("show");
+          }, 3000);
+        });
     </script>
   </body>
 </html>
