@@ -18,12 +18,19 @@ All notable changes to the Neomania podcast website will be documented in this f
   - Improved alignment and spacing of all platform icons
   - Enhanced visual consistency across platforms
   - Made platform icons properly center-aligned
+- Refined UI for better visual hierarchy:
+  - Added subtle typographic divider between sections
+  - Made Twitter and Contact links more understated with text-only styling
+  - Adjusted spacing for better content rhythm and balance
+  - Removed glow effect from bottom links
+  - Improved container layout to prevent shifting elements
 
 ### Removed
 
 - Overcast platform option as it's niche
 - "A weird futurisms discussion podcast" subtitle
 - Decorative borders around platform icons
+- Button styling from Twitter and Contact links
 
 ## [2025-03-16]
 

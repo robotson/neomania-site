@@ -12,19 +12,13 @@ permalink: /index.html
 
     <!-- Primary Meta Tags -->
     <meta name="title" content="Neomania" />
-    <meta
-      name="description"
-      content="A podcast about obsessions, collections, and the things we love."
-    />
+    <meta name="description" content="Neomania Podcast" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://neomania.net/" />
     <meta property="og:title" content="Neomania" />
-    <meta
-      property="og:description"
-      content="a weird futurisms discussion podcast"
-    />
+    <meta property="og:description" content="Neomania Podcast" />
     <meta
       property="og:image"
       content="https://neomania.net/images/neomania-preview.png"
@@ -36,10 +30,7 @@ permalink: /index.html
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://neomania.net/" />
     <meta property="twitter:title" content="Neomania" />
-    <meta
-      property="twitter:description"
-      content="a weird futurisms discussion podcast"
-    />
+    <meta property="twitter:description" content="Neomania Podcast" />
     <meta
       property="twitter:image"
       content="https://neomania.net/images/neomania-preview.png"
@@ -67,17 +58,40 @@ permalink: /index.html
         overflow: hidden;
         padding: 1rem;
         box-sizing: border-box;
-        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 1200px;
       }
 
       .text {
         font-family: "Roboto Flex";
         font-size: 12vw;
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
         width: 100%;
-        max-width: 1200px;
         white-space: nowrap;
+      }
+
+      .text span {
+        display: inline-block;
+        font-variation-settings: "wght" 400, "wdth" 100, "opsz" 48, "GRAD" 0,
+          "slnt" 0, "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203,
+          "YTFI" 738, "YTLC" 514, "YTUC" 712;
+        text-shadow: var(--text-shadow);
+      }
+
+      .subtitle {
+        font-family: "Roboto Flex";
+        font-size: 1.2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        opacity: 0.8;
+        max-width: 600px;
       }
 
       .letter {
@@ -88,33 +102,169 @@ permalink: /index.html
         text-shadow: var(--text-shadow);
       }
 
+      .listen-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 0;
+        margin-top: 1.5rem;
+      }
+
+      .listen-heading {
+        font-family: "Roboto Flex";
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+
+      .podcast-platforms {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+        position: relative;
+      }
+
+      .platform-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: all 0.3s ease;
+        opacity: 0.8;
+        width: 60px;
+        height: 75px;
+        justify-content: space-between;
+      }
+
+      .platform-link:hover {
+        opacity: 1;
+      }
+
+      .platform-icon {
+        width: 38px;
+        height: 38px;
+        transition: all 0.3s ease;
+        object-fit: contain;
+        background-color: transparent;
+        padding: 3px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .platform-link:hover .platform-icon {
+        transform: scale(1.05);
+        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15));
+      }
+
+      .platform-link:hover .icon-wrapper {
+        transform: scale(1.05);
+      }
+
+      /* Theme-specific icon visibility */
+      .dark-only {
+        display: none;
+      }
+
+      .light-only {
+        display: none;
+      }
+
+      /* Default state (dark mode) */
+      .apple-colored,
+      .spotify-colored,
+      .rss-colored {
+        display: flex;
+      }
+
+      /* Light mode */
+      html.light-theme .dark-only {
+        display: none;
+      }
+
+      html.light-theme .light-only {
+        display: flex;
+      }
+
+      html.light-theme .apple-colored,
+      html.light-theme .spotify-colored,
+      html.light-theme .rss-colored {
+        display: none;
+      }
+
+      /* Dark mode */
+      html:not(.light-theme) .light-only {
+        display: none;
+      }
+
+      html:not(.light-theme) .dark-only {
+        display: flex;
+      }
+
+      html:not(.light-theme) .apple-colored,
+      html:not(.light-theme) .spotify-colored,
+      html:not(.light-theme) .rss-colored {
+        display: none;
+      }
+
+      .platform-name {
+        font-family: "Roboto Flex";
+        font-size: 0.85rem;
+        text-align: center;
+        font-weight: 400;
+        margin-top: auto;
+        padding-top: 0.25rem;
+      }
+
       .links {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         gap: 1.5rem;
-        margin-top: 2rem;
         font-family: "Roboto Flex";
-        font-size: 1.2rem;
-        width: 100%;
-        max-width: 600px;
+        font-size: 1rem;
+        margin-top: 1rem;
+        width: auto;
+        opacity: 0.75;
+        position: relative;
+        padding-top: 1.25rem;
+      }
+
+      .links:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 1px;
+        background-color: var(--text-color);
+        opacity: 0.25;
       }
 
       .links a {
         color: var(--text-color);
         text-decoration: none;
-        padding: 0.5rem 1rem;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
+        padding: 0.5rem;
         transition: all 0.3s ease;
-        text-shadow: var(--text-shadow);
+        text-shadow: none;
         text-align: center;
+        border: none;
       }
 
       .links a:hover {
-        background-color: var(--hover-bg-color);
-        border-color: var(--border-color);
-        transform: translateY(-2px);
+        opacity: 1;
+        transform: none;
+        text-decoration: underline;
+        background-color: transparent;
       }
 
       .email-protection {
@@ -152,8 +302,27 @@ permalink: /index.html
           font-size: 14vw;
         }
 
-        .links {
+        .links,
+        .podcast-platforms {
           gap: 1rem;
+        }
+
+        .platform-icon {
+          width: 34px;
+          height: 34px;
+          padding: 2px;
+        }
+
+        .platform-link {
+          height: 80px;
+        }
+
+        .spotify-colored,
+        .spotify-white,
+        .spotify-black {
+          width: 65px;
+          height: 26px;
+          margin-bottom: 3px;
         }
       }
 
@@ -167,6 +336,58 @@ permalink: /index.html
         stroke: var(--text-color);
         stroke-width: 2px;
         transform-origin: center;
+      }
+
+      /* Platform-specific icon styles */
+      .spotify-colored,
+      .spotify-white,
+      .spotify-black {
+        width: 40px;
+        height: 40px;
+        object-fit: scale-down;
+        max-width: 100%;
+        padding: 0;
+      }
+
+      .platform-icon:not(.spotify-colored):not(.spotify-white):not(
+          .spotify-black
+        ) {
+        width: 40px;
+        height: 40px;
+      }
+
+      /* Create a centered icon wrapper for consistent positioning */
+      .icon-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        flex-grow: 1;
+        height: 40px;
+        margin-bottom: 0.25rem;
+      }
+
+      /* Copy feedback styles */
+      .copied-text {
+        display: none;
+        font-weight: 500;
+      }
+
+      .copied .copy-text {
+        display: none;
+      }
+
+      .copied .copied-text {
+        display: block;
+      }
+
+      /* RSS link hover effect */
+      #copy-rss-link {
+        cursor: pointer;
+      }
+
+      #copy-rss-link:hover .copy-text {
+        text-decoration: underline;
       }
     </style>
   </head>
@@ -202,28 +423,110 @@ permalink: /index.html
       </svg>
     </button>
 
-    <div class="text">
-      <span class="letter">N</span>
-      <span class="letter">e</span>
-      <span class="letter">o</span>
-      <span class="letter">m</span>
-      <span class="letter">a</span>
-      <span class="letter">n</span>
-      <span class="letter">i</span>
-      <span class="letter">a</span>
-    </div>
+    <div class="container">
+      <h1 class="text">
+        <span class="n">N</span>
+        <span class="e">e</span>
+        <span class="o">o</span>
+        <span class="m">m</span>
+        <span class="a">a</span>
+        <span class="n2">n</span>
+        <span class="i">i</span>
+        <span class="a2">a</span>
+      </h1>
 
-    <div class="links">
-      <a href="https://creators.spotify.com/pod/show/neomania" target="_blank"
-        >Listen</a
-      >
-      <a href="https://twitter.com/robotson" target="_blank">Twitter</a>
-      <a href="#" class="email-protection" id="email-link">Contact</a>
-    </div>
+      <div class="listen-section">
+        <h2 class="listen-heading">Listen on your favorite platform</h2>
+        <div class="podcast-platforms">
+          <a
+            href="https://podcasts.apple.com/us/podcast/neomania/id1790739651"
+            target="_blank"
+            class="platform-link"
+            aria-label="Listen on Apple Podcasts"
+          >
+            <div class="icon-wrapper">
+              <img
+                src="/images/podcast-icons/Apple_Podcasts_Icon_RGB_sm_060623.svg"
+                alt="Apple Podcasts"
+                class="platform-icon apple-colored"
+              />
+              <img
+                src="/images/podcast-icons/Apple_Podcasts_Icon_wht_sm_060623.svg"
+                alt="Apple Podcasts"
+                class="platform-icon apple-white dark-only"
+              />
+              <img
+                src="/images/podcast-icons/Apple_Podcasts_Icon_blk_sm_060623.svg"
+                alt="Apple Podcasts"
+                class="platform-icon apple-black light-only"
+              />
+            </div>
+            <span class="platform-name">Apple</span>
+          </a>
+          <a
+            href="https://open.spotify.com/show/5W84onjnHfTqz1Sg0ndqsA"
+            target="_blank"
+            class="platform-link"
+            aria-label="Listen on Spotify"
+          >
+            <div class="icon-wrapper">
+              <img
+                src="/images/podcast-icons/Spotify_Primary_Logo_RGB_Green.png"
+                alt="Spotify"
+                class="platform-icon spotify-colored"
+              />
+              <img
+                src="/images/podcast-icons/Spotify_Primary_Logo_RGB_White.png"
+                alt="Spotify"
+                class="platform-icon spotify-white dark-only"
+              />
+              <img
+                src="/images/podcast-icons/Spotify_Primary_Logo_RGB_Black.png"
+                alt="Spotify"
+                class="platform-icon spotify-black light-only"
+              />
+            </div>
+            <span class="platform-name">Spotify</span>
+          </a>
+          <a
+            href="https://anchor.fm/s/ffb36578/podcast/rss"
+            class="platform-link"
+            id="copy-rss-link"
+            aria-label="Copy RSS Feed URL"
+            onclick="event.preventDefault(); navigator.clipboard.writeText('https://anchor.fm/s/ffb36578/podcast/rss'); this.classList.add('copied'); setTimeout(() => this.classList.remove('copied'), 2000);"
+          >
+            <div class="icon-wrapper">
+              <img
+                src="/images/podcast-icons/rss_simple_black.svg"
+                alt="RSS Feed"
+                class="platform-icon rss-colored"
+              />
+              <img
+                src="/images/podcast-icons/rss_simple_white.svg"
+                alt="RSS Feed"
+                class="platform-icon rss-white dark-only"
+              />
+              <img
+                src="/images/podcast-icons/rss_simple_black.svg"
+                alt="RSS Feed"
+                class="platform-icon rss-black light-only"
+              />
+            </div>
+            <span class="platform-name copy-text">Copy RSS</span>
+            <span class="platform-name copied-text">Copied!</span>
+          </a>
+        </div>
+      </div>
 
-    <!-- Toast notification element for email copy -->
-    <div id="toast" class="toast">
-      Email copied to clipboard: contact [at] neomania [dot] net
+      <div class="links">
+        <a href="https://twitter.com/robotson" target="_blank">Twitter</a>
+        <a href="#" class="email-protection" id="email-link">Contact</a>
+      </div>
+
+      <!-- Toast notification element for email copy -->
+      <div id="toast" class="toast">
+        Email copied to clipboard: contact [at] neomania [dot] net
+      </div>
     </div>
 
     <script>
@@ -266,7 +569,7 @@ permalink: /index.html
       });
 
       // Animation script for the letters
-      const letters = document.querySelectorAll(".letter");
+      const letters = document.querySelectorAll(".text span");
 
       const axes = {
         wght: { min: 300, max: 800 },
