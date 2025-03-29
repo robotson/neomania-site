@@ -4,12 +4,30 @@ All notable changes to the Neomania podcast website will be documented in this f
 
 ## [Unreleased]
 
+## [2025-03-28]
+
+### Added
+
+- Background noise effect with adaptive density:
+  - Implemented a static noise background with consistent dot density across all screen sizes
+  - Added density-consistent approach that scales based on viewport dimensions
+  - Optimized for performance on large screens with scaling
+  - Added respect for reduced-motion preferences
+- Improved letter animation:
+  - Implemented balanced animation for logo letters to prevent readability issues
+  - Added parameter correlation to maintain letter legibility
+  - Made animation speed adjustable and visually engaging
+  - Added protection against extreme font variations
+
+## [2025-03-21]
+
 ### Added
 
 - Official podcast platform icons:
   - Downloaded and integrated official SVG/PNG icons for all platforms
   - Created theme-specific variants (dark/light mode) for each platform
   - Added clipboard copy functionality for RSS feed URL
+- Comprehensive CHANGELOG.md documenting site development (235ca0b)
 
 ### Changed
 
@@ -28,7 +46,6 @@ All notable changes to the Neomania podcast website will be documented in this f
 ### Removed
 
 - Overcast platform option as it's niche
-- "A weird futurisms discussion podcast" subtitle
 - Decorative borders around platform icons
 - Button styling from Twitter and Contact links
 
