@@ -5,6 +5,9 @@ module.exports = function (eleventyConfig) {
   // Copy images directory
   eleventyConfig.addPassthroughCopy("images");
 
+  // Copy js directory
+  eleventyConfig.addPassthroughCopy("js");
+
   // Return your configuration object
   return {
     dir: {

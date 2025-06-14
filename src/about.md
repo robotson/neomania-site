@@ -1,15 +1,19 @@
 ---
 layout: base.njk
-title: About Neomania Site
+title: About Neomania
 ---
 
-# Welcome to Neomania Site
+<div class="content-pane">
+  <h1>Welcome to Neomania</h1>
 
-This is a site built with [Eleventy](https://www.11ty.dev/), a simpler static site generator.
+  <p>This is a site built with <a href="https://www.11ty.dev/">Eleventy</a>, a simpler static site generator.</p>
 
-## Features
+  <h2>Features</h2>
 
-- Fast build times
-- Flexible templating
-- Data-driven content
-- Simple to use and extend
+  <ul>
+    <li>Fast build times</li>
+    <li>Flexible templating</li>
+    <li>Data-driven content</li>
+    <li>Simple to use and extend</li>
+  </ul>
+</div>

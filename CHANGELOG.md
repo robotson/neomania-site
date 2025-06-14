@@ -4,6 +4,22 @@ All notable changes to the Neomania podcast website will be documented in this f
 
 ## [Unreleased]
 
+## [2025-06-14]
+
+### Changed
+
+- **Major Architecture Refactoring**: Extracted monolithic index.html into modular components
+  - Moved all inline CSS to dedicated `css/landing.css` file (12KB+ of styles)
+  - Extracted all JavaScript functionality to `js/main.js` (365 lines of code)
+  - Updated base layout template with comprehensive head tags and asset linking
+  - Transformed index.html into clean content-only file using Eleventy front matter
+  - Restructured about page to use unified layout system with content-pane wrapper
+  - Streamlined style.css to focus only on content page styling
+  - Updated Eleventy configuration to handle new asset directories
+  - Preserved all existing functionality: theme toggle, font animations, canvas background, platform icons, email protection
+  - Improved maintainability and scalability for future Figma design implementation
+  - Enhanced performance with proper asset caching and separation of concerns
+
 ## [2025-03-28]
 
 ### Added
