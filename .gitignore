@@ -132,3 +132,6 @@ dist
 # Eleventy output directory
 _site/
 .DS_Store
+
+# ignore robotson plans
+robotson/
