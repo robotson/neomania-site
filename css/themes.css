@@ -1,4 +1,11 @@
 :root {
+  /* Design System Tokens from Figma Spec */
+  --background: #111111;
+  --Text-level-1: #f4f4f4; /* Main body text, titles, active nav */
+  --Text-level-2: #ededed; /* Secondary: episode number, date, duration */
+  --Text-level-3: #909090; /* Tertiary: nav inactive */
+  --icon-level-2: #ededed;
+
   /* Light theme variables */
   --light-bg: #ffffff;
   --light-text: #1a1a1a;
@@ -28,8 +35,8 @@ html {
 
 /* Default to dark theme */
 :root {
-  --bg-color: var(--dark-bg);
-  --text-color: var(--dark-text);
+  --bg-color: var(--background); /* Use new spec color */
+  --text-color: var(--Text-level-1); /* Use new spec color */
   --shadow-color: var(--dark-shadow);
   --border-color: var(--dark-border);
   --hover-bg-color: var(--dark-hover-bg);

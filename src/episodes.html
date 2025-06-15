@@ -4,31 +4,66 @@ title: Episodes
 permalink: /episodes/
 ---
 
-<div class="content-pane">
-  <h1>Neomania Episodes</h1>
+<div class="episode-list-container">
+  <nav class="main-nav">
+    <a href="/episodes/" class="nav-item active">catalog</a>
+    <a href="/#listen" class="nav-item">listen</a>
+    <a href="/about/" class="nav-item">about</a>
+    <div class="spacer"></div>
+    {# <span class="nav-icon"><!-- Play icon SVG --></span>
+    <span class="nav-icon"><!-- Dot menu SVG --></span> #}
+  </nav>
 
-  {# Use the 'episodes' collection that Eleventy creates automatically #}
-  <p>Episodes available: {{ collections.episodes.length }}</p>
-
-  <div class="episode-list">
-    {# Loop over the collection in reverse for newest first #}
-    {% for post in collections.episodes | reverse %}
-      {# We can still use our card component, but we pass the post object #}
-      {% set episode = post.data %}
-      <div class="episode-card">
-        <a href="{{ post.url }}" class="episode-card-link">
-          <div class="episode-card-header">
-            <span class="episode-card-number">Episode {{ episode.episodeNumber }}</span>
-            <span class="episode-card-date">{{ episode.date.toLocaleDateString() }}</span>
-          </div>
-          <h2 class="episode-card-title">{{ episode.title }}</h2>
-          <p class="episode-card-summary">{{ episode.summary }}</p>
-        </a>
-        <div class="episode-card-actions">
-          <a href="{{ episode.audioUrl }}" target="_blank" class="button button-primary">🎵 Listen</a>
+  <main class="episode-list">
+    {% for post in collections.episodes | reverse %} 
+    {% set ep_data = post.data %}
+    <a href="{{ post.url | url }}" class="episode-row">
+      <div class="episode-row-top">
+        <span class="episode-number">{{ (ep_data.episodeNumber | string) | padStart(2, '0') }}</span>
+        <div class="episode-main">
+          <h2 class="episode-title">
+          <span class="episode-title-display">{{ ep_data.displayTitle }}</span>
+          <span class="episode-title-original">{{ ep_data.displayTitle }}{% if ep_data.guest %} w/ {{ ep_data.guest }}{% endif %}</span>
+        </h2>
+          <p class="episode-desc">{{ ep_data.subtitle }}</p>
         </div>
       </div>
+      <div class="episode-row-bottom">
+        {% if ep_data.guest %}
+        <span class="episode-guest-w">w/</span>
+        <div class="episode-guest-info">
+          <span class="episode-guest-name">{{ ep_data.guest }}</span>
+          <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
+          <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
+        </div>
+        {% else %}
+        <div></div> {# Empty space for alignment #}
+        <div class="episode-guest-info">
+          <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
+          <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
+        </div>
+        {% endif %}
+      </div>
+      
+      {# Additional structure for 1280px+ flexbox layout #}
+      <div class="episode-content">
+        <div class="episode-left">
+          <span class="episode-number">{{ (ep_data.episodeNumber | string) | padStart(2, '0') }}</span>
+          <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
+        </div>
+        <div class="episode-right">
+          <div class="episode-main">
+            <h2 class="episode-title">
+              <span class="episode-title-display">{{ ep_data.displayTitle }}</span>
+              <span class="episode-title-original">{{ ep_data.displayTitle }}{% if ep_data.guest %} w/ {{ ep_data.guest }}{% endif %}</span>
+            </h2>
+            <p class="episode-desc">{{ ep_data.subtitle }}</p>
+          </div>
+          <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
+        </div>
+      </div>
+    </a>
     {% endfor %}
-  </div>
-
+  </main>
+</div>
 </div>
