@@ -1,4 +1,4 @@
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
   // Copy the `css` directory to the output
   eleventyConfig.addPassthroughCopy("css");
 
@@ -15,10 +15,11 @@ module.exports = function (eleventyConfig) {
       output: "_site",
       includes: "_includes",
       layouts: "_layouts",
+      data: "_data",
     },
     templateFormats: ["html", "md", "njk"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
     dataTemplateEngine: "njk",
   };
-};
+}

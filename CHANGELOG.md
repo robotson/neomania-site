@@ -6,8 +6,21 @@ All notable changes to the Neomania podcast website will be documented in this f
 
 ## [2025-06-14]
 
+### Added
+
+- **Content-Driven Architecture**: Implemented a robust data pipeline that converts RSS feed items into local Markdown files (`/src/episodes/`), which now serve as the canonical source for all episode content.
+- **Episode Scaffolding Script**: Created a non-destructive script (`npm run fetch-episodes`) to automatically generate new episode Markdown files from the feed without overwriting existing, manually edited content.
+- **Annotation System**: Developed a sophisticated annotation layer (`episodeAnnotations.js`) to enrich episodes with structured metadata like tags, featured status, and custom slugs for cleaner URLs.
+- **Individual Episode Pages**: Added layouts and routing to generate unique pages for each episode (e.g., `/ep/7-stochastic-funnerism-and-autonomous-media/`).
+- **Smart Caching System**: Implemented intelligent caching with different refresh intervals for development (5min), production (1hr), and CI environments (always fresh).
+- **HTML-to-Markdown Conversion**: Added `turndown` library integration to convert RSS HTML content into clean Markdown for better content management.
+
 ### Changed
 
+- **RSS Integration Architecture**: Transitioned the site from being data-driven (reading from a live-fetched JSON object) to content-driven (building from a collection of local Markdown files).
+- **Modernized to ES Modules**: Updated the entire project configuration, including `.eleventy.js` and all scripts, to use modern ES Module syntax (`import`/`export`).
+- **Episode URL Structure**: Updated episode slugs to include episode numbers in both titles and URLs (e.g., `/ep/7-stochastic-funnerism-and-autonomous-media/`).
+- **Fixed CSS Overflow Issue**: Scoped global overflow styles to landing page only using `:has(#noise-canvas)` selector to prevent scrolling issues on content pages.
 - **Major Architecture Refactoring**: Extracted monolithic index.html into modular components
   - Moved all inline CSS to dedicated `css/landing.css` file (12KB+ of styles)
   - Extracted all JavaScript functionality to `js/main.js` (365 lines of code)

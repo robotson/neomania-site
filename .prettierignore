@@ -1,0 +1,14 @@
+# Ignore Nunjucks templates to prevent breaking template syntax
+*.njk
+*.html
+
+# Ignore build output
+_site/
+_cache/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore other generated files
+*.min.js
+*.min.css 

@@ -133,5 +133,8 @@ dist
 _site/
 .DS_Store
 
+# RSS feed cache directory
+_cache/
+
 # ignore robotson plans
 robotson/

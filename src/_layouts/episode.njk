@@ -1,0 +1,24 @@
+---
+layout: base.njk
+---
+
+<article class="content-pane">
+  <header>
+    <h1>{{ title }}</h1>
+    <p>
+      <span>Episode {{ episodeNumber }}</span> | 
+      <span>Published on: {{ date.toLocaleDateString() }}</span> |
+      <span>Duration: {{ duration }}</span>
+    </p>
+  </header>
+  
+  <div class="episode-audio">
+    <audio controls src="{{ audioUrl }}" style="width: 100%;">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <div class="episode-content">
+    {{ content | safe }}
+  </div>
+</article> 

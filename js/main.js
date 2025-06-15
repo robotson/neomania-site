@@ -39,18 +39,20 @@ window
     }
   });
 
-themeToggle.addEventListener("click", () => {
-  document.documentElement.classList.toggle("light-theme");
-  const isLight = document.documentElement.classList.contains("light-theme");
-  localStorage.setItem("theme", isLight ? "light" : "dark");
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    document.documentElement.classList.toggle("light-theme");
+    const isLight = document.documentElement.classList.contains("light-theme");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
 
-  // Redraw dots when theme changes with the correct dot count
-  const targetDotCount = Math.round(
-    canvas.width * canvas.height * BASE_DENSITY
-  );
-  const actualDotCount = Math.min(targetDotCount, MAX_DOTS);
-  drawSparseDots(actualDotCount);
-});
+    // Redraw dots when theme changes with the correct dot count
+    const targetDotCount = Math.round(
+      canvas.width * canvas.height * BASE_DENSITY
+    );
+    const actualDotCount = Math.min(targetDotCount, MAX_DOTS);
+    drawSparseDots(actualDotCount);
+  });
+}
 
 // Animation script for the letters - BALANCED APPROACH
 const letters = document.querySelectorAll(".text span");

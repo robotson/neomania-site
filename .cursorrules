@@ -1,0 +1,75 @@
+### **`.cursorrules` for the Neomania Website Project**
+
+This document contains a set of rules and guidelines for interacting with the Neomania website codebase. Adhering to these rules is mandatory to ensure code quality, prevent common errors, and maintain the established project architecture.
+
+#### **1. Core Architecture & Syntax**
+
+- **RULE: ESM_SYNTAX_IS_MANDATORY**
+
+  - **Description:** This project is configured as an ES Module (ESM) via `"type": "module"` in `package.json`. ALL JavaScript files (`.js`, `.mjs`) MUST use `import` and `export` syntax. The `require()` and `module.exports` syntax (CommonJS) is forbidden and will break the build.
+  - **Example (`.eleventy.js`):**
+
+    ```javascript
+    // CORRECT
+    import somePlugin from 'some-plugin';
+    export default function(eleventyConfig) { ... };
+
+    // INCORRECT
+    const somePlugin = require('some-plugin');
+    module.exports = function(eleventyConfig) { ... };
+    ```
+
+- **RULE: JS_FOR_LOGIC_TEMPLATES_FOR_DISPLAY**
+  - **Description:** All complex logic, data manipulation, and calculations MUST be done in the JavaScript data layer (`src/_data/*.js` files). The Nunjucks templates (`.njk`) should be kept as simple as possible, primarily containing loops and direct variable access. Prepare data in JavaScript so it can be easily displayed in Nunjucks without complex filters or logic.
+  - **Example:** Instead of calculating a total in Nunjucks, calculate it in `episodes.js` and expose it as `episodes.totalDuration`. The template then simply uses `{{ episodes.totalDuration }}`.
+
+#### **2. Nunjucks Templating**
+
+- **RULE: NUNJUCKS_FILTER_SYNTAX**
+
+  - **Description:** Nunjucks filters that take arguments MUST use parentheses `()` like a function call. The colon syntax (`:`) is from the Liquid templating language and is invalid here.
+  - **Example:**
+
+    ```nunjucks
+    // CORRECT
+    {{ my_variable | truncate(200) }}
+
+    // INCORRECT
+    {{ my_variable | truncate: 200 }}
+    ```
+
+- **RULE: DATA_ACCESS_IN_NUNJUCKS**
+  - **Description:** When accessing data from an ESM data file (`.js`) that uses `export default`, the data will be nested under a `.default` key. If the `episodes.js` file uses `export default`, you MUST access the data in templates via `episodes.default`.
+  - **Example:**
+    ```nunjucks
+    // If episodes.js uses "export default"
+    {% for episode in episodes.default %}
+      {{ episode.title }}
+    {% endfor %}
+    ```
+
+#### **3. Data Pipeline & Workflow**
+
+- **RULE: DATA_PIPELINE_WORKFLOW**
+  - **Description:** The episode data pipeline is a two-step process.
+    1.  **Fetching (Manual):** The `npm run fetch-episodes` command runs the _asynchronous_ named export `fetchEpisodes()` from `src/_data/episodes.js`. This is the ONLY step that makes network requests. It saves its results to `_cache/`.
+    2.  **Building (Automatic):** The `eleventy` build process runs the _synchronous_ default export from `src/_data/episodes.js`, which ONLY reads from the `_cache/` directory.
+  - **Action:** When asked to update data, modify the logic within the `fetchEpisodes` function. Do not add `await` calls to the synchronous default export.
+
+#### **4. Frontend & Components**
+
+- **RULE: DEFENSIVE_DOM_MANIPULATION**
+
+  - **Description:** When writing JavaScript that interacts with the DOM, always check if an element exists before attempting to add an event listener or modify it. Not all pages will have all elements. This prevents `Cannot read properties of null` errors.
+  - **Example:**
+    ```javascript
+    // CORRECT
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => { ... });
+    }
+    ```
+
+- **RULE: COMPONENT_FILE_STRUCTURE**
+  - **Description:** All reusable Nunjucks components (e.g., cards, buttons, headers) MUST be created within the `src/_includes/components/` directory. This keeps the project organized.
+  - **Action:** When asked to create a new reusable UI element, place the new `.njk` file in this directory and use `{% include "components/your-component.njk" %}` to render it.

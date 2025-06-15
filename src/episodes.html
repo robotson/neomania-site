@@ -1,0 +1,34 @@
+---
+layout: base.njk
+title: Episodes
+permalink: /episodes/
+---
+
+<div class="content-pane">
+  <h1>Neomania Episodes</h1>
+
+  {# Use the 'episodes' collection that Eleventy creates automatically #}
+  <p>Episodes available: {{ collections.episodes.length }}</p>
+
+  <div class="episode-list">
+    {# Loop over the collection in reverse for newest first #}
+    {% for post in collections.episodes | reverse %}
+      {# We can still use our card component, but we pass the post object #}
+      {% set episode = post.data %}
+      <div class="episode-card">
+        <a href="{{ post.url }}" class="episode-card-link">
+          <div class="episode-card-header">
+            <span class="episode-card-number">Episode {{ episode.episodeNumber }}</span>
+            <span class="episode-card-date">{{ episode.date.toLocaleDateString() }}</span>
+          </div>
+          <h2 class="episode-card-title">{{ episode.title }}</h2>
+          <p class="episode-card-summary">{{ episode.summary }}</p>
+        </a>
+        <div class="episode-card-actions">
+          <a href="{{ episode.audioUrl }}" target="_blank" class="button button-primary">🎵 Listen</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
