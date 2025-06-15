@@ -141,7 +141,7 @@ body:has(.episode-list-container) {
    Large Desktop Layout (L/1280px+ Figma View)
    ========================================================================== */
 
-@media (min-width: 1025px) {
+@media (min-width: 1280px) {
   .episode-list-container {
     width: 100%;
     max-width: 1280px;
@@ -279,7 +279,7 @@ body:has(.episode-list-container) {
    Desktop Layout (M/1024px Figma View)
    ========================================================================== */
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1279px) {
   /* Reset default margins on h2 and p elements */
   .episode-row h2,
   .episode-row p {
