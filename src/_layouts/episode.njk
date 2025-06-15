@@ -21,4 +21,50 @@ layout: base.njk
   <div class="episode-content">
     {{ content | safe }}
   </div>
+
+  {% if hasSupplemental %}
+  <section class="supplemental-content">
+    <h2>Additional Content</h2>
+    
+    {% if hasTranscript %}
+    <details class="supplemental-section">
+      <summary>Full Transcript</summary>
+      <div class="transcript-content">
+        <!-- Transcript content would be loaded here -->
+        <p><em>Transcript coming soon...</em></p>
+      </div>
+    </details>
+    {% endif %}
+    
+    {% if hasExpandedNotes %}
+    <details class="supplemental-section">
+      <summary>Extended Notes</summary>
+      <div class="expanded-notes-content">
+        <!-- Extended notes would be loaded here -->
+        <p><em>Extended notes coming soon...</em></p>
+      </div>
+    </details>
+    {% endif %}
+    
+    {% if hasGuestLinks %}
+    <details class="supplemental-section">
+      <summary>Guest Resources</summary>
+      <div class="guest-links-content">
+        <!-- Guest links would be loaded here -->
+        <p><em>Guest resources coming soon...</em></p>
+      </div>
+    </details>
+    {% endif %}
+    
+    {% if hasCorrections %}
+    <details class="supplemental-section">
+      <summary>Corrections & Updates</summary>
+      <div class="corrections-content">
+        <!-- Corrections would be loaded here -->
+        <p><em>Any corrections or updates will appear here...</em></p>
+      </div>
+    </details>
+    {% endif %}
+  </section>
+  {% endif %}
 </article> 

@@ -22,6 +22,21 @@ const escapeYaml = (text) => {
     .replace(/\t/g, "\\t");
 };
 
+// Check for supplemental content in episode directory
+const checkSupplementalContent = (episodeDir) => {
+  const supplementalFiles = {
+    hasTranscript: fs.existsSync(path.join(episodeDir, "transcript.md")),
+    hasExpandedNotes: fs.existsSync(path.join(episodeDir, "expanded-notes.md")),
+    hasGuestLinks: fs.existsSync(path.join(episodeDir, "guest-links.md")),
+    hasCorrections: fs.existsSync(path.join(episodeDir, "corrections.md")),
+    hasMedia: fs.existsSync(path.join(episodeDir, "media")),
+  };
+
+  const hasSupplemental = Object.values(supplementalFiles).some(Boolean);
+
+  return { ...supplementalFiles, hasSupplemental };
+};
+
 async function scaffoldEpisodes() {
   console.log("🏗️  Running episode scaffold...");
   const rawEpisodes = await fetchEpisodes();
@@ -34,15 +49,25 @@ async function scaffoldEpisodes() {
   }
 
   for (const episode of finalEpisodes) {
-    // Use clean slug for filename (no episode number prefix)
-    const fileName = `${episode.slug}.md`;
-    const filePath = path.join(EPISODES_DIR, fileName);
+    // Use episode number for directory name (zero-padded)
+    const episodeNumStr = episode.episodeNumber.toString().padStart(2, "0");
+    const episodeDir = path.join(EPISODES_DIR, episodeNumStr);
+    const indexFile = path.join(episodeDir, "index.md");
 
-    if (fs.existsSync(filePath)) {
+    // Skip if index.md already exists (don't overwrite manual edits)
+    if (fs.existsSync(indexFile)) {
       continue;
     }
 
-    console.log(`🆕 Creating new episode file: ${fileName}`);
+    console.log(`🆕 Creating new episode directory: ${episodeNumStr}/`);
+
+    // Create episode directory
+    if (!fs.existsSync(episodeDir)) {
+      fs.mkdirSync(episodeDir, { recursive: true });
+    }
+
+    // Check for any supplemental content
+    const supplemental = checkSupplementalContent(episodeDir);
 
     // ALWAYS process HTML content through turndown for the main body
     const htmlContent = episode.summary || episode.content || "";
@@ -53,17 +78,29 @@ async function scaffoldEpisodes() {
     const cleanSummary = turndownService.turndown(rawSummary);
     const summaryText = escapeYaml(cleanSummary);
 
-    // Create the YAML front matter
+    // NEW LOGIC: Extract the first line as the subtitle
+    const subtitle = escapeYaml((rawSummary.split("\n")[0] || "").trim());
+
+    // Create the YAML front matter with updated permalink structure
     const frontMatter = `---
 layout: episode.njk
 title: "${escapeYaml(episode.title)}"
+displayTitle: "${escapeYaml(episode.displayTitle)}"
+guest: ${episode.guest ? `"${escapeYaml(episode.guest)}"` : "null"}
 date: ${episode.publishedDate.toISOString()}
 guid: ${episode.guid}
 episodeNumber: ${episode.episodeNumber}
 duration: "${episode.duration}"
 audioUrl: ${episode.audioUrl}
 summary: "${summaryText}"
-permalink: /ep/${episode.slug}/
+subtitle: "${subtitle}"
+permalink: /ep/{{ episodeNumber | padStart(2, '0') }}/
+hasSupplemental: ${supplemental.hasSupplemental}
+hasTranscript: ${supplemental.hasTranscript}
+hasExpandedNotes: ${supplemental.hasExpandedNotes}
+hasGuestLinks: ${supplemental.hasGuestLinks}
+hasCorrections: ${supplemental.hasCorrections}
+hasMedia: ${supplemental.hasMedia}
 tags:
   - episodes
 ---
@@ -71,7 +108,7 @@ tags:
 ${markdownContent}
 `;
 
-    fs.writeFileSync(filePath, frontMatter);
+    fs.writeFileSync(indexFile, frontMatter);
   }
 
   console.log("✅ Episode scaffolding complete.");

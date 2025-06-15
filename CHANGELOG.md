@@ -4,6 +4,30 @@ All notable changes to the Neomania podcast website will be documented in this f
 
 ## [Unreleased]
 
+## [2025-06-15]
+
+### Added
+
+- **Numbered Episode Structure**: Migrated from slug-based episode files to numbered directory structure (`src/episodes/01/`, `src/episodes/07/`, etc.) for better organization and cleaner URLs (`/ep/01/`, `/ep/07/`).
+- **Supplemental Content System**: Episodes can now include co-located supplemental files (`transcript.md`, `expanded-notes.md`, `guest-links.md`, `corrections.md`, `media/`) with automatic detection and display.
+- **Custom Episodes Collection**: Implemented explicit Eleventy collection (`src/episodes/*/index.md`) to ensure proper episode discovery and sorting by episode number.
+- **Enhanced Episode Templates**: Added conditional supplemental content sections using `<details>` elements that automatically appear when additional content is available.
+- **Supplemental Content Flags**: Extended episode frontmatter with boolean flags (`hasTranscript`, `hasExpandedNotes`, `hasGuestLinks`, etc.) to track available supplemental content.
+- **Episode Management Scripts**: Enhanced scaffolding script to create numbered directories, detect supplemental content, and set appropriate frontmatter flags automatically.
+
+### Changed
+
+- **Episode URL Structure**: Simplified episode URLs from `/ep/long-episode-title-slug/` to clean numbered format `/ep/07/` using episode number as primary organizational key.
+- **Episode Discovery**: Episodes now use episode number rather than filename for organization, making it immediately clear which episode is which in the file system.
+- **Permalink Generation**: Updated permalink structure to use `{{ episodeNumber | padStart(2, '0') }}` for consistent two-digit formatting.
+- **Content Co-location**: All episode-related content (transcripts, notes, media) now lives alongside the main episode file for better organization.
+
+### Enhanced
+
+- **Developer Experience**: Episode management is now much more intuitive with numbered directories and co-located supplemental content.
+- **Scalability**: Structure works seamlessly whether you have 10 or 100+ episodes, with clear migration path for future season/year-based organization.
+- **Content Workflow**: Adding supplemental content is now as simple as dropping files in the episode directory and updating frontmatter flags.
+
 ## [2025-06-14]
 
 ### Added
