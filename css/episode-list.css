@@ -4,17 +4,28 @@
  * File: css/episode-list.css
 */
 
+/* ==========================================================================
+   Variable Font Utilities
+   ========================================================================== */
+
+/* Roboto Flex slant utility - use instead of font-style: italic */
+.roboto-slant {
+  font-variation-settings: "slnt" -10;
+}
+
 /* Apply base styles to pages using this layout */
 body:has(.episode-list-container) {
   background-color: var(--background);
   color: var(--Text-level-1);
 }
 
-/* Styles for the new episode list design */
+/* Styles for the new episode list design - Mobile First (XS default) */
 .episode-list-container {
-  max-width: 900px;
+  width: 100%;
+  max-width: 393px;
   margin: 2rem auto;
-  padding: 1rem;
+  padding: 0 22px;
+  box-sizing: border-box;
   font-family: "Roboto Flex", sans-serif;
 }
 
@@ -92,7 +103,6 @@ body:has(.episode-list-container) {
 .episode-desc {
   font-size: 14px;
   font-weight: 300;
-  font-style: italic;
   color: var(--Text-level-1, #f4f4f4);
   line-height: 1.5;
   margin: 0;
@@ -141,11 +151,11 @@ body:has(.episode-list-container) {
    Large Desktop Layout (L/1280px+ Figma View)
    ========================================================================== */
 
-@media (min-width: 1280px) {
+@media (min-width: 1280px) and (max-width: 1919px) {
   .episode-list-container {
     width: 100%;
     max-width: 1280px;
-    margin: 0 auto;
+    margin: 2rem auto;
     padding: 0 50px;
     box-sizing: border-box;
   }
@@ -232,7 +242,6 @@ body:has(.episode-list-container) {
   .episode-desc {
     font-size: 16px;
     font-weight: 300;
-    font-variation-settings: "slnt" -3;
     line-height: 22px;
     letter-spacing: 0.48px;
     color: var(--Text-level-1, #f4f4f4);
@@ -279,19 +288,23 @@ body:has(.episode-list-container) {
    Desktop Layout (M/1024px Figma View)
    ========================================================================== */
 
+/* ==========================================================================
+   Medium Layout Bridge (769px+)
+   ========================================================================== */
+@media (min-width: 769px) and (max-width: 1279px) {
+  .episode-list-container {
+    max-width: 1024px;
+    margin: 2rem auto;
+    padding: 0 50px;
+  }
+}
+
 @media (min-width: 769px) and (max-width: 1279px) {
   /* Reset default margins on h2 and p elements */
   .episode-row h2,
   .episode-row p {
     margin: 0;
     padding: 0;
-  }
-  .episode-list-container {
-    width: 100%;
-    max-width: 1024px;
-    margin: 0 auto;
-    padding: 0 50px;
-    box-sizing: border-box;
   }
 
   .episode-row {
@@ -304,6 +317,8 @@ body:has(.episode-list-container) {
     border-bottom: 0.5px solid #909090;
     min-height: 88px;
     align-items: start;
+    width: 100%;
+    max-width: 924px;
   }
 
   .episode-number {
@@ -364,7 +379,6 @@ body:has(.episode-list-container) {
   .episode-desc {
     font-size: 14px;
     font-weight: 300;
-    font-variation-settings: "slnt" -3;
     letter-spacing: 0.42px;
     line-height: 20px;
     color: var(--Text-level-1, #f4f4f4);
@@ -403,15 +417,18 @@ body:has(.episode-list-container) {
    Tablet Layout (S/768px Figma View)
    ========================================================================== */
 
+/* ==========================================================================
+   Small Layout Bridge (641px+)
+   ========================================================================== */
 @media (min-width: 641px) and (max-width: 768px) {
   .episode-list-container {
-    width: 100%;
     max-width: 768px;
-    margin: 0 auto;
+    margin: 2rem auto;
     padding: 0 50px;
-    box-sizing: border-box;
   }
+}
 
+@media (min-width: 641px) and (max-width: 768px) {
   .episode-row {
     display: grid;
     grid-template-columns: repeat(16, 1fr);
@@ -420,6 +437,8 @@ body:has(.episode-list-container) {
     row-gap: 0;
     padding: 10px 0;
     border-bottom: 0.5px solid #909090;
+    width: 100%;
+    max-width: 668px;
   }
 
   /* Row 1: Episode number + Title on same line */
@@ -451,7 +470,6 @@ body:has(.episode-list-container) {
     grid-row: 3;
     font-size: 14px;
     font-weight: 300;
-    font-variation-settings: "slnt" -3;
     letter-spacing: 0.42px;
     line-height: 20px;
     color: var(--Text-level-1, #f4f4f4);
@@ -522,14 +540,6 @@ body:has(.episode-list-container) {
    ========================================================================== */
 
 @media (max-width: 640px) {
-  .episode-list-container {
-    width: 100%;
-    max-width: 393px;
-    margin: 0 auto;
-    padding: 0 22px;
-    box-sizing: border-box;
-  }
-
   .episode-row {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
@@ -538,6 +548,8 @@ body:has(.episode-list-container) {
     row-gap: 0;
     padding: 12px 0 16px 0;
     border-bottom: 0.5px solid #909090;
+    width: 100%;
+    max-width: 349px;
   }
 
   /* Row 1: Episode number + Title on same line */
@@ -569,7 +581,6 @@ body:has(.episode-list-container) {
     grid-row: 3;
     font-size: 13px;
     font-weight: 300;
-    font-variation-settings: "slnt" -3;
     letter-spacing: 0.39px;
     line-height: 19px;
     color: var(--Text-level-1, #f4f4f4);
@@ -633,5 +644,141 @@ body:has(.episode-list-container) {
   .episode-main,
   .episode-guest-info {
     display: contents;
+  }
+}
+
+/* ==========================================================================
+   Extra Large Layout (XL/1920px+ Figma View)
+   ========================================================================== */
+
+@media (min-width: 1920px) {
+  .episode-list-container {
+    width: 100%;
+    max-width: 1920px;
+    margin: 2rem auto;
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
+
+  .episode-row {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 19px;
+    border-bottom: 0.5px solid rgba(237, 237, 237, 0.2);
+    gap: 19px;
+    min-height: 70px;
+  }
+
+  .episode-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 121px;
+  }
+
+  /* Left section: Episode number and date with exact XL spacing */
+  .episode-left {
+    display: flex;
+    gap: 121px;
+    align-items: flex-start;
+  }
+
+  .episode-number {
+    width: 108px;
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.91px;
+    text-transform: uppercase;
+    color: var(--Text-level-2, #ededed);
+  }
+
+  .episode-date {
+    width: 105px;
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.91px;
+    text-transform: uppercase;
+    color: var(--Text-level-2, #ededed);
+  }
+
+  /* Right section: Content and duration with XL spacing */
+  .episode-right {
+    display: flex;
+    gap: 121px;
+    align-items: flex-start;
+  }
+
+  /* Content container for title and description - XL sizing */
+  .episode-main {
+    width: 1088px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+
+  .episode-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    color: var(--Text-level-1, #f4f4f4);
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .episode-desc {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.6px;
+    color: var(--Text-level-1, #f4f4f4);
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+  }
+
+  .episode-duration {
+    width: 136px;
+    text-align: right;
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.91px;
+    text-transform: uppercase;
+    color: var(--Text-level-2, #ededed);
+  }
+
+  /* Keep the same visibility rules as L layout */
+  .episode-title-display {
+    display: none;
+  }
+
+  .episode-title-original {
+    display: inline;
+  }
+
+  .episode-guest-w,
+  .episode-guest-name {
+    display: none;
+  }
+
+  .episode-row-top,
+  .episode-row-bottom,
+  .episode-guest-info {
+    display: none;
+  }
+
+  .episode-content {
+    display: flex;
+  }
+
+  .episode-left,
+  .episode-right {
+    display: flex;
   }
 }
