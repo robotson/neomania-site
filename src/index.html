@@ -4,10 +4,30 @@ permalink: /
 bodyClass: home-page
 ---
 
-{% include "components/hero.njk" %}
+{# Debug info overlay #}
+<div class="debug-info" id="debug-info">
+  <h4>🎯 Sticky Header Debug</h4>
+  <div class="status" id="debug-scroll">Scroll: 0px</div>
+  <div class="status" id="debug-hero">Hero: Normal</div>
+  <div class="status" id="debug-buffer">Buffer: Visible</div>
+  <div class="status" id="debug-wordmark">Wordmark: Below</div>
+  <div class="status" id="debug-buffer-sentinel">Buffer Sentinel: Below</div>
+</div>
+
+{# Hero section: 50vh block with wordmark bottom-aligned #}
+<div class="hero-section">
+  {% include "components/hero.njk" %}
+</div>
+
+{# Buffer spacer with breathing room between hero and episodes #}
+<div id="hero-buffer-spacer" style="height: var(--hero-buffer-size, 120px);">
+  {# Second sentinel at the top of the buffer to trigger final lock when buffer top scrolls past viewport #}
+  <div id="buffer-sentinel" aria-hidden="true"></div>
+</div>
 
 <div id="content" class="main-content">
   <div class="episode-list-container">
+    <h2 style="color: white; text-align: center; margin-bottom: 2rem;">📺 Episodes Section</h2>
     {% include "components/episode-catalog.njk" %}
   </div>
 </div>

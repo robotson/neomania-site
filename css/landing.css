@@ -1,18 +1,54 @@
-/*———— HERO LAYOUT ————*/
-.main-hero {
+/*———— CSS CUSTOM PROPERTIES ————*/
+:root {
+  --hero-buffer-size: 120px; /* Breathing room between hero and episodes */
+}
+
+/*———— DEBUGGING COLORS ————*/
+/* Temporary colors to visualize sections during development */
+
+/* Hero section that provides proper sticky context */
+.hero-section {
+  /* This container defines the sticky context - hero will stick within this container */
   position: relative;
-  height: 100vh; /* fills viewport */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-color);
-  z-index: 100;
-  /* Pin after we scroll past it */
+  /* Container needs to be tall enough to contain the shrinking hero */
+  height: 100vh; /* Tall enough for hero to shrink within without disappearing */
+  background: linear-gradient(
+    135deg,
+    #2c3e50,
+    #34495e
+  ); /* Dark background for section */
+
+  /* Debug: Add border to see exactly where container ends */
+  border: 3px solid yellow;
+}
+
+/* Remove the separate spacer - hero section IS the hero block */
+
+.main-hero {
+  /* Hero is sticky - will stick to top when it would otherwise scroll out of view */
   position: sticky;
   top: 0;
+  /* Hero starts at 50vh within the larger container */
+  height: 50vh; /* Starting height within 100vh container */
+  min-height: 4.5rem; /* Never smaller than header height */
+  display: flex;
+  align-items: flex-end; /* Bottom-align the wordmark within hero block */
+  justify-content: center; /* Centre the wordmark horizontally */
+  background: linear-gradient(
+    135deg,
+    #ff6b6b,
+    #ee5a24
+  ); /* Red gradient for hero */
+  z-index: 100;
   margin: 0;
-  overflow: hidden;
+  /* overflow: hidden; -- REMOVED: This can break sticky positioning */
   box-sizing: border-box;
+
+  /* Debug: Add border to see sticky behavior */
+  border: 3px solid lime;
+
+  /* Add padding so wordmark isn't right at the edge */
+  padding-bottom: 2rem;
 }
 
 .hero-container {
@@ -40,34 +76,56 @@
   margin: 0;
   text-align: center;
   white-space: nowrap;
-  color: var(--text-color);
+  color: white; /* High contrast against colorful backgrounds */
   letter-spacing: 0.05em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Strong shadow for visibility */
+  background: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
 }
 
 /* Individual letter styling preserved */
 .wordmark-letter {
   display: inline-block;
-  text-shadow: var(--text-shadow);
-  color: var(--text-color);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+/* sentinel: 1px line positioned at the exact top of the wordmark */
+#hero-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
+  /* Make sentinel visible for debugging */
+  background: yellow;
+  z-index: 1000;
 }
 
 /*———— SCROLL ANIMATION (modern browsers) ————*/
 @supports (animation-timeline: scroll()) {
+  /* Only animate the hero, not the container - container needs stable size for sticky */
   .main-hero {
     animation: hero-compress linear both;
     animation-timeline: scroll(root);
-    animation-range: 0vh 60vh;
+    animation-range: 0vh 50vh; /* Compress over first 50vh of scroll */
   }
   @keyframes hero-compress {
+    from {
+      height: 50vh; /* Starting height - half the container */
+    }
     to {
-      height: 4.5rem;
-    } /* header height */
+      height: 4.5rem; /* Final header height */
+    }
   }
 
   .animated-wordmark .wordmark-text {
     animation: text-shrink linear both;
     animation-timeline: scroll(root);
-    animation-range: 0vh 60vh;
+    animation-range: 0vh 50vh; /* Shrink text over first 50vh of scroll */
   }
   @keyframes text-shrink {
     to {
@@ -86,10 +144,33 @@
   }
 }
 
-/*———— Ensure centred even when compressed ————*/
-.main-hero.stuck {
-  align-items: flex-start; /* pin to top inside sticky area */
-  padding-top: 0.75rem; /* breathing room */
+/* ------------- FINAL LOCKED STATE ------------- */
+.main-hero.locked {
+  /* Switch from sticky to fixed so it can't be "un‑stuck" */
+  position: fixed;
+  top: 0;
+  left: 0; /* <- keep it stretched */
+  right: 0;
+  width: 100%;
+
+  /* height will tween from the big hero down to 4.5rem */
+  height: var(--header-height, 4.5rem);
+
+  /* Keep the letters centred vertically inside the 4.5 rem bar */
+  align-items: center;
+  padding: 0;
+
+  /* smooth shrink instead of instant snap */
+  transition: height 0.35s ease, padding 0.35s ease;
+
+  /* kill any scroll-timeline */
+  animation: none !important;
+}
+
+.main-hero.locked .animated-wordmark .wordmark-text {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  transition: font-size 0.35s ease; /* optional, to glide too */
+  animation: none !important;
 }
 
 /* Additional elements preserved from original */
@@ -160,4 +241,92 @@
 /* Motion-related settings */
 html[data-motion="reduced"] .theme-toggle {
   transition: none;
+}
+
+/*———— HERO BUFFER SPACER ————*/
+/* Buffer block: ~50vh between hero and episodes */
+#hero-buffer-spacer {
+  position: relative;
+  height: 50vh; /* Buffer block: about half viewport height */
+  background: linear-gradient(
+    135deg,
+    #4834d4,
+    #686de0
+  ); /* Purple gradient for buffer */
+  transition: height 0.35s cubic-bezier(0.4, 1.6, 0.6, 1);
+  overflow: hidden;
+  border-top: 3px solid #fff;
+  border-bottom: 3px solid #fff;
+}
+
+#hero-buffer-spacer.collapsed {
+  height: 0 !important;
+}
+
+/* Second sentinel at top of buffer */
+#buffer-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
+  /* Make sentinel visible for debugging */
+  background: lime;
+  z-index: 1000;
+}
+
+/* Episodes content area */
+.main-content {
+  background: linear-gradient(
+    135deg,
+    #00d2d3,
+    #54a0ff
+  ); /* Cyan gradient for content */
+  min-height: 200vh; /* Make it tall enough to scroll */
+  padding: 2rem;
+  border-top: 3px solid #fff;
+}
+
+.episode-list-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+/*———— DEBUG INFO OVERLAY ————*/
+/* Visual debugging info in top-right corner */
+.debug-info {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 12px;
+  z-index: 9999;
+  max-width: 300px;
+  backdrop-filter: blur(10px);
+}
+
+.debug-info h4 {
+  margin: 0 0 0.5rem 0;
+  color: #4caf50;
+}
+
+.debug-info .status {
+  margin: 0.25rem 0;
+}
+
+.debug-info .status.active {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.debug-info .status.locked {
+  color: #f44336;
+  font-weight: bold;
 }

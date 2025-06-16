@@ -1,5 +1,8 @@
 ### **`.cursorrules` for the Neomania Website Project**
 
+SPECIAL INSTRUCTIONS:
+FOR DEBUGGING: you never need to run serve. i am already doing npm run dev so you can just run build to test if the build is working but don't spawn any new servers.
+
 This document contains a set of rules and guidelines for interacting with the Neomania website codebase. Adhering to these rules is mandatory to ensure code quality, prevent common errors, and maintain the established project architecture.
 
 #### **1. Core Architecture & Syntax**
