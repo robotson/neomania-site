@@ -1,3 +1,5 @@
+import fs from "fs";
+
 export default function (eleventyConfig) {
   // Copy the `css` directory to the output
   eleventyConfig.addPassthroughCopy("css");
@@ -65,6 +67,16 @@ export default function (eleventyConfig) {
 
     // Fallback to default date string
     return date.toDateString();
+  });
+
+  // Icon Shortcode
+  eleventyConfig.addShortcode("icon", function (name) {
+    const iconPath = `./src/_includes/icons/${name}.svg`;
+    try {
+      return fs.readFileSync(iconPath, "utf8");
+    } catch (e) {
+      return `<!-- Icon not found: ${name} -->`;
+    }
   });
 
   // Return your configuration object

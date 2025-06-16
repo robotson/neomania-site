@@ -1,28 +1,27 @@
 :root {
-  /* Design System Tokens from Figma Spec */
-  --background: #111111;
-  --Text-level-1: #f4f4f4; /* Main body text, titles, active nav */
-  --Text-level-2: #ededed; /* Secondary: episode number, date, duration */
-  --Text-level-3: #909090; /* Tertiary: nav inactive */
-  --icon-level-2: #ededed;
+  /* Figma Design System Tokens - Light Theme */
+  --light-level1: #111111; /* Main text, titles, active nav */
+  --light-level2: #222222; /* Secondary text */
+  --light-level3: #333333; /* Tertiary text, inactive nav */
+  --light-background: #f4f4f4; /* Background */
+  --light-decorative: #333333; /* Decorative elements, borders */
+  --light-active: #ffffff; /* Active button state */
+  --light-hover: #6c6c6c; /* Hover state */
+  --light-error: #ff0537; /* Error states */
+  --light-success: #00e777; /* Success states */
+  --light-warning: #ffe205; /* Warning states */
 
-  /* Light theme variables */
-  --light-bg: #ffffff;
-  --light-text: #1a1a1a;
-  --light-shadow: rgba(0, 0, 0, 0.2);
-  --light-border: rgba(0, 0, 0, 0.3);
-  --light-hover-bg: rgba(0, 0, 0, 0.1);
-  --light-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1),
-    -1px -1px 2px rgba(255, 255, 255, 0.5);
-
-  /* Dark theme variables (current theme) */
-  --dark-bg: #1a1a1a;
-  --dark-text: #ffffff;
-  --dark-shadow: rgba(255, 255, 255, 0.8);
-  --dark-border: rgba(255, 255, 255, 0.3);
-  --dark-hover-bg: rgba(255, 255, 255, 0.1);
-  --dark-text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
-    0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+  /* Figma Design System Tokens - Dark Theme */
+  --dark-level1: #f4f4f4; /* Main text, titles, active nav */
+  --dark-level2: #ededed; /* Secondary text */
+  --dark-level3: #6c6c6c; /* Tertiary text, inactive nav */
+  --dark-background: #090909; /* Background */
+  --dark-decorative: #6c6c6c; /* Decorative elements, borders */
+  --dark-active: #000000; /* Active button state */
+  --dark-hover: #1e1e1e; /* Hover state */
+  --dark-error: #ff0550; /* Error states */
+  --dark-success: #11fb8a; /* Success states */
+  --dark-warning: #ffe205; /* Warning states */
 }
 
 html {
@@ -35,22 +34,30 @@ html {
 
 /* Default to dark theme */
 :root {
-  --bg-color: var(--background); /* Use new spec color */
-  --text-color: var(--Text-level-1); /* Use new spec color */
-  --shadow-color: var(--dark-shadow);
-  --border-color: var(--dark-border);
-  --hover-bg-color: var(--dark-hover-bg);
-  --text-shadow: var(--dark-text-shadow);
+  --bg-color: var(--dark-background);
+  --text-color: var(--dark-level1);
+  --text-level2: var(--dark-level2);
+  --text-level3: var(--dark-level3);
+  --decorative-color: var(--dark-decorative);
+  --active-color: var(--dark-active);
+  --hover-color: var(--dark-hover);
+  --error-color: var(--dark-error);
+  --success-color: var(--dark-success);
+  --warning-color: var(--dark-warning);
 }
 
 /* Light theme class */
 :root.light-theme {
-  --bg-color: var(--light-bg);
-  --text-color: var(--light-text);
-  --shadow-color: var(--light-shadow);
-  --border-color: var(--light-border);
-  --hover-bg-color: var(--light-hover-bg);
-  --text-shadow: var(--light-text-shadow);
+  --bg-color: var(--light-background);
+  --text-color: var(--light-level1);
+  --text-level2: var(--light-level2);
+  --text-level3: var(--light-level3);
+  --decorative-color: var(--light-decorative);
+  --active-color: var(--light-active);
+  --hover-color: var(--light-hover);
+  --error-color: var(--light-error);
+  --success-color: var(--light-success);
+  --warning-color: var(--light-warning);
 }
 
 /* Theme toggle styles */

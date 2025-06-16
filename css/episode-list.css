@@ -15,8 +15,8 @@
 
 /* Apply base styles to pages using this layout */
 body:has(.episode-list-container) {
-  background-color: var(--background);
-  color: var(--Text-level-1);
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* Styles for the new episode list design - Mobile First (XS default) */
@@ -34,7 +34,7 @@ body:has(.episode-list-container) {
   gap: 1.5rem;
   padding-bottom: 1rem;
   margin-bottom: 2rem;
-  border-bottom: 1px solid var(--Text-level-3, #909090);
+  border-bottom: 1px solid var(--text-level3);
 }
 
 .nav-item {
@@ -43,13 +43,13 @@ body:has(.episode-list-container) {
   text-transform: uppercase;
   letter-spacing: 0.07em;
   text-decoration: none;
-  color: var(--Text-level-3, #909090);
+  color: var(--text-level3);
   transition: color 0.2s ease;
 }
 
 .nav-item.active,
 .nav-item:hover {
-  color: var(--Text-level-1, #f4f4f4);
+  color: var(--text-color);
 }
 
 .spacer {
@@ -64,7 +64,7 @@ body:has(.episode-list-container) {
 .episode-row {
   display: block;
   padding: 1.5rem 0;
-  border-bottom: 1px solid var(--Text-level-3, #909090);
+  border-bottom: 1px solid var(--text-level3);
   text-decoration: none;
   color: inherit;
 }
@@ -82,7 +82,7 @@ body:has(.episode-list-container) {
 .episode-number {
   font-family: "Space Mono", monospace;
   font-size: 10px;
-  color: var(--Text-level-2, #ededed);
+  color: var(--text-level2);
   text-transform: uppercase;
   padding-top: 4px;
 }
@@ -95,7 +95,7 @@ body:has(.episode-list-container) {
 .episode-title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--Text-level-1, #f4f4f4);
+  color: var(--text-color);
   margin: 0 0 0.5rem 0;
   transition: opacity 0.2s ease;
 }
@@ -103,7 +103,7 @@ body:has(.episode-list-container) {
 .episode-desc {
   font-size: 14px;
   font-weight: 300;
-  color: var(--Text-level-1, #f4f4f4);
+  color: var(--text-color);
   line-height: 1.5;
   margin: 0;
 }
@@ -115,7 +115,7 @@ body:has(.episode-list-container) {
   margin-top: 1rem;
   font-family: "Space Mono", monospace;
   font-size: 10px;
-  color: var(--Text-level-2, #ededed);
+  color: var(--text-level2);
   text-transform: uppercase;
   letter-spacing: 0.07em;
 }
@@ -164,7 +164,7 @@ body:has(.episode-list-container) {
     display: flex;
     flex-direction: column;
     padding-bottom: 18px;
-    border-bottom: 0.5px solid #909090;
+    border-bottom: 0.5px solid var(--text-level3);
     gap: 15px;
   }
 
@@ -188,7 +188,7 @@ body:has(.episode-list-container) {
     font-weight: 400;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
   }
 
   .episode-date {
@@ -199,7 +199,7 @@ body:has(.episode-list-container) {
     font-weight: 400;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
   }
 
   /* Right section: Content and duration */
@@ -222,7 +222,7 @@ body:has(.episode-list-container) {
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.48px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     white-space: nowrap;
@@ -244,7 +244,7 @@ body:has(.episode-list-container) {
     font-weight: 300;
     line-height: 22px;
     letter-spacing: 0.48px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
   }
@@ -257,7 +257,7 @@ body:has(.episode-list-container) {
     font-weight: 400;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
   }
 
   /* Hide separate guest elements since they're in the title */
@@ -314,7 +314,7 @@ body:has(.episode-list-container) {
     column-gap: 14px;
     row-gap: 0;
     padding: 12px 0;
-    border-bottom: 0.5px solid #909090;
+    border-bottom: 0.5px solid var(--text-level3);
     min-height: 88px;
     align-items: start;
     width: 100%;
@@ -328,7 +328,7 @@ body:has(.episode-list-container) {
     font-size: 11px;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: baseline;
   }
 
@@ -339,7 +339,7 @@ body:has(.episode-list-container) {
     font-size: 11px;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: baseline;
   }
 
@@ -359,7 +359,7 @@ body:has(.episode-list-container) {
     font-weight: 600;
     letter-spacing: 0.42px;
     line-height: 20px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     white-space: nowrap;
@@ -381,7 +381,7 @@ body:has(.episode-list-container) {
     font-weight: 300;
     letter-spacing: 0.42px;
     line-height: 20px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
   }
@@ -395,7 +395,7 @@ body:has(.episode-list-container) {
     font-size: 11px;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: baseline;
   }
 
@@ -436,7 +436,7 @@ body:has(.episode-list-container) {
     column-gap: 14px;
     row-gap: 0;
     padding: 10px 0;
-    border-bottom: 0.5px solid #909090;
+    border-bottom: 0.5px solid var(--text-level3);
     width: 100%;
     max-width: 668px;
   }
@@ -449,7 +449,7 @@ body:has(.episode-list-container) {
     font-size: 11px;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: start;
   }
 
@@ -460,7 +460,7 @@ body:has(.episode-list-container) {
     font-weight: 600;
     letter-spacing: 0.42px;
     line-height: 20px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
   }
 
@@ -472,7 +472,7 @@ body:has(.episode-list-container) {
     font-weight: 300;
     letter-spacing: 0.42px;
     line-height: 20px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
   }
 
@@ -484,7 +484,7 @@ body:has(.episode-list-container) {
     font-size: 11px;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: center;
     margin: 0;
   }
@@ -496,7 +496,7 @@ body:has(.episode-list-container) {
     font-size: 11px;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: center;
     margin: 0;
   }
@@ -508,7 +508,7 @@ body:has(.episode-list-container) {
     font-size: 11px;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: center;
     margin: 0;
   }
@@ -520,7 +520,7 @@ body:has(.episode-list-container) {
     font-size: 11px;
     letter-spacing: 0.77px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     text-align: right;
     align-self: center;
     margin: 0;
@@ -547,7 +547,7 @@ body:has(.episode-list-container) {
     column-gap: 14px;
     row-gap: 0;
     padding: 12px 0 16px 0;
-    border-bottom: 0.5px solid #909090;
+    border-bottom: 0.5px solid var(--text-level3);
     width: 100%;
     max-width: 349px;
   }
@@ -560,7 +560,7 @@ body:has(.episode-list-container) {
     font-size: 10px;
     letter-spacing: 0.7px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: start;
   }
 
@@ -571,7 +571,7 @@ body:has(.episode-list-container) {
     font-weight: 600;
     letter-spacing: 0.39px;
     line-height: 19px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
   }
 
@@ -583,7 +583,7 @@ body:has(.episode-list-container) {
     font-weight: 300;
     letter-spacing: 0.39px;
     line-height: 19px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
   }
 
@@ -595,7 +595,7 @@ body:has(.episode-list-container) {
     font-size: 10px;
     letter-spacing: 0.7px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: center;
     margin: 0;
   }
@@ -607,7 +607,7 @@ body:has(.episode-list-container) {
     font-size: 10px;
     letter-spacing: 0.7px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: center;
     margin: 0;
   }
@@ -619,7 +619,7 @@ body:has(.episode-list-container) {
     font-size: 10px;
     letter-spacing: 0.7px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     align-self: center;
     margin: 0;
     margin-left: -1ch;
@@ -632,7 +632,7 @@ body:has(.episode-list-container) {
     font-size: 10px;
     letter-spacing: 0.7px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
     text-align: right;
     align-self: center;
     margin: 0;
@@ -690,7 +690,7 @@ body:has(.episode-list-container) {
     font-weight: 400;
     letter-spacing: 0.91px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
   }
 
   .episode-date {
@@ -700,7 +700,7 @@ body:has(.episode-list-container) {
     font-weight: 400;
     letter-spacing: 0.91px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
   }
 
   /* Right section: Content and duration with XL spacing */
@@ -723,7 +723,7 @@ body:has(.episode-list-container) {
     font-size: 20px;
     font-weight: 600;
     letter-spacing: 0.6px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     line-height: normal;
@@ -736,7 +736,7 @@ body:has(.episode-list-container) {
     font-size: 20px;
     font-weight: 300;
     letter-spacing: 0.6px;
-    color: var(--Text-level-1, #f4f4f4);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     line-height: normal;
@@ -750,7 +750,7 @@ body:has(.episode-list-container) {
     font-weight: 400;
     letter-spacing: 0.91px;
     text-transform: uppercase;
-    color: var(--Text-level-2, #ededed);
+    color: var(--text-level2);
   }
 
   /* Keep the same visibility rules as L layout */

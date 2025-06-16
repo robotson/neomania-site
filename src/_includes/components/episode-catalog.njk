@@ -1,0 +1,51 @@
+<main class="episode-list">
+  {% for post in collections.episodes | reverse %} 
+  {% set ep_data = post.data %}
+  <a href="{{ post.url | url }}" class="episode-row">
+    <div class="episode-row-top">
+      <span class="episode-number">{{ (ep_data.episodeNumber | string) | padStart(2, '0') }}</span>
+      <div class="episode-main">
+        <h2 class="episode-title">
+        <span class="episode-title-display">{{ ep_data.displayTitle }}</span>
+        <span class="episode-title-original">{{ ep_data.displayTitle }}{% if ep_data.guest %} w/ {{ ep_data.guest }}{% endif %}</span>
+      </h2>
+        <p class="episode-desc roboto-slant">{{ ep_data.subtitle }}</p>
+      </div>
+    </div>
+    <div class="episode-row-bottom">
+      {% if ep_data.guest %}
+      <span class="episode-guest-w">w/</span>
+      <div class="episode-guest-info">
+        <span class="episode-guest-name">{{ ep_data.guest }}</span>
+        <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
+        <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
+      </div>
+      {% else %}
+      <div></div> {# Empty space for alignment #}
+      <div class="episode-guest-info">
+        <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
+        <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
+      </div>
+      {% endif %}
+    </div>
+    
+    {# Additional structure for 1280px+ flexbox layout #}
+    <div class="episode-content">
+      <div class="episode-left">
+        <span class="episode-number">{{ (ep_data.episodeNumber | string) | padStart(2, '0') }}</span>
+        <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
+      </div>
+      <div class="episode-right">
+        <div class="episode-main">
+          <h2 class="episode-title">
+            <span class="episode-title-display">{{ ep_data.displayTitle }}</span>
+            <span class="episode-title-original">{{ ep_data.displayTitle }}{% if ep_data.guest %} w/ {{ ep_data.guest }}{% endif %}</span>
+          </h2>
+          <p class="episode-desc roboto-slant">{{ ep_data.subtitle }}</p>
+        </div>
+        <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</main> 
