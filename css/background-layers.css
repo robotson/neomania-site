@@ -2,33 +2,36 @@
 
 /* ===== SVG GRAIN/TURBULENCE LAYER ===== */
 
-.grain-overlay {
-  position: fixed;
+.main-content .grain-overlay {
+  display: none; /* Temporarily disabled */
+  position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
-  opacity: 0.2;
+  z-index: 0; /* Behind the content */
+  opacity: 0.15;
   mix-blend-mode: soft-light;
-  transition: opacity 0.8s ease-in-out;
 }
 
-/* Increase grain visibility during transition and sticky states */
+/* Increase grain visibility during transition and sticky states - NO LONGER NEEDED */
+/*
 .wordmark-transitioning ~ .grain-overlay,
 .wordmark-sticky ~ .grain-overlay {
   opacity: 0.4;
 }
+*/
 
 /* Theme-aware grain coloring */
-:root.light-theme .grain-overlay {
+:root.light-theme .main-content .grain-overlay {
   filter: invert(1);
 }
 
 /* ===== CRAWLING TEXTURE LAYER ===== */
 
-.crawl-texture {
-  position: fixed;
+.main-content .crawl-texture {
+  display: none; /* Temporarily disabled */
+  position: absolute;
   inset: 0;
   /* Fallback pattern for testing */
   background-image: linear-gradient(
@@ -52,20 +55,23 @@
   background-size: 60px 60px, 40px 40px;
   background-repeat: repeat;
   background-position: 0 0;
-  opacity: 0;
-  z-index: -2;
+  opacity: 0.6; /* Always visible now */
+  z-index: 0; /* Behind the content */
   pointer-events: none;
+  animation: crawl-horizontal 240s linear infinite;
 
-  /* Smooth fade-in during transition */
-  transition: opacity 0.8s ease-in-out;
+  /* No longer needed */
+  /* transition: opacity 0.8s ease-in-out; */
 }
 
-/* Show texture during transition and sticky states */
+/* Show texture during transition and sticky states - NO LONGER NEEDED */
+/*
 .wordmark-transitioning ~ .crawl-texture,
 .wordmark-sticky ~ .crawl-texture {
   opacity: 0.6;
   animation: crawl-horizontal 240s linear infinite;
 }
+*/
 
 /* Horizontal crawling animation */
 @keyframes crawl-horizontal {
@@ -81,28 +87,28 @@
 
 /* Mobile - smaller pattern */
 @media (max-width: 640px) {
-  .crawl-texture {
+  .main-content .crawl-texture {
     background-size: 40px 40px, 30px 30px;
   }
 }
 
 /* Tablet */
 @media (min-width: 641px) and (max-width: 1279px) {
-  .crawl-texture {
+  .main-content .crawl-texture {
     background-size: 50px 50px, 35px 35px;
   }
 }
 
 /* Desktop */
 @media (min-width: 1280px) and (max-width: 1919px) {
-  .crawl-texture {
+  .main-content .crawl-texture {
     background-size: 60px 60px, 40px 40px;
   }
 }
 
 /* XL Desktop */
 @media (min-width: 1920px) {
-  .crawl-texture {
+  .main-content .crawl-texture {
     background-size: 80px 80px, 50px 50px;
   }
 }
@@ -131,15 +137,20 @@
   z-index: 10;
 }
 
+.main-content > .episode-list-container {
+  position: relative;
+  z-index: 1;
+}
+
 /* ===== PERFORMANCE OPTIMIZATIONS ===== */
 
-.crawl-texture {
+.main-content .crawl-texture {
   /* GPU acceleration for smooth animation */
   will-change: background-position;
   transform: translateZ(0);
 }
 
-.grain-overlay {
+.main-content .grain-overlay {
   /* GPU acceleration for blend modes */
   will-change: opacity;
   transform: translateZ(0);
@@ -148,12 +159,12 @@
 /* ===== ACCESSIBILITY & REDUCED MOTION ===== */
 
 @media (prefers-reduced-motion: reduce) {
-  .crawl-texture {
+  .main-content .crawl-texture {
     animation: none !important;
     background-position: 0 0 !important;
   }
 
-  .grain-overlay animate {
+  .main-content .grain-overlay animate {
     animation-duration: 0s !important;
   }
 }
@@ -161,29 +172,31 @@
 /* ===== THEME INTEGRATION ===== */
 
 /* Light theme adjustments */
-:root.light-theme .crawl-texture {
+:root.light-theme .main-content .crawl-texture {
   opacity: 0.3;
   mix-blend-mode: multiply;
 }
 
+/*
 :root.light-theme .wordmark-transitioning ~ .crawl-texture,
 :root.light-theme .wordmark-sticky ~ .crawl-texture {
   opacity: 0.4;
 }
+*/
 
 /* Dark theme (default) */
-:root:not(.light-theme) .crawl-texture {
+:root:not(.light-theme) .main-content .crawl-texture {
   mix-blend-mode: screen;
 }
 
 /* ===== HIGH CONTRAST MODE ===== */
 
 @media (prefers-contrast: high) {
-  .grain-overlay {
+  .main-content .grain-overlay {
     opacity: 0.1 !important;
   }
 
-  .crawl-texture {
+  .main-content .crawl-texture {
     opacity: 0.2 !important;
   }
 }
@@ -192,7 +205,7 @@
 
 /* Fallback for browsers without mix-blend-mode */
 @supports not (mix-blend-mode: soft-light) {
-  .grain-overlay {
+  .main-content .grain-overlay {
     opacity: 0.1;
   }
 }

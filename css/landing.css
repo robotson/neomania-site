@@ -1,320 +1,227 @@
 /*———— CSS CUSTOM PROPERTIES ————*/
 :root {
-  --hero-buffer-size: 120px; /* Breathing room between hero and episodes */
+  --header-height: 6.25rem;
+  --hero-start-height: 100vh;
+  /* Set a long runway to create a buffer after the main animation */
+  --animation-scroll-range: 200vh;
 }
 
-/*———— DEBUGGING COLORS ————*/
-/* Temporary colors to visualize sections during development */
-
-/* Hero section that provides proper sticky context */
-.hero-section {
-  /* This container defines the sticky context - hero will stick within this container */
-  position: relative;
-  /* Container needs to be tall enough to contain the shrinking hero */
-  height: 100vh; /* Tall enough for hero to shrink within without disappearing */
-  background: linear-gradient(
-    135deg,
-    #2c3e50,
-    #34495e
-  ); /* Dark background for section */
-
-  /* Debug: Add border to see exactly where container ends */
-  border: 3px solid yellow;
-}
-
-/* Remove the separate spacer - hero section IS the hero block */
-
-.main-hero {
-  /* Hero is sticky - will stick to top when it would otherwise scroll out of view */
-  position: sticky;
+/*———— LAYOUT CONTAINERS ————*/
+.fixed-hero-container {
+  /* This container is fixed and holds the hero. It does not scroll. */
+  position: fixed;
   top: 0;
-  /* Hero starts at 50vh within the larger container */
-  height: 50vh; /* Starting height within 100vh container */
-  min-height: 4.5rem; /* Never smaller than header height */
-  display: flex;
-  align-items: flex-end; /* Bottom-align the wordmark within hero block */
-  justify-content: center; /* Centre the wordmark horizontally */
-  background: linear-gradient(
-    135deg,
-    #ff6b6b,
-    #ee5a24
-  ); /* Red gradient for hero */
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none; /* Allows clicks to pass through to content below */
   z-index: 100;
-  margin: 0;
-  /* overflow: hidden; -- REMOVED: This can break sticky positioning */
-  box-sizing: border-box;
+}
 
-  /* Debug: Add border to see sticky behavior */
-  border: 3px solid lime;
+.scroll-container {
+  /* This invisible element is tall and creates the scrollbar. */
+  height: var(--animation-scroll-range);
+  width: 100%;
+}
 
-  /* Add padding so wordmark isn't right at the edge */
-  padding-bottom: 2rem;
+.main-content {
+  /* The actual page content, starts after the scroll container. */
+  background: #111;
+  position: relative;
+  z-index: 1;
+  padding: 15rem 1rem 4rem;
+  /* Ensure there's always enough scroll-able area for the animation to finish */
+  min-height: 100vh;
+  /* Start hidden and let the animation fade it in */
+  opacity: 0;
+}
+
+/*———— HERO ELEMENT ————*/
+.main-hero {
+  height: var(--hero-start-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  /* This will be used for the final layout */
+  padding: 0 2rem;
 }
 
 .hero-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 0rem;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 10;
 }
 
-/*———— WORDMARK SIZING ————*/
-/* initial size */
-.animated-wordmark {
-  font-family: "Roboto Flex", sans-serif;
-  position: relative;
-  z-index: 10;
+/* Add styles for the new nav elements */
+.header-nav {
+  display: none; /* Temporarily hidden to fix spacing */
+  gap: 1.5rem;
+  opacity: 0; /* Start hidden */
+  flex-shrink: 0;
 }
-
-.animated-wordmark .wordmark-text {
-  font-size: clamp(3rem, 12vw, 8rem);
-  transition: font-size 0.2s linear;
-  margin: 0;
-  text-align: center;
-  white-space: nowrap;
-  color: white; /* High contrast against colorful backgrounds */
-  letter-spacing: 0.05em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Strong shadow for visibility */
-  background: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  backdrop-filter: blur(5px);
+.header-nav-item {
+  font-family: "Space Mono", monospace;
+  font-size: 0.8125rem; /* 13px, was 0.875rem */
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #909090;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
-
-/* Individual letter styling preserved */
-.wordmark-letter {
-  display: inline-block;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+.header-nav-item:hover {
   color: white;
 }
-
-/* sentinel: 1px line positioned at the exact top of the wordmark */
-#hero-sentinel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  pointer-events: none;
-  /* Make sentinel visible for debugging */
-  background: yellow;
-  z-index: 1000;
+.header-nav-item.is-active {
+  color: white;
+  text-decoration: underline;
 }
 
-/*———— SCROLL ANIMATION (modern browsers) ————*/
+/*———— SCROLL-DRIVEN ANIMATIONS ————*/
 @supports (animation-timeline: scroll()) {
-  /* Only animate the hero, not the container - container needs stable size for sticky */
   .main-hero {
-    animation: hero-compress linear both;
+    animation: hero-shrink linear both;
     animation-timeline: scroll(root);
-    animation-range: 0vh 50vh; /* Compress over first 50vh of scroll */
+    animation-range: 0vh 100vh;
   }
-  @keyframes hero-compress {
-    from {
-      height: 50vh; /* Starting height - half the container */
-    }
+
+  @keyframes hero-shrink {
     to {
-      height: 4.5rem; /* Final header height */
+      height: var(--header-height);
+      background: rgba(10, 10, 10, 0.75);
+      backdrop-filter: blur(12px);
+      justify-content: center; /* Always center the hero container */
     }
   }
 
-  .animated-wordmark .wordmark-text {
+  .wordmark-text {
     animation: text-shrink linear both;
     animation-timeline: scroll(root);
-    animation-range: 0vh 50vh; /* Shrink text over first 50vh of scroll */
+    animation-range: 0vh 100vh;
   }
+
   @keyframes text-shrink {
     to {
-      font-size: clamp(1.5rem, 4vw, 2rem);
-    }
-  }
-}
-
-/*———— Fallback (no scroll‑timeline) ————*/
-@supports not (animation-timeline: scroll()) {
-  .main-hero {
-    height: auto;
-  }
-  .animated-wordmark .wordmark-text {
-    font-size: clamp(1.5rem, 4vw, 2rem);
-  }
-}
-
-/* ------------- FINAL LOCKED STATE ------------- */
-.main-hero.locked {
-  /* Switch from sticky to fixed so it can't be "un‑stuck" */
-  position: fixed;
-  top: 0;
-  left: 0; /* <- keep it stretched */
-  right: 0;
-  width: 100%;
-
-  /* height will tween from the big hero down to 4.5rem */
-  height: var(--header-height, 4.5rem);
-
-  /* Keep the letters centred vertically inside the 4.5 rem bar */
-  align-items: center;
-  padding: 0;
-
-  /* smooth shrink instead of instant snap */
-  transition: height 0.35s ease, padding 0.35s ease;
-
-  /* kill any scroll-timeline */
-  animation: none !important;
-}
-
-.main-hero.locked .animated-wordmark .wordmark-text {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  transition: font-size 0.35s ease; /* optional, to glide too */
-  animation: none !important;
-}
-
-/* Additional elements preserved from original */
-.subtitle {
-  font-family: "Roboto Flex";
-  font-size: 1.2rem;
-  text-align: center;
-  margin-bottom: 2rem;
-  opacity: 0.8;
-  max-width: 600px;
-}
-
-.letter {
-  display: inline-block;
-  font-variation-settings: "wght" 400, "wdth" 100, "opsz" 48, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-  text-shadow: var(--text-shadow);
-}
-
-/* Media queries for better responsiveness */
-@media (max-width: 600px) {
-  .animated-wordmark .wordmark-text {
-    font-size: clamp(2.5rem, 14vw, 6rem);
-  }
-
-  @supports (animation-timeline: scroll()) {
-    @keyframes text-shrink {
-      to {
-        font-size: clamp(1.2rem, 5vw, 1.8rem);
-      }
+      /* Make final font size smaller to match design */
+      font-size: 2.2rem; /* Was 1.75rem, to match ~35px */
+      text-shadow: none;
     }
   }
 
-  @supports not (animation-timeline: scroll()) {
-    .animated-wordmark .wordmark-text {
-      font-size: clamp(1.2rem, 5vw, 1.8rem);
+  .main-content {
+    animation: content-fade-in linear both;
+    animation-timeline: scroll(root);
+    /* Fade in concurrently with the header collapse. */
+    animation-range: 0vh 100vh;
+  }
+
+  /* New animation for nav items */
+  .header-nav {
+    animation: nav-fade-in linear both;
+    animation-timeline: scroll(root);
+    /* Fade in as the header is locking into place. */
+    animation-range: 80vh 100vh;
+  }
+
+  @keyframes nav-fade-in {
+    to {
+      opacity: 1;
     }
   }
-}
 
-@media (min-width: 1200px) {
-  .animated-wordmark .wordmark-text {
-    font-size: clamp(4rem, 8vw, 120px);
-  }
-
-  @supports (animation-timeline: scroll()) {
-    @keyframes text-shrink {
-      to {
-        font-size: clamp(1.8rem, 3vw, 2.2rem);
-      }
+  @keyframes content-fade-in {
+    to {
+      opacity: 1;
     }
   }
 
-  @supports not (animation-timeline: scroll()) {
-    .animated-wordmark .wordmark-text {
-      font-size: clamp(1.8rem, 3vw, 2.2rem);
+  /* The textures are now part of the main content and should not fade out with the hero. */
+  /*
+  .crawl-texture,
+  .grain-overlay {
+    animation: fade-out linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0vh 75vh;
+  }
+
+  @keyframes fade-out {
+    to {
+      opacity: 0;
     }
   }
-}
+  */
 
-.sun-beams line {
-  stroke: var(--text-color);
-  stroke-width: 2px;
-  transform-origin: center;
-}
+  .hero-container {
+    animation: hero-container-expand linear both;
+    animation-timeline: scroll(root);
+    /* Expand as the header is locking into place. */
+    animation-range: 80vh 100vh;
+  }
 
-/* Motion-related settings */
-html[data-motion="reduced"] .theme-toggle {
-  transition: none;
-}
-
-/*———— HERO BUFFER SPACER ————*/
-/* Buffer block: ~50vh between hero and episodes */
-#hero-buffer-spacer {
-  position: relative;
-  height: 50vh; /* Buffer block: about half viewport height */
-  background: linear-gradient(
-    135deg,
-    #4834d4,
-    #686de0
-  ); /* Purple gradient for buffer */
-  transition: height 0.35s cubic-bezier(0.4, 1.6, 0.6, 1);
-  overflow: hidden;
-  border-top: 3px solid #fff;
-  border-bottom: 3px solid #fff;
-}
-
-#hero-buffer-spacer.collapsed {
-  height: 0 !important;
-}
-
-/* Second sentinel at top of buffer */
-#buffer-sentinel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  pointer-events: none;
-  /* Make sentinel visible for debugging */
-  background: lime;
-  z-index: 1000;
-}
-
-/* Episodes content area */
-.main-content {
-  background: linear-gradient(
-    135deg,
-    #00d2d3,
-    #54a0ff
-  ); /* Cyan gradient for content */
-  min-height: 200vh; /* Make it tall enough to scroll */
-  padding: 2rem;
-  border-top: 3px solid #fff;
+  @keyframes hero-container-expand {
+    to {
+      gap: 2rem;
+    }
+  }
 }
 
 .episode-list-container {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   border-radius: 8px;
   padding: 1rem;
-  backdrop-filter: blur(10px);
+}
+
+/*———— WORDMARK SIZING ————*/
+.animated-wordmark {
+  font-family: "Roboto Flex", sans-serif;
+}
+
+.animated-wordmark .wordmark-text {
+  font-size: clamp(2rem, 10vw, 6rem); /* Adjusted for smaller mobile size */
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /*———— DEBUG INFO OVERLAY ————*/
-/* Visual debugging info in top-right corner */
 .debug-info {
   position: fixed;
   top: 10px;
   right: 10px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   color: white;
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 8px;
   font-family: monospace;
   font-size: 12px;
   z-index: 9999;
-  max-width: 300px;
   backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .debug-info h4 {
   margin: 0 0 0.5rem 0;
-  color: #4caf50;
+  color: #00faff; /* Cyan */
+  font-weight: normal;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  align-items: center;
+}
+
+.status-grid .label {
+  color: #aaa;
+}
+
+.status-grid .value {
+  color: #f5d76e; /* Yellow */
+  font-weight: bold;
 }
 
 .debug-info .status {
@@ -329,4 +236,38 @@ html[data-motion="reduced"] .theme-toggle {
 .debug-info .status.locked {
   color: #f44336;
   font-weight: bold;
+}
+
+/*———— DEBUG PANEL ————*/
+.debug-panel {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-family: "SF Mono", "Consolas", monospace;
+  font-size: 0.75rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+.debug-panel__title {
+  font-weight: bold;
+  color: #00ffab;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+.debug-panel__item {
+  display: flex;
+  justify-content: space-between;
+}
+.debug-panel__item span:first-child {
+  color: #a0a0a0;
 }

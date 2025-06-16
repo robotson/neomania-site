@@ -1,88 +1,33 @@
-/* ===== WORDMARK DANCE - Variable Font Wiggle Animation ===== */
+/* ===== WORDMARK DANCE - Base Styling ===== */
 
-/* CSS Custom Properties for Final Letter States */
+/* This file provides the basic display properties for the letters.
+   All animation and font-variation-settings are now handled
+   exclusively by js/wordmark-sequence.js to prevent CSS
+   specificity conflicts. */
+
 :root {
-  /* Final resting font variations */
+  /* Final resting font variations, available for fallbacks or transitions. */
   --wordmark-final-variations: "wght" 500, "wdth" 100, "slnt" 0, "opsz" 48,
     "GRAD" 0, "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203,
     "YTFI" 738, "YTLC" 514, "YTUC" 712;
 }
 
-/* ===== INDIVIDUAL LETTER STYLING ===== */
-
 .wordmark-letter {
   display: inline-block;
   text-shadow: var(--text-shadow);
   color: var(--text-color);
+  /* The font-variation-settings are now applied via inline style from JS */
 }
 
-/* Individual letter styling - thick to thin progression (Figma-matched) */
-.wordmark-letter:nth-child(1) {
-  /* N - heaviest */
-  font-variation-settings: "wght" 900, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-}
+/* ===== ACCESSIBILITY & THEME SUPPORT ===== */
 
-.wordmark-letter:nth-child(2) {
-  /* e - heavy */
-  font-variation-settings: "wght" 750, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-}
-
-.wordmark-letter:nth-child(3) {
-  /* o - medium-heavy */
-  font-variation-settings: "wght" 650, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-}
-
-.wordmark-letter:nth-child(4) {
-  /* m - medium */
-  font-variation-settings: "wght" 550, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-}
-
-.wordmark-letter:nth-child(5) {
-  /* a - medium-light */
-  font-variation-settings: "wght" 450, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-}
-
-.wordmark-letter:nth-child(6) {
-  /* n - light */
-  font-variation-settings: "wght" 400, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-}
-
-.wordmark-letter:nth-child(7) {
-  /* i - very light */
-  font-variation-settings: "wght" 350, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-}
-
-.wordmark-letter:nth-child(8) {
-  /* a - lightest */
-  font-variation-settings: "wght" 300, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
-}
-
-/* ===== REDUCED MOTION SUPPORT ===== */
-
+/* For users who prefer reduced motion, JS will be disabled, and the 
+   CSS animation in landing.css provides a graceful fallback. */
 @media (prefers-reduced-motion: reduce) {
   .wordmark-letter {
-    animation: none !important;
-    font-variation-settings: var(--wordmark-final-variations) !important;
+    /* Let the fallback state from landing.css take over */
   }
 }
-
-/* ===== THEME INTEGRATION ===== */
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {

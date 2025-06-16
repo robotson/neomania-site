@@ -726,20 +726,17 @@ body:has(.episode-list-container) {
     color: var(--text-color);
     margin: 0;
     padding: 0;
-    line-height: normal;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
   }
 
   .episode-desc {
     font-size: 20px;
     font-weight: 300;
+    font-variation-settings: "slnt" -10;
+    line-height: 22px;
     letter-spacing: 0.6px;
     color: var(--text-color);
     margin: 0;
     padding: 0;
-    line-height: normal;
   }
 
   .episode-duration {
