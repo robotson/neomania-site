@@ -1,3 +1,5 @@
+/* Imports removed - now loaded explicitly in base.njk */
+
 :root {
   --primary-color: #3498db;
   --secondary-color: #2c3e50;

@@ -1,0 +1,93 @@
+/* ===== WORDMARK DANCE - Variable Font Wiggle Animation ===== */
+
+/* CSS Custom Properties for Final Letter States */
+:root {
+  /* Final resting font variations */
+  --wordmark-final-variations: "wght" 500, "wdth" 100, "slnt" 0, "opsz" 48,
+    "GRAD" 0, "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203,
+    "YTFI" 738, "YTLC" 514, "YTUC" 712;
+}
+
+/* ===== INDIVIDUAL LETTER STYLING ===== */
+
+.wordmark-letter {
+  display: inline-block;
+  text-shadow: var(--text-shadow);
+  color: var(--text-color);
+}
+
+/* Individual letter styling - thick to thin progression (Figma-matched) */
+.wordmark-letter:nth-child(1) {
+  /* N - heaviest */
+  font-variation-settings: "wght" 900, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
+    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
+    "YTLC" 514, "YTUC" 712;
+}
+
+.wordmark-letter:nth-child(2) {
+  /* e - heavy */
+  font-variation-settings: "wght" 750, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
+    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
+    "YTLC" 514, "YTUC" 712;
+}
+
+.wordmark-letter:nth-child(3) {
+  /* o - medium-heavy */
+  font-variation-settings: "wght" 650, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
+    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
+    "YTLC" 514, "YTUC" 712;
+}
+
+.wordmark-letter:nth-child(4) {
+  /* m - medium */
+  font-variation-settings: "wght" 550, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
+    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
+    "YTLC" 514, "YTUC" 712;
+}
+
+.wordmark-letter:nth-child(5) {
+  /* a - medium-light */
+  font-variation-settings: "wght" 450, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
+    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
+    "YTLC" 514, "YTUC" 712;
+}
+
+.wordmark-letter:nth-child(6) {
+  /* n - light */
+  font-variation-settings: "wght" 400, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
+    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
+    "YTLC" 514, "YTUC" 712;
+}
+
+.wordmark-letter:nth-child(7) {
+  /* i - very light */
+  font-variation-settings: "wght" 350, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
+    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
+    "YTLC" 514, "YTUC" 712;
+}
+
+.wordmark-letter:nth-child(8) {
+  /* a - lightest */
+  font-variation-settings: "wght" 300, "wdth" 100, "opsz" 80, "GRAD" 0, "slnt" 0,
+    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
+    "YTLC" 514, "YTUC" 712;
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  .wordmark-letter {
+    animation: none !important;
+    font-variation-settings: var(--wordmark-final-variations) !important;
+  }
+}
+
+/* ===== THEME INTEGRATION ===== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .wordmark-letter {
+    text-shadow: none;
+    font-weight: 600;
+  }
+}

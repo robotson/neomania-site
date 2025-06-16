@@ -1,0 +1,205 @@
+/* ===== BACKGROUND LAYERS SYSTEM ===== */
+
+/* ===== SVG GRAIN/TURBULENCE LAYER ===== */
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.2;
+  mix-blend-mode: soft-light;
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* Increase grain visibility during transition and sticky states */
+.wordmark-transitioning ~ .grain-overlay,
+.wordmark-sticky ~ .grain-overlay {
+  opacity: 0.4;
+}
+
+/* Theme-aware grain coloring */
+:root.light-theme .grain-overlay {
+  filter: invert(1);
+}
+
+/* ===== CRAWLING TEXTURE LAYER ===== */
+
+.crawl-texture {
+  position: fixed;
+  inset: 0;
+  /* Fallback pattern for testing */
+  background-image: linear-gradient(
+      45deg,
+      transparent 25%,
+      rgba(255, 255, 255, 0.1) 25%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 50%,
+      transparent 75%,
+      rgba(255, 255, 255, 0.1) 75%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 25%,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 50%,
+      transparent 75%,
+      rgba(255, 255, 255, 0.05) 75%
+    );
+  background-size: 60px 60px, 40px 40px;
+  background-repeat: repeat;
+  background-position: 0 0;
+  opacity: 0;
+  z-index: -2;
+  pointer-events: none;
+
+  /* Smooth fade-in during transition */
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* Show texture during transition and sticky states */
+.wordmark-transitioning ~ .crawl-texture,
+.wordmark-sticky ~ .crawl-texture {
+  opacity: 0.6;
+  animation: crawl-horizontal 240s linear infinite;
+}
+
+/* Horizontal crawling animation */
+@keyframes crawl-horizontal {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -200vw;
+  }
+}
+
+/* ===== RESPONSIVE TEXTURE SWITCHING ===== */
+
+/* Mobile - smaller pattern */
+@media (max-width: 640px) {
+  .crawl-texture {
+    background-size: 40px 40px, 30px 30px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1279px) {
+  .crawl-texture {
+    background-size: 50px 50px, 35px 35px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1280px) and (max-width: 1919px) {
+  .crawl-texture {
+    background-size: 60px 60px, 40px 40px;
+  }
+}
+
+/* XL Desktop */
+@media (min-width: 1920px) {
+  .crawl-texture {
+    background-size: 80px 80px, 50px 50px;
+  }
+}
+
+/* ===== LAYER Z-INDEX MANAGEMENT ===== */
+
+/* Z-index stack (from back to front):
+   -3: Base background
+   -2: Crawling texture
+   -1: (reserved)
+    0: Default content
+    1: SVG grain overlay
+   10: Wordmark content
+  100: Sticky header
+  200: Theme toggle
+  300: Modals/overlays
+*/
+
+.main-hero {
+  position: relative;
+  z-index: 0;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 10;
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+
+.crawl-texture {
+  /* GPU acceleration for smooth animation */
+  will-change: background-position;
+  transform: translateZ(0);
+}
+
+.grain-overlay {
+  /* GPU acceleration for blend modes */
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+/* ===== ACCESSIBILITY & REDUCED MOTION ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  .crawl-texture {
+    animation: none !important;
+    background-position: 0 0 !important;
+  }
+
+  .grain-overlay animate {
+    animation-duration: 0s !important;
+  }
+}
+
+/* ===== THEME INTEGRATION ===== */
+
+/* Light theme adjustments */
+:root.light-theme .crawl-texture {
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+}
+
+:root.light-theme .wordmark-transitioning ~ .crawl-texture,
+:root.light-theme .wordmark-sticky ~ .crawl-texture {
+  opacity: 0.4;
+}
+
+/* Dark theme (default) */
+:root:not(.light-theme) .crawl-texture {
+  mix-blend-mode: screen;
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+
+@media (prefers-contrast: high) {
+  .grain-overlay {
+    opacity: 0.1 !important;
+  }
+
+  .crawl-texture {
+    opacity: 0.2 !important;
+  }
+}
+
+/* ===== FALLBACK FOR OLDER BROWSERS ===== */
+
+/* Fallback for browsers without mix-blend-mode */
+@supports not (mix-blend-mode: soft-light) {
+  .grain-overlay {
+    opacity: 0.1;
+  }
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(10px)) {
+  .wordmark-sticky {
+    background: rgba(var(--bg-color-rgb), 0.9);
+  }
+}

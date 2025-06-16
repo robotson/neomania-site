@@ -10,6 +10,8 @@
   --light-error: #ff0537; /* Error states */
   --light-success: #00e777; /* Success states */
   --light-warning: #ffe205; /* Warning states */
+  --light-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1),
+    -1px -1px 2px rgba(255, 255, 255, 0.5);
 
   /* Figma Design System Tokens - Dark Theme */
   --dark-level1: #f4f4f4; /* Main text, titles, active nav */
@@ -22,6 +24,8 @@
   --dark-error: #ff0550; /* Error states */
   --dark-success: #11fb8a; /* Success states */
   --dark-warning: #ffe205; /* Warning states */
+  --dark-text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
 }
 
 html {
@@ -44,6 +48,7 @@ html {
   --error-color: var(--dark-error);
   --success-color: var(--dark-success);
   --warning-color: var(--dark-warning);
+  --text-shadow: var(--dark-text-shadow);
 }
 
 /* Light theme class */
@@ -58,6 +63,7 @@ html {
   --error-color: var(--light-error);
   --success-color: var(--light-success);
   --warning-color: var(--light-warning);
+  --text-shadow: var(--light-text-shadow);
 }
 
 /* Theme toggle styles */

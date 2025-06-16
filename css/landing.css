@@ -1,47 +1,98 @@
+/*———— HERO LAYOUT ————*/
 .main-hero {
-  margin: 0;
-  min-height: 100vh;
+  position: relative;
+  height: 100vh; /* fills viewport */
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   background: var(--bg-color);
-  color: var(--text-color);
-  overflow: hidden;
-  padding: 1rem;
-  box-sizing: border-box;
+  z-index: 100;
+  /* Pin after we scroll past it */
   position: sticky;
   top: 0;
-  z-index: 1;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-.container {
+.hero-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
-.text {
-  font-family: "Roboto Flex";
-  font-size: 12vw;
+/*———— WORDMARK SIZING ————*/
+/* initial size */
+.animated-wordmark {
+  font-family: "Roboto Flex", sans-serif;
+  position: relative;
+  z-index: 10;
+}
+
+.animated-wordmark .wordmark-text {
+  font-size: clamp(3rem, 12vw, 8rem);
+  transition: font-size 0.2s linear;
+  margin: 0;
   text-align: center;
-  margin-bottom: 1rem;
-  width: 100%;
   white-space: nowrap;
+  color: var(--text-color);
+  letter-spacing: 0.05em;
 }
 
-.text span {
+/* Individual letter styling preserved */
+.wordmark-letter {
   display: inline-block;
-  font-variation-settings: "wght" 400, "wdth" 100, "opsz" 48, "GRAD" 0, "slnt" 0,
-    "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738,
-    "YTLC" 514, "YTUC" 712;
   text-shadow: var(--text-shadow);
+  color: var(--text-color);
 }
 
+/*———— SCROLL ANIMATION (modern browsers) ————*/
+@supports (animation-timeline: scroll()) {
+  .main-hero {
+    animation: hero-compress linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0vh 60vh;
+  }
+  @keyframes hero-compress {
+    to {
+      height: 4.5rem;
+    } /* header height */
+  }
+
+  .animated-wordmark .wordmark-text {
+    animation: text-shrink linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0vh 60vh;
+  }
+  @keyframes text-shrink {
+    to {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+  }
+}
+
+/*———— Fallback (no scroll‑timeline) ————*/
+@supports not (animation-timeline: scroll()) {
+  .main-hero {
+    height: auto;
+  }
+  .animated-wordmark .wordmark-text {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+}
+
+/*———— Ensure centred even when compressed ————*/
+.main-hero.stuck {
+  align-items: flex-start; /* pin to top inside sticky area */
+  padding-top: 0.75rem; /* breathing room */
+}
+
+/* Additional elements preserved from original */
 .subtitle {
   font-family: "Roboto Flex";
   font-size: 1.2rem;
@@ -61,14 +112,42 @@
 
 /* Media queries for better responsiveness */
 @media (max-width: 600px) {
-  .text {
-    font-size: 14vw;
+  .animated-wordmark .wordmark-text {
+    font-size: clamp(2.5rem, 14vw, 6rem);
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @keyframes text-shrink {
+      to {
+        font-size: clamp(1.2rem, 5vw, 1.8rem);
+      }
+    }
+  }
+
+  @supports not (animation-timeline: scroll()) {
+    .animated-wordmark .wordmark-text {
+      font-size: clamp(1.2rem, 5vw, 1.8rem);
+    }
   }
 }
 
 @media (min-width: 1200px) {
-  .text {
-    font-size: 100px;
+  .animated-wordmark .wordmark-text {
+    font-size: clamp(4rem, 8vw, 120px);
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @keyframes text-shrink {
+      to {
+        font-size: clamp(1.8rem, 3vw, 2.2rem);
+      }
+    }
+  }
+
+  @supports not (animation-timeline: scroll()) {
+    .animated-wordmark .wordmark-text {
+      font-size: clamp(1.8rem, 3vw, 2.2rem);
+    }
   }
 }
 
