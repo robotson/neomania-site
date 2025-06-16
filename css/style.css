@@ -62,3 +62,8 @@ body.home-page {
   margin: 0;
   padding: 0;
 }
+
+/* Apply a black background to single episode pages */
+.episode-page {
+  background: var(--bg-color);
+}

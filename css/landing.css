@@ -2,8 +2,8 @@
 :root {
   --header-height: 6.25rem;
   --hero-start-height: 100vh;
-  /* Set a long runway to create a buffer after the main animation */
-  --animation-scroll-range: 200vh;
+  /* Adjust runway to remove empty buffer. Animation now happens over the full scroll distance. */
+  --animation-scroll-range: 100vh;
 }
 
 /*———— LAYOUT CONTAINERS ————*/
@@ -29,10 +29,10 @@
   background: #111;
   position: relative;
   z-index: 1;
-  padding: 15rem 1rem 4rem;
+  padding: 20rem 1rem 40rem;
   /* Ensure there's always enough scroll-able area for the animation to finish */
-  min-height: 100vh;
-  /* Start hidden and let the animation fade it in */
+  min-height: calc(100vh - 20rem);
+  /* Start hidden, will be faded in by JS */
   opacity: 0;
 }
 
@@ -59,7 +59,8 @@
 .header-nav {
   display: none; /* Temporarily hidden to fix spacing */
   gap: 1.5rem;
-  opacity: 0; /* Start hidden */
+  /* Start hidden, will be faded in by JS */
+  opacity: 0;
   flex-shrink: 0;
 }
 .header-nav-item {
@@ -77,100 +78,6 @@
 .header-nav-item.is-active {
   color: white;
   text-decoration: underline;
-}
-
-/*———— SCROLL-DRIVEN ANIMATIONS ————*/
-@supports (animation-timeline: scroll()) {
-  .main-hero {
-    animation: hero-shrink linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0vh 100vh;
-  }
-
-  @keyframes hero-shrink {
-    to {
-      height: var(--header-height);
-      background: rgba(10, 10, 10, 0.75);
-      backdrop-filter: blur(12px);
-      justify-content: center; /* Always center the hero container */
-    }
-  }
-
-  .wordmark-text {
-    animation: text-shrink linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0vh 100vh;
-  }
-
-  @keyframes text-shrink {
-    to {
-      /* Make final font size smaller to match design */
-      font-size: 2.2rem; /* Was 1.75rem, to match ~35px */
-      text-shadow: none;
-    }
-  }
-
-  .main-content {
-    animation: content-fade-in linear both;
-    animation-timeline: scroll(root);
-    /* Fade in concurrently with the header collapse. */
-    animation-range: 0vh 100vh;
-  }
-
-  /* New animation for nav items */
-  .header-nav {
-    animation: nav-fade-in linear both;
-    animation-timeline: scroll(root);
-    /* Fade in as the header is locking into place. */
-    animation-range: 80vh 100vh;
-  }
-
-  @keyframes nav-fade-in {
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes content-fade-in {
-    to {
-      opacity: 1;
-    }
-  }
-
-  /* The textures are now part of the main content and should not fade out with the hero. */
-  /*
-  .crawl-texture,
-  .grain-overlay {
-    animation: fade-out linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0vh 75vh;
-  }
-
-  @keyframes fade-out {
-    to {
-      opacity: 0;
-    }
-  }
-  */
-
-  .hero-container {
-    animation: hero-container-expand linear both;
-    animation-timeline: scroll(root);
-    /* Expand as the header is locking into place. */
-    animation-range: 80vh 100vh;
-  }
-
-  @keyframes hero-container-expand {
-    to {
-      gap: 2rem;
-    }
-  }
-}
-
-.episode-list-container {
-  background: transparent;
-  border-radius: 8px;
-  padding: 1rem;
 }
 
 /*———— WORDMARK SIZING ————*/
@@ -270,4 +177,10 @@
 }
 .debug-panel__item span:first-child {
   color: #a0a0a0;
+}
+
+.episode-list-container {
+  background: transparent;
+  border-radius: 8px;
+  padding: 1rem;
 }
