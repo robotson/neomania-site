@@ -4,6 +4,30 @@ All notable changes to the Neomania podcast website will be documented in this f
 
 ## [Unreleased] - v1.0.0 🎉
 
+### [2025-06-23]
+
+#### Added
+
+- **Advanced Scroll-Driven Hero Animation**: Implemented sophisticated "splash → pinned" animation system with smooth interpolation over viewport height, transforming static hero into dynamic scroll-responsive experience.
+- **Variable Font Animation System**: Created complex font variation animation with 13 different axes (weight, width, optical size, grade, slant, XOPQ, XTRA, YOPQ, YTAS, YTDE, YTFI, YTLC, YTUC) featuring balanced relationships and legibility protection.
+- **Fixed Hero Container Architecture**: Introduced fixed positioning system with dedicated scroll container for seamless animation transitions without layout shift.
+- **One-Way Animation Logic**: Implemented progress-only-increases system preventing animation reversal during scroll, creating intentional directional user experience.
+- **Comprehensive Letter Animation States**: Each letter maintains individual animation states with randomized speeds, directions, and settling behaviors for organic visual movement.
+- **Cross-Browser Scroll Animation**: Used scroll event listeners for maximum compatibility while maintaining smooth 60fps performance across all browsers.
+- **Main Content Fade System**: Added opacity animation for main content that reveals over the first 10% of scroll progress, creating smooth content transition.
+- **Advanced Performance Optimization**: Animation frame cleanup and scroll listener removal upon completion to prevent memory leaks and improve performance.
+
+#### Enhanced
+
+- **Responsive Wordmark Sizing**: Dynamic font size interpolation from initial clamp-based sizing to final 2.2rem with smooth scaling.
+- **Hero Container Morphing**: Smooth height transition from full viewport (100vh) to compact header (6.25rem) with background color transitions.
+- **Typography Animation**: Dynamic text shadow reduction and letter-spacing adjustments as wordmark transitions to sticky state.
+- **Accessibility Support**: Comprehensive reduced motion support with static fallback states that respect user preferences.
+
+#### Fixed
+
+- **Scroll Animation Performance**: Refined scroll handling logic to ensure progress only increases, creating one-way animation effect and removing scroll event listeners once animation completes for enhanced performance.
+
 ### [2025-06-15]
 
 #### Added
