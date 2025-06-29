@@ -81,7 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- The One True Scroll Handler ---
   function handleScroll() {
     const scrollY = window.scrollY;
-    progress = Math.min(1, Math.max(0, scrollY / scrollAnimationEnd));
+    const newProgress = Math.min(1, Math.max(0, scrollY / scrollAnimationEnd));
+
+    // Only allow progress to increase, making it a one-way animation.
+    if (newProgress > progress) {
+      progress = newProgress;
+    }
 
     // If the animation loop isn't running and we're in the animation zone, start it.
     if (!animationFrameId && progress < 1) {
@@ -242,6 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
           .join(", ");
       });
       animationFrameId = null;
+      // Animation is complete, so we can remove the listener for performance.
+      window.removeEventListener("scroll", handleScroll);
     }
   }
 
