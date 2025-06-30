@@ -1,4 +1,26 @@
 import fs from "fs";
+import episodeAnnotations from "./src/_data/episodeAnnotations.js";
+
+/**
+ * Generates a clean, URL-friendly slug from an episode title.
+ * @param {string} title The original episode title.
+ * @returns {string} The generated slug.
+ */
+function generateSlug(title) {
+  if (!title) return "";
+
+  const cleanedTitle = title.replace(/^\d+\.\s*/, "").replace(/\s+w\/.*$/i, ""); // Case-insensitive removal of " w/..."
+
+  const slug = cleanedTitle
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+
+  const words = slug.split("-");
+  return words.slice(0, 8).join("-");
+}
 
 export default function (eleventyConfig) {
   // Copy the `css` directory to the output
@@ -12,9 +34,60 @@ export default function (eleventyConfig) {
 
   // Custom episodes collection - explicitly collect from numbered directories
   eleventyConfig.addCollection("episodes", function (collectionApi) {
-    return collectionApi
+    const episodes = collectionApi
       .getFilteredByGlob("src/episodes/*/index.md")
       .sort((a, b) => a.data.episodeNumber - b.data.episodeNumber);
+    
+    // Process each episode to add slug and merge annotations
+    episodes.forEach(episode => {
+      const episodeData = episode.data;
+      
+      // Generate slug if it doesn't exist
+      if (!episodeData.slug) {
+        episodeData.slug = generateSlug(episodeData.title);
+      }
+      
+      // Merge annotations if they exist for this episode
+      const annotation = episodeAnnotations[episodeData.slug] || {};
+      
+      // Merge annotation data into episode data
+      Object.assign(episodeData, {
+        ...episodeAnnotations._defaults,
+        ...annotation,
+        
+        // Override slug if a custom one exists in the annotation
+        slug: annotation.customSlug || episodeData.slug,
+        
+        // Special handling for arrays - combine rather than replace
+        tags: [...(episodeAnnotations._defaults.tags || []), ...(annotation.tags || [])],
+        guestLinks: [
+          ...(episodeAnnotations._defaults.guestLinks || []),
+          ...(annotation.guestLinks || []),
+        ],
+        corrections: [
+          ...(episodeAnnotations._defaults.corrections || []),
+          ...(annotation.corrections || []),
+        ],
+        
+        // Override logic: annotation takes precedence, fallback to original
+        title: annotation.customTitle || episodeData.title,
+        notes: annotation.expandedNotes || episodeData.summary,
+        image: annotation.customImage || episodeData.image,
+        
+        // Computed fields
+        hasCustomContent: !!(
+          annotation.customTitle ||
+          annotation.expandedNotes ||
+          annotation.transcript ||
+          annotation.guestLinks?.length ||
+          annotation.corrections?.length
+        ),
+        hasTranscript: !!annotation.transcript,
+        lastAnnotated: annotation.lastUpdated || null,
+      });
+    });
+    
+    return episodes;
   });
 
   // Custom filter to format duration from "HH:MM:SS" to "XH Ymin"
