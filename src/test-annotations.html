@@ -22,17 +22,17 @@ permalink: /test-annotations/
     "
   >
     <h2>📊 System Overview</h2>
-    <p><strong>Total Episodes:</strong> {{ episodes.length }}</p>
+    <p><strong>Total Episodes:</strong> {{ collections.episodes.length }}</p>
     <p>
       <strong>Episodes with annotations:</strong>
-      {% set annotatedCount = 0 %} {% for episode in episodes %} {% if
-      episode.hasCustomContent %}{% set annotatedCount = annotatedCount + 1 %}{%
+      {% set annotatedCount = 0 %} {% for post in collections.episodes %} {% if
+      post.data.hasCustomContent %}{% set annotatedCount = annotatedCount + 1 %}{%
       endif %} {% endfor %} {{ annotatedCount }}
     </p>
   </div>
 
   <h2>🏆 Featured Episode (with annotations)</h2>
-  {% for episode in episodes %} {% if episode.featured %}
+  {% for post in collections.episodes %} {% set episode = post.data %} {% if episode.featured %}
   <div
     style="
       border: 2px solid #ffd700;
@@ -89,50 +89,142 @@ permalink: /test-annotations/
   </div>
   {% endif %} {% endfor %}
 
-  <h2>📋 All Episodes</h2>
-  {% for episode in episodes %}
-  <div
-    style="
-      border: 1px solid #ddd;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      border-radius: 4px;
-    "
-  >
-    <h4>{{ episode.episodeNumber }}. {{ episode.title }}</h4>
-    <p><strong>Slug:</strong> <code>{{ episode.slug }}</code></p>
-    <p><strong>Duration:</strong> {{ episode.duration }}</p>
+  <h2>📝 Annotation Helper</h2>
+  <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+    <p><strong>📋 Copy these slugs to create annotations in <code>episodeAnnotations.js</code></strong></p>
+    <p style="font-size: 0.9rem; color: #666;">Available override fields: <code>guestPreposition</code>, <code>guestDisplayName</code>, <code>guestShortName</code>, <code>displayTitleOverride</code>, <code>customTitle</code>, <code>expandedNotes</code>, etc.</p>
+  </div>
+
+  {% for post in collections.episodes %}
+  {% set episode = post.data %}
+  <div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 250px;">
+        <h4 style="margin: 0 0 0.5rem 0;">{{ episode.episodeNumber }}. {{ episode.title }}</h4>
+        {% if episode.guest %}
+        <p style="margin: 0.25rem 0; color: #666; font-size: 0.9rem;">Guest: {{ episode.guest }}</p>
+        {% endif %}
+      </div>
+      <div style="text-align: right; min-width: 200px;">
+        <div style="background: #f8f9fa; padding: 0.5rem; border-radius: 4px; border: 1px solid #e9ecef;">
+          <div style="font-size: 0.8rem; color: #666; margin-bottom: 0.25rem;">Slug to copy:</div>
+          <code style="font-size: 0.9rem; font-weight: bold; user-select: all;">"{{ episode.slug }}"</code>
+        </div>
+      </div>
+    </div>
 
     {% if episode.hasCustomContent %}
-    <span
-      style="
-        background: #e8f5e8;
-        color: #2e7d32;
-        padding: 0.2rem 0.5rem;
-        border-radius: 12px;
-        font-size: 0.8rem;
-      "
-      >✨ Has Custom Content</span
-    >
-    {% endif %} {% if episode.tags.length > 0 %}
-    <p><strong>Tags:</strong> {{ episode.tags | join(", ") }}</p>
+    <div style="margin-top: 0.5rem;">
+      <span style="background: #e8f5e8; color: #2e7d32; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.8rem;">✨ Has Custom Content</span>
+      {% if episode.tags.length > 0 %}
+      <span style="margin-left: 0.5rem; color: #666; font-size: 0.8rem;">Tags: {{ episode.tags | join(", ") }}</span>
+      {% endif %}
+    </div>
     {% endif %}
   </div>
   {% endfor %}
 
-  <h2>🔍 Raw Data (First Episode)</h2>
+  <div style="background: #e8f4fd; padding: 1rem; border-radius: 8px; margin: 2rem 0;">
+    <h3>🔧 Annotation Template</h3>
+    <p>Copy this template and replace the slug and values:</p>
+    <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.9rem;"><code>"your-episode-slug-here": {
+  guestPreposition: "at",        // "w/", "at", "featuring", etc.
+  guestDisplayName: "Full Name", // Full official name
+  guestShortName: "Short Name",  // Abbreviated version
+  displayTitleOverride: "Custom Title", // Complete title override
+  tags: ["tag1", "tag2"],
+  featured: true,
+},</code></pre>
+  </div>
+
+  <h2>📋 All Episodes (Detailed View)</h2>
+  {% for post in collections.episodes %}
+  {% set episode = post.data %}
+  <div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; background: #fafafa;">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+      <h4 style="margin: 0; flex: 1;">{{ episode.episodeNumber }}. {{ episode.title }}</h4>
+      <span style="background: #007acc; color: white; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.8rem; white-space: nowrap; margin-left: 1rem;">{{ episode.duration }}</span>
+    </div>
+    
+    <div style="margin: 0.5rem 0;">
+      <strong>Slug:</strong> <code style="background: #e9ecef; padding: 0.2rem 0.4rem; border-radius: 3px;">{{ episode.slug }}</code>
+    </div>
+    
+    {% if episode.guest %}
+    <div style="margin: 0.5rem 0;">
+      <strong>Guest:</strong> {{ episode.guest }}
+      {% if episode.guestDisplayName and episode.guestDisplayName != episode.guest %}
+      <span style="color: #666; font-size: 0.9rem;">(Display: {{ episode.guestDisplayName }}) </span>
+      {% endif %}
+      {% if episode.guestShortName %}
+      <span style="color: #666; font-size: 0.9rem;">(Short: {{ episode.guestShortName }})</span>
+      {% endif %}
+      {% if episode.guestPreposition %}
+      <span style="background: #fff3cd; color: #856404; padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.8rem; margin-left: 0.5rem;">{{ episode.guestPreposition }}</span>
+      {% endif %}
+    </div>
+    {% endif %}
+    
+    {% if episode.subtitle %}
+    <div style="margin: 0.5rem 0;">
+      <strong>Subtitle:</strong> <em>{{ episode.subtitle }}</em>
+    </div>
+    {% endif %}
+    
+    <div style="margin: 0.5rem 0; font-size: 0.9rem; color: #666;">
+      <strong>Published:</strong> {{ episode.pubDate | date('MMMM D, YYYY') }}
+      {% if episode.displayTitle and episode.displayTitle != episode.title %}
+      <br><strong>Display Title:</strong> {{ episode.displayTitle }}
+      {% endif %}
+      {% if episode.displayTitleOverride %}
+      <br><strong>Title Override:</strong> <span style="background: #d1ecf1; color: #0c5460; padding: 0.1rem 0.3rem; border-radius: 3px;">{{ episode.displayTitleOverride }}</span>
+      {% endif %}
+    </div>
+
+    {% if episode.hasCustomContent %}
+    <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #ddd;">
+      <span style="background: #e8f5e8; color: #2e7d32; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.8rem;">✨ Has Custom Content</span>
+      {% if episode.tags.length > 0 %}
+      <div style="margin-top: 0.5rem;">
+        <strong>Tags:</strong>
+        {% for tag in episode.tags %}
+        <span style="background: #e3f2fd; padding: 0.2rem 0.5rem; margin: 0.1rem; border-radius: 12px; font-size: 0.8rem;">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if episode.corrections.length > 0 %}
+      <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+        <strong>Corrections:</strong> {{ episode.corrections | join(", ") }}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <h2>🔍 Sample Episode Data</h2>
+  {% if collections.episodes.length > 0 %}
+  {% set firstEpisode = collections.episodes[0].data %}
   <details>
-    <summary>Click to see the full data structure</summary>
-    <pre
-      style="
-        background: #f5f5f5;
-        padding: 1rem;
-        border-radius: 4px;
-        overflow-x: auto;
-        font-size: 0.8rem;
-      "
-    >
-{{ episodes[0] | dump }}</pre
-    >
+    <summary>Click to see a sample episode data structure</summary>
+    <div style="background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.8rem;">
+      <p><strong>Title:</strong> {{ firstEpisode.title }}</p>
+      <p><strong>Display Title:</strong> {{ firstEpisode.displayTitle }}</p>
+      <p><strong>Slug:</strong> {{ firstEpisode.slug }}</p>
+      <p><strong>Episode Number:</strong> {{ firstEpisode.episodeNumber }}</p>
+      <p><strong>Guest:</strong> {{ firstEpisode.guest or "None" }}</p>
+      <p><strong>Duration:</strong> {{ firstEpisode.duration }}</p>
+      <p><strong>Subtitle:</strong> {{ firstEpisode.subtitle }}</p>
+      <p><strong>Published:</strong> {{ firstEpisode.pubDate }}</p>
+      {% if firstEpisode.guestPreposition %}<p><strong>Guest Preposition:</strong> {{ firstEpisode.guestPreposition }}</p>{% endif %}
+      {% if firstEpisode.guestDisplayName %}<p><strong>Guest Display Name:</strong> {{ firstEpisode.guestDisplayName }}</p>{% endif %}
+      {% if firstEpisode.guestShortName %}<p><strong>Guest Short Name:</strong> {{ firstEpisode.guestShortName }}</p>{% endif %}
+      {% if firstEpisode.displayTitleOverride %}<p><strong>Title Override:</strong> {{ firstEpisode.displayTitleOverride }}</p>{% endif %}
+      <p><strong>Has Custom Content:</strong> {{ firstEpisode.hasCustomContent or "false" }}</p>
+      {% if firstEpisode.tags.length > 0 %}<p><strong>Tags:</strong> {{ firstEpisode.tags | join(", ") }}</p>{% endif %}
+    </div>
   </details>
+  {% else %}
+  <p>No episodes found in collections.</p>
+  {% endif %}
 </div>
