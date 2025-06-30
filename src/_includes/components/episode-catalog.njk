@@ -1,51 +1,34 @@
 <main class="episode-list">
-  {% for post in collections.episodes | reverse %} 
-  {% set ep_data = post.data %}
-  <a href="{{ post.url | url }}" class="episode-row">
-    <div class="episode-row-top">
+  {# This is the new, flat structure for each episode row #}
+  {% for post in collections.episodes | reverse %}
+    {% set ep_data = post.data %}
+
+    {# Define display variables with override logic #}
+    {% set final_title = ep_data.displayTitleOverride or ep_data.displayTitle %}
+    {% set final_guest_name = ep_data.guestShortName or ep_data.guestDisplayName or ep_data.guest %}
+    {% set final_preposition = ep_data.guestPreposition or "w/" %}
+    
+    {% set has_guest_info = final_guest_name and final_guest_name != 'null' %}
+
+    <a href="{{ post.url | url }}" class="episode-row{% if not has_guest_info %} no-guest{% endif %}">
       <span class="episode-number">{{ (ep_data.episodeNumber | string) | padStart(2, '0') }}</span>
+      <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
+      
+      {# The main content block for title and subtitle #}
       <div class="episode-main">
         <h2 class="episode-title">
-        <span class="episode-title-display">{{ ep_data.displayTitle }}</span>
-        <span class="episode-title-original">{{ ep_data.displayTitle }}{% if ep_data.guest %} w/ {{ ep_data.guest }}{% endif %}</span>
-      </h2>
+            {# We keep both spans for CSS targeting at different breakpoints #}
+            <span class="episode-title-display">{{ final_title }}</span>
+            <span class="episode-title-original">{{ final_title }}{% if has_guest_info %} {{ final_preposition }} {{ ep_data.guestDisplayName or final_guest_name }}{% endif %}</span>
+        </h2>
         <p class="episode-desc roboto-slant">{{ ep_data.subtitle }}</p>
       </div>
-    </div>
-    <div class="episode-row-bottom">
-      {% if ep_data.guest %}
-      <span class="episode-guest-w">w/</span>
-      <div class="episode-guest-info">
-        <span class="episode-guest-name">{{ ep_data.guest }}</span>
-        <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
-        <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
-      </div>
-      {% else %}
-      <div></div> {# Empty space for alignment #}
-      <div class="episode-guest-info">
-        <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
-        <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
-      </div>
-      {% endif %}
-    </div>
-    
-    {# Additional structure for 1280px+ flexbox layout #}
-    <div class="episode-content">
-      <div class="episode-left">
-        <span class="episode-number">{{ (ep_data.episodeNumber | string) | padStart(2, '0') }}</span>
-        <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
-      </div>
-      <div class="episode-right">
-        <div class="episode-main">
-          <h2 class="episode-title">
-            <span class="episode-title-display">{{ ep_data.displayTitle }}</span>
-            <span class="episode-title-original">{{ ep_data.displayTitle }}{% if ep_data.guest %} w/ {{ ep_data.guest }}{% endif %}</span>
-          </h2>
-          <p class="episode-desc roboto-slant">{{ ep_data.subtitle }}</p>
-        </div>
-        <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
-      </div>
-    </div>
-  </a>
+
+      {# Guest info for smaller, stacked layouts #}
+      <span class="episode-guest-w">{{ final_preposition }}</span>
+      <span class="episode-guest-name">{{ final_guest_name }}</span>
+      
+      <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
+    </a>
   {% endfor %}
 </main> 

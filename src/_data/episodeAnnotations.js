@@ -27,6 +27,13 @@ const episodeAnnotations = {
     lastUpdated: "2025-06-14",
   },
 
+  // Vibe Camp 2025 episode with custom preposition
+  "field-tape-vibe-camp-2025": {
+    guestPreposition: "at",
+    guestDisplayName: "Vibe Camp 2025",
+    guestShortName: "Vibe Camp",
+  },
+
   // "7-stochastic-funnerism-and-autonomous-media-w-some": {
   //   // Override RSS title if needed
   //   customTitle: "Stochastic Funnerism (Extended Director's Cut)",
