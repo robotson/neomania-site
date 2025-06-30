@@ -28,6 +28,30 @@ All notable changes to the Neomania podcast website will be documented in this f
 
 - **Scroll Animation Performance**: Refined scroll handling logic to ensure progress only increases, creating one-way animation effect and removing scroll event listeners once animation completes for enhanced performance.
 
+### [2025-06-29]
+
+#### Added
+
+- **Master Grid System**: Implemented unified CSS Grid architecture for episode list, replacing conflicting Grid/Flexbox layouts with consistent, mobile-first system across all breakpoints.
+- **Granular Content Override System**: Introduced flexible annotation system in `episodeAnnotations.js` for manual override of episode data including guest names, titles, and prepositions (`guestPreposition`, `guestDisplayName`, `guestShortName`, `displayTitleOverride`).
+- **Developer Dashboard**: Transformed `test-annotations.html` into comprehensive developer tool for managing annotations, debugging merged data, and quick slug reference with copy-paste templates.
+- **XL Breakpoint Typography**: Enhanced typography system with specific font size overrides for extra-large screens (1920px+) - 20px for titles/descriptions, 13px for metadata elements.
+- **Conditional Guest Styling**: Implemented `.no-guest` class system for episodes without guest information, enabling cleaner CSS targeting and layout control.
+- **Waterfall Data Logic**: Added sophisticated data merging logic that prefers override data but gracefully falls back to RSS defaults.
+
+#### Enhanced
+
+- **Data Processing Architecture**: Centralized all episode data processing (slug generation, annotation merging) into Eleventy collections for single source of truth.
+- **Responsive Grid Precision**: Achieved pixel-perfect alignment across all breakpoints (XS: 8-column, S: 16-column, M/L/XL: 24-column) with proper subgrid implementation.
+- **Typography Hierarchy**: Improved visual hierarchy with size-specific typography rules that enhance readability and maintain design consistency.
+- **Template Flexibility**: Updated `episode-catalog.njk` with conditional logic for guest information display and title override handling.
+
+#### Fixed
+
+- **Layout Stability**: Resolved numerous layout bugs caused by conflicting CSS methodologies by implementing unified Master Grid system.
+- **Cross-Breakpoint Consistency**: Eliminated fluid layout issues between breakpoints, creating predictable "snap-to-width" behavior.
+- **Guest Information Display**: Fixed conditional display of guest information with proper preposition handling and name variations.
+
 ### [2025-06-15]
 
 #### Added
