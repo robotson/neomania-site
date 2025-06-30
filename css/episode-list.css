@@ -359,4 +359,16 @@ body:has(.episode-list-container) {
     max-width: 1920px;
     padding: 0 60px;
   }
+
+  /* XL Typography Overrides */
+  .episode-title,
+  .episode-desc {
+    font-size: 20px;
+  }
+
+  .episode-number,
+  .episode-date,
+  .episode-duration {
+    font-size: 13px;
+  }
 }
