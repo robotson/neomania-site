@@ -5,29 +5,29 @@
 
     {# Define display variables with override logic #}
     {% set final_title = ep_data.displayTitleOverride or ep_data.displayTitle %}
-    {% set final_guest_name = ep_data.guestShortName or ep_data.guestDisplayName or ep_data.guest %}
+    {% set guest_display_name = ep_data.guestDisplayName or ep_data.guest %}
+    {% set guest_short_name = ep_data.guestShortName or ep_data.guest %}
     {% set final_preposition = ep_data.guestPreposition or "w/" %}
     
-    {% set has_guest_info = final_guest_name and final_guest_name != 'null' %}
+    {% set has_guest_info = guest_display_name and guest_display_name != 'null' %}
 
     <a href="{{ post.url | url }}" class="episode-row{% if not has_guest_info %} no-guest{% endif %}">
+      {# Flat structure for direct grid control #}
       <span class="episode-number">{{ (ep_data.episodeNumber | string) | padStart(2, '0') }}</span>
-      <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
-      
-      {# The main content block for title and subtitle #}
+
+      {# This main content block is a grid item itself on desktop #}
       <div class="episode-main">
         <h2 class="episode-title">
-            {# We keep both spans for CSS targeting at different breakpoints #}
-            <span class="episode-title-display">{{ final_title }}</span>
-            <span class="episode-title-original">{{ final_title }}{% if has_guest_info %} {{ final_preposition }} {{ ep_data.guestDisplayName or final_guest_name }}{% endif %}</span>
+          <span class="episode-title-display">{{ final_title }}</span>
+          <span class="episode-title-original">{{ final_title }}{% if has_guest_info %} {{ final_preposition }} {{ guest_display_name }}{% endif %}</span>
         </h2>
         <p class="episode-desc roboto-slant">{{ ep_data.subtitle }}</p>
       </div>
-
-      {# Guest info for smaller, stacked layouts #}
-      <span class="episode-guest-w">{{ final_preposition }}</span>
-      <span class="episode-guest-name">{{ final_guest_name }}</span>
       
+      {# Metadata elements for mobile and desktop #}
+      <span class="episode-guest-w">{{ final_preposition }}</span>
+      <span class="episode-guest-name">{{ guest_short_name }}</span>
+      <span class="episode-date">{{ ep_data.date | date('MM/dd/yy') }}</span>
       <span class="episode-duration">{{ ep_data.duration | formatDuration }}</span>
     </a>
   {% endfor %}

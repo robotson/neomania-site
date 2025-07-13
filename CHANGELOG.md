@@ -2,15 +2,53 @@
 
 All notable changes to the Neomania podcast website will be documented in this file.
 
-## [Unreleased] - v1.0.0 🎉
+## [Unreleased] - v1.0.0
+
+### [2024-07-15] - Comprehensive Refinements
+
+#### Added
+
+- **Breakpoint-Specific Typography Specs**: Implemented detailed typography settings for S, M, L, and XL breakpoints, including font families (Roboto Flex for titles/subtitles, Space Mono for metadata), precise font sizes, weights, line-heights, letter-spacing, and styles.
+- **Grid Layout Fine-Tuning**: Added column spanning for elements like dates (span 2 columns) and guest names (span 5 columns) in S breakpoint; ensured consistent gutters, margins, and padding across breakpoints (e.g., 50px margin for M, 14px gutter).
+- **Vertical Spacing Controls**: Introduced custom padding for rows (e.g., 15px top/18px bottom for L, 19px for XL) and gaps between title/subtitle (5px for XL).
+- **Variable Font Enhancements**: Refined font-variation-settings for XL titles (weight 500) and subtitles (weight 300 with slant -10).
+- **Color Token Alignment**: Added Figma-aligned tokens like --text-level-1 (#F4F4F4) and ensured usage in titles/subtitles; metadata uses --text-level2 (#EDEDED).
+
+#### Enhanced
+
+- **Responsive Adjustments**: Fine-tuned line-heights (e.g., 19.6px for S titles/subtitles), letter-spacing (e.g., 0.91px for XL metadata, 0.77px for S/M/LG metadata), and paddings (e.g., reduced S gap to 13px between subtitle and metadata).
+- **Grid Stability**: Prevented column stretching by using auto/max-content for dates and spanning multiple columns where needed.
+- **Documentation**: Expanded episode-list-typography.md with new columns for weights, line-heights, styles, and detailed refinement notes for each breakpoint.
+
+#### Fixed
+
+- **Layout Issues**: Resolved column expansion problems for dates by switching to spanning (e.g., 4/6 for M/L/XL); corrected excessive spacings (e.g., reduced S top padding to 10px, gap to 13px).
+- **Typography Consistency**: Removed unwanted italic/slant from S subtitles; reverted and fine-tuned line-heights multiple times for optimal readability (final 19.6px for S).
+- **Redundancies**: Omitted duplicate properties in CSS implementations to keep code clean while matching Figma specs.
+
+### [2025-06-30]
+
+#### Added
+
+- **Full Design Spec Implementation**: Began a comprehensive refactor of the episode list component (`episode-catalog.njk`) and its styles (`episode-list.css`) to better match the detailed responsive design specification. This includes precise, multi-breakpoint grid layouts (24, 16, and 8-column), complex content reflowing for stacked mobile views, and correct typography sizing. More work is needed to add vertical rhythm and other design details.
+
+#### Enhanced
+
+- **Component Architecture**: The `episode-catalog.njk` component now uses a flat HTML structure, making it fully compatible with CSS `subgrid` for robust and maintainable layouts. All data display logic (e.g., guest name variations, title overrides) is handled cleanly within this single component.
+
+#### Fixed
+
+- **Episode Page Layout**: The dedicated `/episodes` page has been corrected to use the canonical `episode-catalog.njk` component, eliminating layout bugs and ensuring 100% visual consistency with the homepage's episode list.
+
+### [2025-06-29] - Addendum
 
 ### [2025-06-23]
 
 #### Added
 
-- **Advanced Scroll-Driven Hero Animation**: Implemented sophisticated "splash → pinned" animation system with smooth interpolation over viewport height, transforming static hero into dynamic scroll-responsive experience.
-- **Variable Font Animation System**: Created complex font variation animation with 13 different axes (weight, width, optical size, grade, slant, XOPQ, XTRA, YOPQ, YTAS, YTDE, YTFI, YTLC, YTUC) featuring balanced relationships and legibility protection.
-- **Fixed Hero Container Architecture**: Introduced fixed positioning system with dedicated scroll container for seamless animation transitions without layout shift.
+- **Advanced Scroll-Driven Hero Animation**: Attempted a sophisticated "splash → pinned" animation system with smooth interpolation over viewport height, transforming static hero into dynamic scroll-responsive experience. This is a work in progress and needs more work to be fully functional.
+- **Variable Font Animation System**: Updated the complex font variation animation which features 13 different axes (weight, width, optical size, grade, slant, XOPQ, XTRA, YOPQ, YTAS, YTDE, YTFI, YTLC, YTUC) including balanced relationships and legibility protection.
+- **Fixed Hero Container Architecture**: Introduced fixed positioning system with dedicated scroll container for animation transitions without layout shift.
 - **One-Way Animation Logic**: Implemented progress-only-increases system preventing animation reversal during scroll, creating intentional directional user experience.
 - **Comprehensive Letter Animation States**: Each letter maintains individual animation states with randomized speeds, directions, and settling behaviors for organic visual movement.
 - **Cross-Browser Scroll Animation**: Used scroll event listeners for maximum compatibility while maintaining smooth 60fps performance across all browsers.

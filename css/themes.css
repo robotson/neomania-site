@@ -1,5 +1,11 @@
 :root {
   /* Figma Design System Tokens - Light Theme */
+  /* 
+    Token Naming:
+    - Raw tokens: --light-level1, --dark-level1, etc.
+    - Semantic aliases: --text-color (legacy), --text-level-1 (Figma-aligned)
+    - Both --text-color and --text-level-1 map to the same values
+  */
   --light-level1: #111111; /* Main text, titles, active nav */
   --light-level2: #222222; /* Secondary text */
   --light-level3: #333333; /* Tertiary text, inactive nav */
@@ -40,6 +46,7 @@ html {
 :root {
   --bg-color: var(--dark-background);
   --text-color: var(--dark-level1);
+  --text-level-1: var(--dark-level1); /* Figma token alias */
   --text-level2: var(--dark-level2);
   --text-level3: var(--dark-level3);
   --decorative-color: var(--dark-decorative);
@@ -55,6 +62,7 @@ html {
 :root.light-theme {
   --bg-color: var(--light-background);
   --text-color: var(--light-level1);
+  --text-level-1: var(--light-level1); /* Figma token alias */
   --text-level2: var(--light-level2);
   --text-level3: var(--light-level3);
   --decorative-color: var(--light-decorative);
