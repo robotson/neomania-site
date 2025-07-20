@@ -1,38 +1,28 @@
-// === WORDMARK SEQUENCE: SCROLL-DRIVEN HERO ANIMATION ===
-// This script handles the entire logo "splash → pinned" journey with smooth interpolation.
-// It animates the wordmark font, the hero container, and fades in the main content.
-// This implementation uses a scroll event listener for cross-browser compatibility.
+// === WORDMARK SEQUENCE: SAFARI-COMPATIBLE SCROLL ANIMATION ===
+// This script creates a smooth, bidirectional scroll experience using CSS custom properties
+// instead of DOM manipulation. Compatible with Safari and all modern browsers.
 
 document.addEventListener("DOMContentLoaded", () => {
   const letters = document.querySelectorAll(".wordmark-letter");
   if (!letters.length) return;
 
-  // --- DOM ELEMENT REFERENCES ---
-  const hero = document.querySelector(".main-hero");
-  const mainContent = document.querySelector(".main-content");
-  const wordmarkText = document.querySelector(
-    ".animated-wordmark .wordmark-text"
-  );
-  const fixedHeroContainer = document.querySelector(".fixed-hero-container");
-
   // --- STATE & CONFIGURATION ---
   let animationFrameId = null;
-  let progress = 0;
+  let lastScrollY = 0;
   const scrollAnimationEnd = window.innerHeight; // Animation completes over 1x viewport height
-  const heroEndHeight = 6.25 * 16; // 6.25rem in pixels
   let initialFontSize; // Will be read after fonts load
-  const finalFontSize = 2.2 * 16; // 2.2rem in pixels
+  const finalFontSize = 2.0 * 16; // 2.0rem in pixels - try larger for header
 
   const AXES_CONFIG = {
     wght: { min: 300, max: 900 }, // Expanded range to include all resting weights
-    wdth: { min: 50, max: 130 },
+    wdth: { min: 80, max: 120 }, // Center at 100 - wider for more counter space
     opsz: { min: 14, max: 120 },
     GRAD: { min: -100, max: 100 },
     slnt: { min: -5, max: 0 },
     XOPQ: { min: 60, max: 150 },
     XTRA: { min: 350, max: 550 },
     YOPQ: { min: 35, max: 120 },
-    YTAS: { min: 700, max: 850 },
+    YTAS: { min: 700, max: 850 }, // Restored normal ranges
     YTDE: { min: -250, max: -120 },
     YTFI: { min: 600, max: 750 },
     YTLC: { min: 450, max: 550 },
@@ -47,7 +37,23 @@ document.addEventListener("DOMContentLoaded", () => {
     slnt: 0,
   };
 
-  const RESTING_WGHT = [900, 750, 650, 550, 450, 400, 350, 300];
+  // Use the finely tuned values with thinner strokes for bigger counters
+  const FINAL_AXES_N = {
+    wdth: 110,  // Wider N letter
+    opsz: 80,   // From CSS file
+    GRAD: 0,    // From CSS file  
+    slnt: 0,
+    YTAS: 750,  // From CSS file
+    YTUC: 712,  // From CSS file
+    YOPQ: 60,   // Even thinner vertical strokes for wider counters
+    YTLC: 514,  // From CSS file
+    YTDE: -203, // From CSS file
+    YTFI: 738,  // From CSS file
+    XOPQ: 80,   // Even thinner horizontal strokes for wider counters
+    XTRA: 468,  // From CSS file
+  };
+
+  const RESTING_WGHT = [900, 750, 650, 550, 450, 400, 350, 300]; // Restored N to 900
 
   const balancedAxes = [
     { axis1: "wght", axis2: "XOPQ", correlation: -0.6 },
@@ -78,50 +84,87 @@ document.addEventListener("DOMContentLoaded", () => {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
 
-  // --- The One True Scroll Handler ---
+  // --- Bidirectional Scroll Handler ---
   function handleScroll() {
     const scrollY = window.scrollY;
-    const newProgress = Math.min(1, Math.max(0, scrollY / scrollAnimationEnd));
-
-    // Only allow progress to increase, making it a one-way animation.
-    if (newProgress > progress) {
-      progress = newProgress;
-    }
-
-    // If the animation loop isn't running and we're in the animation zone, start it.
-    if (!animationFrameId && progress < 1) {
+    const progress = Math.min(1, Math.max(0, scrollY / scrollAnimationEnd));
+    
+    // Update CSS custom properties for smooth transitions
+    updateCSSProperties(progress);
+    
+    // Continue letter animation while in scroll range
+    if (scrollY <= scrollAnimationEnd && !animationFrameId) {
       masterAnimationLoop();
     }
+    
+    lastScrollY = scrollY;
+  }
+  
+  // --- Update CSS Custom Properties ---
+  function updateCSSProperties(progress) {
+    const easedProgress = easeInOutCubic(progress);
+    const root = document.documentElement;
+    
+    // Hero container height - shrink from 100vh to header size
+    const heroHeight = lerp(window.innerHeight, 80, easedProgress); // 80px to match header height
+    root.style.setProperty('--hero-container-height', `${heroHeight}px`);
+    
+    // Hero container positioning - move to align with header
+    const heroTop = lerp(0, 0, easedProgress); // Stay at top
+    root.style.setProperty('--hero-top', `${heroTop}px`);
+    
+    // Background opacity
+    const bgOpacity = easedProgress * 0.75;
+    root.style.setProperty('--hero-bg-opacity', bgOpacity);
+    
+    // Content opacity - fast fade over first 10%
+    const contentOpacity = Math.min(1, progress / 0.1);
+    root.style.setProperty('--content-opacity', contentOpacity);
+    
+    // Navigation opacity - fade in faster, starting at 30% scroll
+    const navOpacity = progress > 0.3 ? (progress - 0.3) / 0.3 : 0;
+    root.style.setProperty('--nav-opacity', Math.min(1, navOpacity));
+    
+    // Wordmark font size and styling
+    const currentFontSize = lerp(initialFontSize || 96, finalFontSize, easedProgress);
+    root.style.setProperty('--wordmark-font-size', `${currentFontSize}px`);
+    
+    // Text shadow (glow) - fade to zero smoothly
+    const shadowBlur = lerp(4, 0, easedProgress);
+    const shadowOpacity = lerp(0.5, 0, easedProgress);
+    
+    if (shadowOpacity < 0.01) {
+      // Completely remove shadow when very close to zero
+      root.style.setProperty('--wordmark-text-shadow', 'none');
+      root.style.setProperty('--text-shadow', 'none');
+    } else {
+      root.style.setProperty('--wordmark-text-shadow', `2px 2px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`);
+      
+      // Also animate the theme-based shadow for letters
+      const letterShadowOpacity = lerp(0.8, 0, easedProgress);
+      root.style.setProperty('--text-shadow', `0 0 10px rgba(255, 255, 255, ${letterShadowOpacity}), 0 0 20px rgba(255, 255, 255, ${letterShadowOpacity * 0.5}), 0 0 30px rgba(255, 255, 255, ${letterShadowOpacity * 0.3})`);
+    }
+    
+    // Wordmark opacity - fade to more subtle in final state
+    const wordmarkOpacity = lerp(1, 0.7, easedProgress);
+    root.style.setProperty('--wordmark-opacity', wordmarkOpacity);
+    
+    // Wiggle amplitude for letter animation - smoother transition
+    const wiggleProgress = Math.max(0, (progress - 0.1) / 0.9);
+    const wiggleAmplitude = 1 - wiggleProgress; // Linear instead of eased to avoid double-easing
+    root.style.setProperty('--wiggle-amplitude', wiggleAmplitude);
   }
 
   // --- Main Animation Loop ---
   function masterAnimationLoop() {
+    const scrollY = window.scrollY;
+    const progress = Math.min(1, Math.max(0, scrollY / scrollAnimationEnd));
     const easedProgress = easeInOutCubic(progress);
-
-    // Calculate wiggle amplitude with a 10% buffer at the start
-    let wiggleAmplitude = 1;
-    if (progress > 0.1) {
-      const wiggleProgress = (progress - 0.1) / 0.9;
-      wiggleAmplitude = 1 - easeInOutCubic(wiggleProgress);
-    }
-
-    // 1. Animate Hero Container
-    const heroHeight = lerp(window.innerHeight, heroEndHeight, easedProgress);
-    hero.style.height = `${heroHeight}px`;
-    hero.style.backgroundColor = `rgba(10, 10, 10, ${easedProgress * 0.75})`;
-
-    // 2. Animate Wordmark Font Size & Shadow
-    const currentFontSize = lerp(initialFontSize, finalFontSize, easedProgress);
-    wordmarkText.style.fontSize = `${currentFontSize}px`;
-    wordmarkText.style.textShadow = `2px 2px ${lerp(
-      4,
-      0,
-      easedProgress
-    )}px rgba(0, 0, 0, ${lerp(0.5, 0, easedProgress)})`;
-
-    // 3. Animate Main Content Opacity - Fast fade over first 10%
-    const contentFadeProgress = Math.min(1, progress / 0.1);
-    mainContent.style.opacity = contentFadeProgress;
+    
+    // Get wiggle amplitude from CSS custom property
+    const wiggleAmplitude = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue('--wiggle-amplitude') || '1'
+    );
 
     // 4. Animate Font Variation Settings with Wiggle
     letters.forEach((letter, i) => {
@@ -190,16 +233,27 @@ document.addEventListener("DOMContentLoaded", () => {
           const wiggleOffset =
             (state.currentValues[axis] - settledValue) * wiggleAmplitude;
           finalValue = settledValue + wiggleOffset;
-        } else if (FINAL_AXES_COMMON.hasOwnProperty(axis)) {
-          // Other specified axes settle to a common value.
-          const settledValue = lerp(
-            (AXES_CONFIG[axis].min + AXES_CONFIG[axis].max) / 2,
-            FINAL_AXES_COMMON[axis],
-            easedProgress
-          );
-          const wiggleOffset =
-            (state.currentValues[axis] - settledValue) * wiggleAmplitude;
-          finalValue = settledValue + wiggleOffset;
+        } else if (FINAL_AXES_COMMON.hasOwnProperty(axis) || (i === 0 && FINAL_AXES_N.hasOwnProperty(axis))) {
+          // Other specified axes settle to a common value, or special N values
+          const finalAxes = i === 0 ? FINAL_AXES_N : FINAL_AXES_COMMON;
+          
+          if (i === 0 && FINAL_AXES_N.hasOwnProperty(axis)) {
+            // For the N, settle directly to final value with NO wiggle offset
+            finalValue = lerp(
+              state.currentValues[axis],
+              finalAxes[axis],
+              easedProgress
+            );
+          } else {
+            // For other letters, use center-to-final interpolation
+            const settledValue = lerp(
+              (AXES_CONFIG[axis].min + AXES_CONFIG[axis].max) / 2,
+              finalAxes[axis],
+              easedProgress
+            );
+            const wiggleOffset = (state.currentValues[axis] - settledValue) * wiggleAmplitude;
+            finalValue = settledValue + wiggleOffset;
+          }
         } else {
           // This axis is for the random "dance" effect only.
           // We fade it out by interpolating from its current wiggle value
@@ -228,28 +282,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .join(", ");
     });
 
-    // Continue the loop if the animation isn't finished.
-    if (progress < 1) {
-      animationFrameId = requestAnimationFrame(masterAnimationLoop);
-    } else {
-      // Ensure final state is set perfectly when animation ends
-      mainContent.style.opacity = "1";
-      wordmarkText.style.fontSize = `${finalFontSize}px`;
-      wordmarkText.style.letterSpacing = "0.08em"; // Add generous letter-spacing
-
-      letters.forEach((letter, i) => {
-        const finalSettings = {
-          ...FINAL_AXES_COMMON,
-          wght: RESTING_WGHT[i],
-        };
-        letter.style.fontVariationSettings = Object.entries(finalSettings)
-          .map(([k, v]) => `"${k}" ${v}`)
-          .join(", ");
-      });
-      animationFrameId = null;
-      // Animation is complete, so we can remove the listener for performance.
-      window.removeEventListener("scroll", handleScroll);
-    }
+    // Keep animation running continuously to maintain smooth letter variations
+    animationFrameId = requestAnimationFrame(masterAnimationLoop);
   }
 
   // --- EVENT BINDING & REDUCED MOTION ---
@@ -257,18 +291,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    initialFontSize = parseFloat(getComputedStyle(wordmarkText).fontSize);
+    
+    // Get initial font size from computed styles
+    const wordmarkText = document.querySelector(".animated-wordmark .wordmark-text");
+    if (wordmarkText) {
+      initialFontSize = parseFloat(getComputedStyle(wordmarkText).fontSize);
+    }
 
     // Always clean up previous listeners
     window.removeEventListener("scroll", handleScroll);
 
     if (prefersReduced) {
-      // Set final, static state for reduced motion
-      hero.style.height = `${finalFontSize * 4}px`;
-      hero.style.backgroundColor = "rgba(10, 10, 10, 0.75)";
-      mainContent.style.opacity = "1";
-      wordmarkText.style.fontSize = `${finalFontSize}px`;
-      wordmarkText.style.textShadow = "none";
+      // Set final, static state for reduced motion using CSS custom properties
+      const root = document.documentElement;
+      root.style.setProperty('--hero-container-height', '100px');
+      root.style.setProperty('--hero-bg-opacity', '0.75');
+      root.style.setProperty('--content-opacity', '1');
+      root.style.setProperty('--nav-opacity', '1');
+      root.style.setProperty('--wordmark-font-size', `${finalFontSize}px`);
+      root.style.setProperty('--wordmark-text-shadow', 'none');
+      root.style.setProperty('--wiggle-amplitude', '0');
       document.body.classList.add("no-animation-timeline");
     } else {
       document.body.classList.remove("no-animation-timeline");

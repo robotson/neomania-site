@@ -7,9 +7,9 @@
 
 :root {
   /* Final resting font variations, available for fallbacks or transitions. */
-  --wordmark-final-variations: "wght" 500, "wdth" 100, "slnt" 0, "opsz" 48,
-    "GRAD" 0, "XOPQ" 100, "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203,
-    "YTFI" 738, "YTLC" 514, "YTUC" 712;
+  --wordmark-final-variations: "wght" 900, "wdth" 100, "slnt" 0, "opsz" 81,
+    "GRAD" 2, "XOPQ" 105, "XTRA" 452, "YOPQ" 78, "YTAS" 773, "YTDE" -186,
+    "YTFI" 677, "YTLC" 501, "YTUC" 627;
 }
 
 .wordmark-letter {

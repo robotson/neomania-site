@@ -4,21 +4,25 @@ permalink: /
 bodyClass: home-page
 ---
 
+{# Separate header navigation overlay #}
+<header class="header-nav">
+  <div class="header-nav--left">
+    <a href="#" class="header-nav-item is-active">CATALOG</a>
+    <a href="#" class="header-nav-item">LISTEN</a>
+  </div>
+  <div class="header-nav--right">
+    <a href="#" class="header-nav-item">CONNECT</a>
+    {# Icons will go here later #}
+  </div>
+</header>
+
 {# This is the fixed container for the hero that will stay on screen. #}
 <div class="fixed-hero-container">
-  <header class="main-hero">
+  <div class="main-hero">
     <div class="hero-container">
-      <div class="header-nav header-nav--left">
-        <a href="#" class="header-nav-item is-active">CATALOG</a>
-        <a href="#" class="header-nav-item">LISTEN</a>
-      </div>
       {% include "components/animated-wordmark.njk" %}
-      <div class="header-nav header-nav--right">
-        <a href="#" class="header-nav-item">CONNECT</a>
-        {# Icons will go here later #}
-      </div>
     </div>
-  </header>
+  </div>
 </div>
 
 

@@ -4,91 +4,189 @@
   --hero-start-height: 100vh;
   /* Adjust runway to remove empty buffer. Animation now happens over the full scroll distance. */
   --animation-scroll-range: 100vh;
+  
+  /* Initialize animation properties to prevent undefined behavior */
+  --hero-container-height: 100vh;
+  --hero-top: 0px;
+  --hero-bg-opacity: 0;
+  --hero-justify: center;
+  --hero-align: center;
+  --hero-padding: 0 2rem;
+  --content-opacity: 0;
+  --nav-opacity: 0;
+  --wiggle-amplitude: 1;
+  --wordmark-font-size: clamp(2rem, 10vw, 6rem);
+  --wordmark-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  --wordmark-opacity: 1;
 }
 
 /*———— LAYOUT CONTAINERS ————*/
 .fixed-hero-container {
-  /* This container is fixed and holds the hero. It does not scroll. */
-  position: fixed;
-  top: 0;
+  /* This container becomes sticky after scroll, contains the transforming content */
+  position: sticky;
+  top: var(--hero-top, 0);
   left: 0;
   width: 100%;
-  height: 100vh;
-  pointer-events: none; /* Allows clicks to pass through to content below */
+  height: var(--hero-container-height, 100vh);
   z-index: 100;
+  overflow: hidden;
+  transition: height 0.1s ease-out, top 0.1s ease-out;
 }
 
 .scroll-container {
-  /* This invisible element is tall and creates the scrollbar. */
+  /* This provides scroll distance for the animation - no longer removed by JS */
   height: var(--animation-scroll-range);
   width: 100%;
 }
 
 .main-content {
-  /* The actual page content, starts after the scroll container. */
+  /* The actual page content, positioned naturally in document flow */
   background: #111;
   position: relative;
   z-index: 1;
-  padding: 20rem 1rem 40rem;
-  /* Ensure there's always enough scroll-able area for the animation to finish */
-  min-height: calc(100vh - 20rem);
-  /* Start hidden, will be faded in by JS */
-  opacity: 0;
+  padding: 2rem 1rem 4rem;
+  min-height: 100vh;
+  /* Opacity controlled by CSS custom property */
+  opacity: var(--content-opacity, 0);
+  transition: opacity 0.2s ease-out;
 }
 
 /*———— HERO ELEMENT ————*/
 .main-hero {
-  height: var(--hero-start-height);
+  height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background: black;
-  /* This will be used for the final layout */
-  padding: 0 2rem;
+  justify-content: var(--hero-justify, center);
+  align-items: var(--hero-align, center);
+  background: rgba(10, 10, 10, var(--hero-bg-opacity, 0));
+  padding: var(--hero-padding, 0 2rem);
+  transition: all 0.1s ease-out;
 }
 
 .hero-container {
+  /* Container that allows both centered and grid-aligned content */
+  position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0rem;
-  width: 100%;
 }
 
-/* Add styles for the new nav elements */
-.header-nav {
-  display: none; /* Temporarily hidden to fix spacing */
-  gap: 1.5rem;
-  /* Start hidden, will be faded in by JS */
-  opacity: 0;
-  flex-shrink: 0;
+/* Wordmark stays independently centered */
+.animated-wordmark {
+  font-family: "Roboto Flex", sans-serif;
+  transition: all 0.1s ease-out;
+  z-index: 2000; /* Always above header */
+  position: relative;
 }
+
+/* Fixed header navigation - always at top, no layout impact */
+.header-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px; /* Fixed header height */
+  
+  /* Use same responsive container as episode list */
+  max-width: 393px;
+  margin: 0 auto;
+  padding: 0 22px;
+  box-sizing: border-box;
+  
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  column-gap: 14px;
+  align-items: center;
+  
+  opacity: var(--nav-opacity, 0);
+  transition: opacity 0.2s ease-out;
+  z-index: 1000;
+}
+
+.header-nav--left {
+  grid-column: 1 / 4;
+  display: flex;
+  gap: 1.5rem;
+  justify-self: start;
+}
+
+.header-nav--right {
+  grid-column: 6 / -1;
+  display: flex;
+  gap: 1.5rem;
+  justify-self: end;
+}
+
 .header-nav-item {
   font-family: "Space Mono", monospace;
-  font-size: 0.8125rem; /* 13px, was 0.875rem */
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: #909090;
   text-decoration: none;
+  color: var(--text-level3);
   transition: color 0.2s ease;
 }
-.header-nav-item:hover {
-  color: white;
-}
+
+.header-nav-item:hover,
 .header-nav-item.is-active {
-  color: white;
-  text-decoration: underline;
+  color: var(--text-color);
+}
+
+/* Responsive navigation grid - match episode list breakpoints */
+@media (min-width: 768px) {
+  .header-nav {
+    max-width: 768px;
+    padding: 0 50px;
+    grid-template-columns: repeat(16, 1fr);
+  }
+  
+  .header-nav--left {
+    grid-column: 1 / 6;
+  }
+  
+  .header-nav--right {
+    grid-column: 12 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-nav {
+    max-width: 1024px;
+    padding: 0 50px;
+    grid-template-columns: repeat(24, 1fr);
+  }
+  
+  .header-nav--left {
+    grid-column: 1 / 8;
+  }
+  
+  .header-nav--right {
+    grid-column: 18 / -1;
+  }
+}
+
+@media (min-width: 1280px) {
+  .header-nav {
+    max-width: 1280px;
+    column-gap: 16px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .header-nav {
+    max-width: 1920px;
+    padding: 0 60px;
+  }
 }
 
 /*———— WORDMARK SIZING ————*/
-.animated-wordmark {
-  font-family: "Roboto Flex", sans-serif;
-}
-
 .animated-wordmark .wordmark-text {
-  font-size: clamp(2rem, 10vw, 6rem); /* Adjusted for smaller mobile size */
+  font-size: var(--wordmark-font-size, clamp(2rem, 10vw, 6rem));
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: var(--wordmark-text-shadow, 2px 2px 4px rgba(0, 0, 0, 0.5));
+  opacity: var(--wordmark-opacity, 1);
+  transition: font-size 0.1s ease-out, text-shadow 0.1s ease-out, opacity 0.1s ease-out;
 }
 
 /*———— DEBUG INFO OVERLAY ————*/
