@@ -457,7 +457,7 @@ body:has(.episode-list-container) {
 @media (min-width: 1920px) {
   .episode-list-container {
     max-width: 1920px;
-    padding: 0 60px;
+    padding: 10rem 60px 0 60px; /* Maintain top padding for XL header spacing */
   }
 
   /* XL Episode Row Spacing */
