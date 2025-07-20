@@ -31,6 +31,13 @@
   z-index: 100;
   overflow: hidden;
   transition: height 0.1s ease-out, top 0.1s ease-out;
+  
+  /* GPU acceleration magic */
+  will-change: height, transform;
+  contain: layout style paint;
+  transform: translate3d(0, 0, 0); /* Force hardware acceleration */
+  isolation: isolate; /* Create new stacking context */
+  backface-visibility: hidden; /* GPU optimization */
 }
 
 .scroll-container {
@@ -49,6 +56,11 @@
   /* Opacity controlled by CSS custom property */
   opacity: var(--content-opacity, 0);
   transition: opacity 0.2s ease-out;
+  
+  /* GPU acceleration for smooth content fade */
+  will-change: opacity;
+  transform: translate3d(0, 0, 0); /* Hardware acceleration */
+  contain: layout paint; /* Isolate content rendering */
 }
 
 /*———— HERO ELEMENT ————*/
@@ -78,6 +90,13 @@
   transition: all 0.1s ease-out;
   z-index: 2000; /* Always above header */
   position: relative;
+  
+  /* GPU acceleration for font variations */
+  will-change: font-variation-settings, font-size, transform;
+  transform: translate3d(0, 0, 0); /* Hardware acceleration */
+  contain: layout style paint; /* Isolate rendering */
+  backface-visibility: hidden; /* Prevent texture thrashing */
+  isolation: isolate; /* New compositing layer */
 }
 
 /* Fixed header navigation - always at top, no layout impact */
@@ -135,9 +154,12 @@
 
 .header-nav-item {
   font-family: "Space Mono", monospace;
-  font-size: 11px;
+  font-size: 10px; /* Match XS episode metadata */
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.7px; /* Match episode metadata */
   text-transform: uppercase;
-  letter-spacing: 0.07em;
   text-decoration: none;
   color: var(--text-level3);
   transition: color 0.2s ease;
@@ -403,6 +425,11 @@
     padding: 0 50px;
   }
   
+  .header-nav-item {
+    font-size: 11px; /* Match S breakpoint episode metadata */
+    letter-spacing: 0.77px; /* Match S breakpoint episode metadata */
+  }
+  
   .header-nav--mobile {
     height: 250px; /* Even taller for SM */
     min-height: 250px;
@@ -491,6 +518,11 @@
     min-height: auto; /* Reset min-height */
   }
   
+  .header-nav-item {
+    font-size: 10px; /* Match M breakpoint episode metadata */
+    letter-spacing: 0.7px; /* Match M breakpoint episode metadata */
+  }
+  
   /* MD+ (24 columns) positioning */
   .header-nav--catalog {
     grid-column: 1 / 3; /* Cols 1-2 */
@@ -515,12 +547,22 @@
     max-width: 1280px;
     column-gap: 16px;
   }
+  
+  .header-nav-item {
+    font-size: 11px; /* Match L breakpoint episode metadata */
+    letter-spacing: 0.77px; /* Match L breakpoint episode metadata */
+  }
 }
 
 @media (min-width: 1920px) {
   .header-nav {
     max-width: 1920px;
     padding: 0 60px;
+  }
+  
+  .header-nav-item {
+    font-size: 13px; /* Match XL breakpoint episode metadata */
+    letter-spacing: 0.91px; /* Match XL breakpoint episode metadata */
   }
 }
 
@@ -531,6 +573,14 @@
   text-shadow: var(--wordmark-text-shadow, 2px 2px 4px rgba(0, 0, 0, 0.5));
   opacity: var(--wordmark-opacity, 1);
   transition: font-size 0.1s ease-out, text-shadow 0.1s ease-out, opacity 0.1s ease-out;
+  
+  /* Maximum GPU optimization for text */
+  will-change: font-size, opacity, text-shadow;
+  transform: translate3d(0, 0, 0); /* Force GPU layer */
+  backface-visibility: hidden; /* Prevent aliasing */
+  -webkit-font-smoothing: antialiased; /* Smoother rendering */
+  contain: layout paint; /* Isolate text rendering */
+  isolation: isolate; /* Separate compositing layer */
 }
 
 /*———— DEBUG INFO OVERLAY ————*/

@@ -51,6 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
     YTUC: { min: 550, max: 700 },
   };
 
+  // Pre-calculate ranges for performance (avoid calculating every frame)
+  const AXES_RANGES = {};
+  Object.entries(AXES_CONFIG).forEach(([axis, config]) => {
+    AXES_RANGES[axis] = config.max - config.min;
+  });
+
   // The final, "at-rest" state for the wordmark when it's sticky.
   const FINAL_AXES_COMMON = {
     wdth: 100,
@@ -103,7 +109,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return a + (b - a) * t;
   }
   function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    // Truly smooth cubic ease-in-out without 50% discontinuity
+    if (t < 0.5) {
+      return 4 * t * t * t;
+    } else {
+      const f = 2 * t - 2;
+      return 1 + f * f * f / 2;
+    }
   }
 
   // --- Bidirectional Scroll Handler ---
@@ -133,56 +145,54 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Update CSS Custom Properties ---
   function updateCSSProperties(progress) {
     const easedProgress = easeInOutCubic(progress);
-    const root = document.documentElement;
     
-    // Hero container height - shrink from 100vh to header size
-    const heroHeight = lerp(window.innerHeight, 80, easedProgress); // 80px to match header height
-    root.style.setProperty('--hero-container-height', `${heroHeight}px`);
-    
-    // Hero container positioning - move to align with header
-    const heroTop = lerp(0, 0, easedProgress); // Stay at top
-    root.style.setProperty('--hero-top', `${heroTop}px`);
-    
-    // Background opacity
+    // Calculate all values first (no DOM access during calculations)
+    const heroHeight = lerp(window.innerHeight, 80, easedProgress); // Back to height changes
+    const heroTop = lerp(0, 0, easedProgress);
     const bgOpacity = easedProgress * 0.75;
-    root.style.setProperty('--hero-bg-opacity', bgOpacity);
-    
-    // Content opacity - fast fade over first 10%
     const contentOpacity = Math.min(1, progress / 0.1);
-    root.style.setProperty('--content-opacity', contentOpacity);
+    const navOpacity = progress > 0.3 ? Math.min(1, (progress - 0.3) / 0.3) : 0;
     
-    // Navigation opacity - fade in faster, starting at 30% scroll
-    const navOpacity = progress > 0.3 ? (progress - 0.3) / 0.3 : 0;
-    root.style.setProperty('--nav-opacity', Math.min(1, navOpacity));
-    
-    // Wordmark font size and styling - now truly responsive
+    // Keep font-size scaling for wordmark (but maybe optimize differently)
     const currentFontSize = getResponsiveFontSize(null, easedProgress);
-    root.style.setProperty('--wordmark-font-size', `${currentFontSize}px`);
     
-    // Text shadow (glow) - fade to zero smoothly
+    // Text shadows
     const shadowBlur = lerp(4, 0, easedProgress);
     const shadowOpacity = lerp(0.5, 0, easedProgress);
+    const letterShadowOpacity = lerp(0.8, 0, easedProgress);
     
-    if (shadowOpacity < 0.01) {
-      // Completely remove shadow when very close to zero
-      root.style.setProperty('--wordmark-text-shadow', 'none');
-      root.style.setProperty('--text-shadow', 'none');
+    // Wordmark opacity
+    const wordmarkOpacity = lerp(1, 0.7, easedProgress);
+    
+    // Wiggle amplitude
+    let wiggleAmplitude;
+    if (progress <= 0.33) {
+      wiggleAmplitude = 1;
+    } else if (progress <= 0.5) {
+      wiggleAmplitude = 1 - ((progress - 0.33) / 0.17);
     } else {
-      root.style.setProperty('--wordmark-text-shadow', `2px 2px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`);
-      
-      // Also animate the theme-based shadow for letters
-      const letterShadowOpacity = lerp(0.8, 0, easedProgress);
-      root.style.setProperty('--text-shadow', `0 0 10px rgba(255, 255, 255, ${letterShadowOpacity}), 0 0 20px rgba(255, 255, 255, ${letterShadowOpacity * 0.5}), 0 0 30px rgba(255, 255, 255, ${letterShadowOpacity * 0.3})`);
+      wiggleAmplitude = 0;
     }
     
-    // Wordmark opacity - fade to more subtle in final state
-    const wordmarkOpacity = lerp(1, 0.7, easedProgress);
-    root.style.setProperty('--wordmark-opacity', wordmarkOpacity);
+    // Batch all CSS custom property updates for better performance
+    const updates = {
+      '--hero-container-height': `${heroHeight}px`,
+      '--hero-top': `${heroTop}px`,
+      '--hero-bg-opacity': bgOpacity,
+      '--content-opacity': contentOpacity,
+      '--nav-opacity': navOpacity,
+      '--wordmark-font-size': `${currentFontSize}px`,
+      '--wordmark-text-shadow': `2px 2px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`,
+      '--text-shadow': `0 0 10px rgba(255, 255, 255, ${letterShadowOpacity}), 0 0 20px rgba(255, 255, 255, ${letterShadowOpacity * 0.5}), 0 0 30px rgba(255, 255, 255, ${letterShadowOpacity * 0.3})`,
+      '--wordmark-opacity': wordmarkOpacity,
+      '--wiggle-amplitude': wiggleAmplitude
+    };
     
-    // Wiggle amplitude for letter animation - smoother transition
-    const wiggleProgress = Math.max(0, (progress - 0.1) / 0.9);
-    const wiggleAmplitude = 1 - wiggleProgress; // Linear instead of eased to avoid double-easing
-    root.style.setProperty('--wiggle-amplitude', wiggleAmplitude);
+    // Apply all updates in one batch
+    const root = document.documentElement;
+    Object.entries(updates).forEach(([property, value]) => {
+      root.style.setProperty(property, value);
+    });
   }
 
   // --- Main Animation Loop ---
@@ -196,13 +206,19 @@ document.addEventListener("DOMContentLoaded", () => {
       getComputedStyle(document.documentElement).getPropertyValue('--wiggle-amplitude') || '1'
     );
 
+    // Early exit for performance - stop RAF loop when no animation needed
+    if (wiggleAmplitude <= 0.001 && progress >= 0.5) {
+      animationFrameId = null;
+      return;
+    }
+
     // 4. Animate Font Variation Settings with Wiggle
     letters.forEach((letter, i) => {
       const finalSettings = {};
 
       // Primary animation step - move each axis value
       for (const axis in AXES_CONFIG) {
-        const range = AXES_CONFIG[axis].max - AXES_CONFIG[axis].min;
+        const range = AXES_RANGES[axis]; // Use pre-calculated range
         letterStates[i].currentValues[axis] +=
           letterStates[i].directions[axis] * range * letterStates[i].speed;
         if (
@@ -215,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Apply balanced relationships between axes
       balancedAxes.forEach(({ axis1, axis2, correlation }) => {
-        const range1 = AXES_CONFIG[axis1].max - AXES_CONFIG[axis1].min;
+        const range1 = AXES_RANGES[axis1]; // Use pre-calculated range
         const normalizedPos1 =
           (letterStates[i].currentValues[axis1] - AXES_CONFIG[axis1].min) /
           range1;
@@ -223,28 +239,26 @@ document.addEventListener("DOMContentLoaded", () => {
           correlation < 0
             ? 1 - normalizedPos1 * Math.abs(correlation)
             : normalizedPos1 * correlation;
-        const range2 = AXES_CONFIG[axis2].max - AXES_CONFIG[axis2].min;
+        const range2 = AXES_RANGES[axis2]; // Use pre-calculated range
         const targetValue2 = AXES_CONFIG[axis2].min + targetPos2 * range2;
         letterStates[i].currentValues[axis2] =
           letterStates[i].currentValues[axis2] * 0.7 + targetValue2 * 0.3;
       });
 
-      // Legibility protection
+      // Legibility protection (using pre-calculated ranges)
       const weightNormalized =
         (letterStates[i].currentValues.wght - AXES_CONFIG.wght.min) /
-        (AXES_CONFIG.wght.max - AXES_CONFIG.wght.min);
+        AXES_RANGES.wght;
       const xopqNormalized =
         (letterStates[i].currentValues.XOPQ - AXES_CONFIG.XOPQ.min) /
-        (AXES_CONFIG.XOPQ.max - AXES_CONFIG.XOPQ.min);
+        AXES_RANGES.XOPQ;
       if (weightNormalized < 0.3 && xopqNormalized < 0.3) {
         if (Math.random() < 0.5) {
           letterStates[i].currentValues.wght =
-            AXES_CONFIG.wght.min +
-            (AXES_CONFIG.wght.max - AXES_CONFIG.wght.min) * 0.4;
+            AXES_CONFIG.wght.min + AXES_RANGES.wght * 0.4;
         } else {
           letterStates[i].currentValues.XOPQ =
-            AXES_CONFIG.XOPQ.min +
-            (AXES_CONFIG.XOPQ.max - AXES_CONFIG.XOPQ.min) * 0.4;
+            AXES_CONFIG.XOPQ.min + AXES_RANGES.XOPQ * 0.4;
         }
       }
 
