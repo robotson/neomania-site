@@ -22,9 +22,9 @@
   /* Figma Design System Tokens - Dark Theme */
   --dark-level1: #f4f4f4; /* Main text, titles, active nav */
   --dark-level2: #ededed; /* Secondary text */
-  --dark-level3: #6c6c6c; /* Tertiary text, inactive nav */
-  --dark-background: #090909; /* Background */
-  --dark-decorative: #6c6c6c; /* Decorative elements, borders */
+  --dark-level3: #909090; /* Tertiary text, inactive nav */
+  --dark-background: #000000; /* Background */
+  --dark-decorative: #909090; /* Decorative elements, borders */
   --dark-active: #000000; /* Active button state */
   --dark-hover: #1e1e1e; /* Hover state */
   --dark-error: #ff0550; /* Error states */
@@ -76,9 +76,6 @@ html {
 
 /* Theme toggle styles */
 .theme-toggle {
-  position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
   width: 24px;
   height: 24px;
   padding: 0;
@@ -87,6 +84,14 @@ html {
   cursor: pointer;
   opacity: 0.85;
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Legacy fixed positioning for standalone theme toggle */
+.theme-toggle-container .theme-toggle {
+  position: fixed;
+  z-index: 1001;
+  top: 1.5rem;
+  right: 1.5rem;
 }
 
 .theme-toggle:hover {

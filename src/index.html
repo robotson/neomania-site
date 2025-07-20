@@ -4,17 +4,65 @@ permalink: /
 bodyClass: home-page
 ---
 
-{# Separate header navigation overlay #}
-<header class="header-nav">
-  <div class="header-nav--left">
-    <a href="#" class="header-nav-item is-active">CATALOG</a>
-    <a href="#" class="header-nav-item">LISTEN</a>
-  </div>
-  <div class="header-nav--right">
-    <a href="#" class="header-nav-item">CONNECT</a>
-    {# Icons will go here later #}
+{# Desktop navigation (MD+ breakpoints) #}
+<header class="header-nav header-nav--desktop">
+  <a href="#" class="header-nav-item header-nav--catalog is-active">CATALOG</a>
+  <a href="#" class="header-nav-item header-nav--listen">LISTEN</a>
+  <a href="#" class="header-nav-item header-nav--connect">CONNECT</a>
+  <button class="theme-toggle header-nav--theme-toggle" aria-label="Toggle theme">
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
+      {% icon "sun" %}
+      {% icon "moon" %}
+      {% icon "sun-beams" %}
+    </svg>
+  </button>
+</header>
+
+{# Mobile navigation (XS/SM breakpoints) #}
+<header class="header-nav header-nav--mobile">
+  <div class="mobile-header-content">
+    <button class="header-nav--hamburger" aria-label="Open menu">
+      <span class="hamburger-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </span>
+    </button>
   </div>
 </header>
+
+{# Mobile Menu Modal #}
+<div class="mobile-menu-modal" id="mobile-menu-modal">
+  <div class="mobile-menu-backdrop"></div>
+  <div class="mobile-menu-content">
+    <div class="mobile-menu-header">
+      <button class="mobile-menu--back" aria-label="Go back" style="visibility: hidden;">‹</button>
+      <div class="mobile-menu-wordmark">
+        <span class="mobile-wordmark-text">Neomania</span>
+      </div>
+      <button class="mobile-menu--close" aria-label="Close menu">×</button>
+    </div>
+    <nav class="mobile-menu-nav">
+      <a href="#" class="mobile-menu-item mobile-menu--catalog is-active">Catalog</a>
+      <button class="mobile-menu-item mobile-menu--listen" type="button">Listen</button>
+      <a href="#" class="mobile-menu-item mobile-menu--connect">Connect</a>
+      <button class="mobile-menu-item mobile-menu--theme theme-toggle" aria-label="Toggle theme">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 24 24" width="8" height="8">
+          {% icon "sun" %}
+          {% icon "moon" %}
+          {% icon "sun-beams" %}
+        </svg>
+      </button>
+    </nav>
+    
+    <!-- Listen sub-menu (hidden by default) -->
+    <div class="mobile-menu-submenu" id="listen-submenu">
+      <a href="#" class="mobile-menu-subitem mobile-menu--spotify">Spotify</a>
+      <a href="#" class="mobile-menu-subitem mobile-menu--apple">Apple Podcast</a>
+      <a href="#" class="mobile-menu-subitem mobile-menu--rss">RSS</a>
+    </div>
+  </div>
+</div>
 
 {# This is the fixed container for the hero that will stay on screen. #}
 <div class="fixed-hero-container">
@@ -51,4 +99,4 @@ bodyClass: home-page
 </main>
 
 {# {% include "components/debug-panel.njk" %} #}
-{% include "components/theme-toggle.njk" %}
+{# Theme toggle now in header navigation #}

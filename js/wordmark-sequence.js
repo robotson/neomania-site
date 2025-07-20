@@ -12,6 +12,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const scrollAnimationEnd = window.innerHeight; // Animation completes over 1x viewport height
   let initialFontSize; // Will be read after fonts load
   const finalFontSize = 2.0 * 16; // 2.0rem in pixels - try larger for header
+  
+  // Responsive font size system - continuous scaling
+  function getResponsiveFontSize(baseSize, progress) {
+    const viewportWidth = window.innerWidth;
+    
+    // Continuous scaling using viewport width
+    // Scale from 40px at 320px viewport to 112px at 1920px viewport
+    const minViewport = 320;
+    const maxViewport = 1920;
+    const minFontSize = 40;
+    const maxFontSize = 112;
+    
+    // Clamp viewport width to our range
+    const clampedViewport = Math.max(minViewport, Math.min(maxViewport, viewportWidth));
+    
+    // Calculate continuous font size based on viewport width
+    const viewportProgress = (clampedViewport - minViewport) / (maxViewport - minViewport);
+    const responsiveBaseSize = lerp(minFontSize, maxFontSize, viewportProgress);
+    
+    // Interpolate between responsive base size and final size
+    return lerp(responsiveBaseSize, finalFontSize, progress);
+  }
 
   const AXES_CONFIG = {
     wght: { min: 300, max: 900 }, // Expanded range to include all resting weights
@@ -100,6 +122,14 @@ document.addEventListener("DOMContentLoaded", () => {
     lastScrollY = scrollY;
   }
   
+  // --- Responsive Resize Handler ---
+  function handleResize() {
+    // Update immediately during resize for real-time feedback
+    const scrollY = window.scrollY;
+    const progress = Math.min(1, Math.max(0, scrollY / scrollAnimationEnd));
+    updateCSSProperties(progress);
+  }
+  
   // --- Update CSS Custom Properties ---
   function updateCSSProperties(progress) {
     const easedProgress = easeInOutCubic(progress);
@@ -125,8 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const navOpacity = progress > 0.3 ? (progress - 0.3) / 0.3 : 0;
     root.style.setProperty('--nav-opacity', Math.min(1, navOpacity));
     
-    // Wordmark font size and styling
-    const currentFontSize = lerp(initialFontSize || 96, finalFontSize, easedProgress);
+    // Wordmark font size and styling - now truly responsive
+    const currentFontSize = getResponsiveFontSize(null, easedProgress);
     root.style.setProperty('--wordmark-font-size', `${currentFontSize}px`);
     
     // Text shadow (glow) - fade to zero smoothly
@@ -300,6 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Always clean up previous listeners
     window.removeEventListener("scroll", handleScroll);
+    window.removeEventListener("resize", handleResize);
 
     if (prefersReduced) {
       // Set final, static state for reduced motion using CSS custom properties
@@ -308,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
       root.style.setProperty('--hero-bg-opacity', '0.75');
       root.style.setProperty('--content-opacity', '1');
       root.style.setProperty('--nav-opacity', '1');
-      root.style.setProperty('--wordmark-font-size', `${finalFontSize}px`);
+      root.style.setProperty('--wordmark-font-size', `${getResponsiveFontSize(null, 1)}px`);
       root.style.setProperty('--wordmark-text-shadow', 'none');
       root.style.setProperty('--wiggle-amplitude', '0');
       document.body.classList.add("no-animation-timeline");
@@ -317,6 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
       handleScroll(); // Initial call to set progress
       masterAnimationLoop(); // Start the animation loop
       window.addEventListener("scroll", handleScroll, { passive: true });
+      window.addEventListener("resize", handleResize, { passive: true });
     }
   }
 

@@ -28,7 +28,7 @@ body:has(.episode-list-container) {
   width: 100%;
   max-width: 393px;
   margin: 2rem auto;
-  padding: 0 22px;
+  padding: 10rem 22px 0 22px; /* Add top padding to prevent scrolling too close to header */
   box-sizing: border-box;
   font-family: "Roboto Flex", sans-serif;
 }
@@ -212,7 +212,7 @@ body:has(.episode-list-container) {
   /* Update container for S breakpoint */
   .episode-list-container {
     max-width: 768px;
-    padding: 0 50px;
+    padding: 10rem 50px 0 50px; /* Maintain top padding for mobile header spacing */
   }
   
   /* Update grid to 16 columns */
@@ -300,7 +300,7 @@ body:has(.episode-list-container) {
   /* Update container for M breakpoint */
   .episode-list-container {
     max-width: 1024px;
-    padding: 0 50px; /* M breakpoint margin spec */
+    padding: 10rem 50px 0 50px; /* Maintain top padding for desktop header spacing */
   }
   
   /* Update grid to 24 columns */
