@@ -14,7 +14,7 @@
 
 .wordmark-letter {
   display: inline-block;
-  text-shadow: var(--text-shadow);
+  /* text-shadow removed - now using filter-based glow on parent */
   color: var(--text-color);
   /* The font-variation-settings are now applied via inline style from JS */
 }

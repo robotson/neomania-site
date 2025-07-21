@@ -61,6 +61,12 @@
   will-change: opacity;
   transform: translate3d(0, 0, 0); /* Hardware acceleration */
   contain: layout paint; /* Isolate content rendering */
+  
+  /* MW-3: Skip layout until content is visible/needed */
+  content-visibility: auto;
+  contain-intrinsic-size: 100vh; /* Provide hint for size calculation */
+  
+  /* QW-4: Disable pointer events when faded out for performance - handled by JS */
 }
 
 /*———— HERO ELEMENT ————*/
@@ -82,6 +88,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Fix-GLOW-1: let shadows extend */
+  overflow: visible;
 }
 
 /* Wordmark stays independently centered */
@@ -94,7 +102,9 @@
   /* GPU acceleration for font variations */
   will-change: font-variation-settings, font-size, transform;
   transform: translate3d(0, 0, 0); /* Hardware acceleration */
-  contain: layout style paint; /* Isolate rendering */
+  contain: layout style; /* Fix 1a: Remove paint contain to prevent glow clipping */
+  overflow: visible; /* Fix 1b: Allow glow to extend beyond bounds */
+  white-space: nowrap; /* Fix 2a: Prevent text wrapping on narrow viewports */
   backface-visibility: hidden; /* Prevent texture thrashing */
   isolation: isolate; /* New compositing layer */
 }
@@ -121,6 +131,8 @@
   opacity: var(--nav-opacity, 0);
   transition: opacity 0.2s ease-out;
   z-index: 1000;
+  
+  /* QW-4: Disable pointer events when faded out for performance - handled by JS */
 }
 
 /* Responsive Display Logic */
@@ -436,7 +448,7 @@
   }
   
   .mobile-header-content {
-    top: 4rem; /* More top padding for SM */
+    top: 28px; /* Reduced top padding for SM */
   }
   
   .mobile-menu-content {
@@ -567,20 +579,34 @@
 }
 
 /*———— WORDMARK SIZING ————*/
-.animated-wordmark .wordmark-text {
-  font-size: var(--wordmark-font-size, clamp(2rem, 10vw, 6rem));
-  color: white;
-  text-shadow: var(--wordmark-text-shadow, 2px 2px 4px rgba(0, 0, 0, 0.5));
-  opacity: var(--wordmark-opacity, 1);
-  transition: font-size 0.1s ease-out, text-shadow 0.1s ease-out, opacity 0.1s ease-out;
+.animated-wordmark {
+  /* Fix-SCALE-1: only declare fallback here;
+     JS will overwrite the var itself, not the property */
+  transform: var(--wordmark-transform, scale(1)) translate3d(0,0,0);
+  transform-origin: center center;
+  /* Transform is driven by JS every frame; no CSS transition needed */
   
-  /* Maximum GPU optimization for text */
-  will-change: font-size, opacity, text-shadow;
-  transform: translate3d(0, 0, 0); /* Force GPU layer */
-  backface-visibility: hidden; /* Prevent aliasing */
-  -webkit-font-smoothing: antialiased; /* Smoother rendering */
-  contain: layout paint; /* Isolate text rendering */
-  isolation: isolate; /* Separate compositing layer */
+  /* GPU optimization for scaling - C-3: will-change toggled by JS */
+  backface-visibility: hidden;
+  isolation: isolate;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+
+.animated-wordmark .wordmark-text {
+  /* Reduce pre-transform footprint so small viewports don't wrap */
+  font-size: 3rem;          /* 48 px base instead of 64 px */
+  line-height: 1;           /* tighter box */
+  color: white;
+  /* GPU-friendly drop-shadow with opacity animation */
+  filter: drop-shadow(0 0 8px rgba(255,255,255, var(--glow-alpha,0.8)));
+  opacity: var(--wordmark-opacity, 1);
+  transition: opacity .15s ease-out;
+  
+  /* Optimized for transform-based scaling */
+  -webkit-font-smoothing: antialiased;
+  contain: layout;          /* drop 'paint' so shadows can spill */
 }
 
 /*———— DEBUG INFO OVERLAY ————*/
