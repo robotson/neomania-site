@@ -6,8 +6,6 @@
   --animation-scroll-range: 100vh;
   
   /* Initialize animation properties to prevent undefined behavior */
-  --hero-container-height: 100vh;
-  --hero-top: 0px;
   --hero-bg-opacity: 0;
   --hero-justify: center;
   --hero-align: center;
@@ -15,8 +13,6 @@
   --content-opacity: 0;
   --nav-opacity: 0;
   --wiggle-amplitude: 1;
-  --wordmark-font-size: clamp(2rem, 10vw, 6rem);
-  --wordmark-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   --wordmark-opacity: 1;
 }
 
@@ -24,17 +20,16 @@
 .fixed-hero-container {
   /* This container becomes sticky after scroll, contains the transforming content */
   position: sticky;
-  top: var(--hero-top, 0);
+  top: 0;
   left: 0;
   width: 100%;
-  height: var(--hero-container-height, 100vh);
+  height: 100vh;
   z-index: 100;
   overflow: hidden;
-  transition: height 0.1s ease-out, top 0.1s ease-out;
   
   /* GPU acceleration magic */
-  will-change: height, transform;
-  contain: layout style paint;
+  will-change: transform;
+  contain: layout;
   transform: translate3d(0, 0, 0); /* Force hardware acceleration */
   isolation: isolate; /* Create new stacking context */
   backface-visibility: hidden; /* GPU optimization */
@@ -75,9 +70,21 @@
   display: flex;
   justify-content: var(--hero-justify, center);
   align-items: var(--hero-align, center);
-  background: rgba(10, 10, 10, var(--hero-bg-opacity, 0));
   padding: var(--hero-padding, 0 2rem);
-  transition: all 0.1s ease-out;
+  position: relative; /* For pseudo-element positioning */
+}
+
+.main-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 10, 1);
+  opacity: var(--hero-bg-opacity, 0);
+  transition: opacity 0.1s ease-out;
+  pointer-events: none; /* Allow clicks to pass through */
 }
 
 .hero-container {
@@ -162,6 +169,19 @@
 .header-nav--theme-toggle {
   grid-column: 8 / 9; /* Col 8 (end position) */
   justify-self: end;
+}
+
+/* Absolutely position wordmark anchor relative to header */
+#wordmark-anchor {
+  position: absolute;
+  display: inline-block;       /* makes height/width take effect */
+  font: 600 clamp(3rem, 5vw, 6rem)/1 "Roboto Flex", sans-serif; /* medium viewport-based sizing */
+  letter-spacing: 0.1em;       /* matches animated wordmark */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); /* center both horizontally and vertically */
+  opacity: 0;                  /* still invisible placeholder */
+  filter: drop-shadow(0 0 8px transparent); /* invisible but counted - matches hero glow */
 }
 
 .header-nav-item {
@@ -535,6 +555,7 @@
     letter-spacing: 0.7px; /* Match M breakpoint episode metadata */
   }
   
+  
   /* MD+ (24 columns) positioning */
   .header-nav--catalog {
     grid-column: 1 / 3; /* Cols 1-2 */
@@ -564,6 +585,7 @@
     font-size: 11px; /* Match L breakpoint episode metadata */
     letter-spacing: 0.77px; /* Match L breakpoint episode metadata */
   }
+  
 }
 
 @media (min-width: 1920px) {
@@ -576,27 +598,41 @@
     font-size: 13px; /* Match XL breakpoint episode metadata */
     letter-spacing: 0.91px; /* Match XL breakpoint episode metadata */
   }
+  
 }
 
 /*———— WORDMARK SIZING ————*/
 .animated-wordmark {
-  /* Fix-SCALE-1: only declare fallback here;
-     JS will overwrite the var itself, not the property */
-  transform: var(--wordmark-transform, scale(1)) translate3d(0,0,0);
-  transform-origin: center center;
-  /* Transform is driven by JS every frame; no CSS transition needed */
+  /* FLIP transform: First ⨉ Invert ⨉ Play */
+  transform:
+    translate(
+      calc(var(--p, 0) * var(--dx, 0px)),
+      calc(var(--p, 0) * var(--dy, 0px))
+    )
+    scale(calc(1 + var(--p, 0) * (var(--s, 1) - 1)))
+    translateZ(0)
+    /* Additional transforms can be appended by JS */
+    var(--wiggle-transform, rotate(0deg));
   
-  /* GPU optimization for scaling - C-3: will-change toggled by JS */
+  transform-origin: center;     /* scale from center */
+  
+  /* GPU optimization - will-change toggled by JS */
   backface-visibility: hidden;
   isolation: isolate;
   white-space: nowrap;
   overflow: visible;
 }
 
+/* Wordmark anchor placeholder in header - real glyph size */
+.nav-logo {
+  font: 600 2rem/1 "Roboto Flex", sans-serif;
+  opacity: 0;           /* reserve space, stay invisible */
+  letter-spacing: 0.1em; /* match animated wordmark spacing */
+}
 
 .animated-wordmark .wordmark-text {
-  /* Reduce pre-transform footprint so small viewports don't wrap */
-  font-size: 3rem;          /* 48 px base instead of 64 px */
+  /* Hero wordmark starting size - viewport responsive, starts larger than target */
+  font-size: clamp(4rem, 6vw, 8rem); /* scales with viewport, bigger than anchor */
   line-height: 1;           /* tighter box */
   color: white;
   /* GPU-friendly drop-shadow with opacity animation */
