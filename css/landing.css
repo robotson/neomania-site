@@ -2,8 +2,8 @@
 :root {
   --header-height: 6.25rem;
   --hero-start-height: 100vh;
-  /* Adjust runway to remove empty buffer. Animation now happens over the full scroll distance. */
-  --animation-scroll-range: 100vh;
+  /* Show content after ~70% of a viewport instead of the full 100% */
+  --animation-scroll-range: 70vh;
   
   /* Initialize animation properties to prevent undefined behavior */
   --hero-bg-opacity: 0;
@@ -38,6 +38,7 @@
 .scroll-container {
   /* This provides scroll distance for the animation - no longer removed by JS */
   height: var(--animation-scroll-range);
+  min-height: 480px;          /* optional guard for tiny phones */
   width: 100%;
 }
 
