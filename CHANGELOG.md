@@ -2,7 +2,65 @@
 
 All notable changes to the Neomania podcast website will be documented in this file.
 
-## [Unreleased] - v1.0.0
+## [Unreleased] - v2.0.0
+
+### [2025-07-28] - Animated Background System & Episode Hover States
+
+#### Added
+
+- **Viewport-Fixed Background System**: Implemented scrolling background texture with shimmer grain overlay that reveals behind hero section as user scrolls down.
+- **Animated Background Texture**: Added `neomania-bg-texture.png` as crawling horizontal background (400s animation cycle) with viewport-fixed positioning.
+- **Dynamic Grain Shimmer Overlay**: Created animated SVG turbulence filter with 10s seed animation cycle, fine grain (`baseFrequency="1.5"`), and `color-burn` blend mode for visible distortion effects.
+- **Smart Scroll-Triggered Visibility**: Implemented `background-controller.js` to show/hide background layers based on scroll position with smooth opacity transitions.
+- **Episode Hover States**: Added Figma-compliant hover effects for episode rows with semi-transparent background highlighting and smooth transitions.
+- **Overscroll Protection**: Added solid background layer (`z-index: -101`) to prevent background texture visibility during browser rubber-banding.
+
+#### Enhanced
+
+- **Episode Link Interactivity**: Fixed z-index conflicts that were blocking episode row interactions by adjusting hero container layering.
+- **Background Layer Architecture**: Established three-layer system (solid background, texture, grain) with proper z-index management (-101, -100, -99).
+- **Visual Polish**: Removed bottom border from last episode in list for cleaner visual termination.
+
+#### Fixed
+
+- **Interaction Blocking**: Resolved issue where `fixed-hero-container` with `z-index: 100` was preventing episode link clicks and hover states.
+- **Background Transparency**: Made main content areas transparent to allow viewport background layers to show through properly.
+
+#### Technical Implementation
+
+- **CSS Layer Stack**: `z-index: -101` (solid), `-100` (texture), `-99` (grain), `0-2` (content)
+- **Performance**: GPU-accelerated animations with `transform: translateZ(0)` and `will-change` properties
+- **Accessibility**: Full `prefers-reduced-motion` support for all background animations
+- **Theme Integration**: Background layers work with existing light/dark theme system
+
+### [2025-07-15 to 2025-07-27] - V2 Design Implementation Progress
+
+#### Added
+
+- **Enhanced Scroll Animation System**: Implemented GPU-accelerated scroll animations with Safari compatibility and cross-browser optimization for smooth 60fps performance.
+- **FLIP Animation Framework**: Added sophisticated FLIP (First, Last, Invert, Play) animation scaling and positioning system for fluid UI transitions.
+- **Responsive Navigation Enhancements**: Improved mobile header layout with extra headspace and adaptive breakpoint handling.
+- **Advanced CSS Variable System**: Updated landing page with refined CSS custom properties for better design token management.
+
+#### Enhanced
+
+- **Performance Optimizations**: Applied micro-optimizations to scroll animations, reducing jank and improving overall site responsiveness.
+- **Cross-Browser Compatibility**: Enhanced Safari-specific scroll animation handling and responsive navigation behavior.
+- **Episode List Refinements**: Added typography overrides and XL breakpoint spacing adjustments for improved visual hierarchy.
+- **Landing Page Polish**: Fine-tuned scroll behavior and visual feedback for better user experience.
+
+#### In Progress - V2 Vision
+
+- **Scrolling Background Animation**: Major background animation system for immersive visual experience (not yet implemented).
+- **Shimmer Disturbance Layer**: Interactive visual effect layer that creates dynamic shimmer effects (planned).
+- **Complete Navigation System**: Additional menu components and interactions per Figma designs (in development).
+- **Figma Episode Pages**: Full implementation of episode page layouts matching design specifications (upcoming).
+
+#### Notes
+
+This release represents significant progress toward the V2 design vision with a focus on performance, animations, and responsive behavior. The core landing page experience is largely functional, with major visual features still in development.
+
+## [Released] - v1.0.0
 
 ### [2024-07-15] - Comprehensive Refinements
 

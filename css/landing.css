@@ -24,7 +24,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  z-index: 100;
+  z-index: 0;
   overflow: hidden;
   
   /* GPU acceleration magic */
@@ -44,7 +44,7 @@
 
 .main-content {
   /* The actual page content, positioned naturally in document flow */
-  background: #111;
+  background: transparent;
   position: relative;
   z-index: 1;
   padding: 2rem 1rem 4rem;

@@ -79,6 +79,11 @@ body:has(.episode-list-container) {
   
   padding: 12px 0 16px;
   border-bottom: 0.5px solid var(--text-level3);
+}
+
+/* Remove border from last episode */
+.episode-row:last-child {
+  border-bottom: none;
   text-decoration: none;
   color: inherit;
   align-items: start;
@@ -89,8 +94,37 @@ body:has(.episode-list-container) {
   border-top: 0.5px solid var(--text-level3);
 }
 
-.episode-row:hover .episode-title {
-  opacity: 0.8;
+/* Episode Row Hover State - Based on Figma Design */
+a.episode-row {
+  transition: background-color 0.2s ease-out;
+  position: relative;
+  text-decoration: none;
+  /* Debug: Add a subtle background to confirm CSS is loading */
+  background-color: transparent;
+  /* Force pointer events to work */
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+a.episode-row:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important; /* Subtle Figma hover background */
+}
+
+/* Add border separator on hover */
+a.episode-row:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.5px;
+  background-color: var(--text-level3);
+  opacity: 1;
+  z-index: 1;
+}
+
+a.episode-row:hover .episode-title {
+  opacity: 0.9;
 }
 
 /* ==========================================================================

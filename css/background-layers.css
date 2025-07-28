@@ -1,26 +1,40 @@
 /* ===== BACKGROUND LAYERS SYSTEM ===== */
 
-/* ===== SVG GRAIN/TURBULENCE LAYER ===== */
+/* ===== SOLID BACKGROUND (prevents overscroll visibility) ===== */
 
-.main-content .grain-overlay {
-  display: none; /* Temporarily disabled */
-  position: absolute;
+.viewport-solid-background {
+  position: fixed;
   inset: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  background: var(--bg-color);
+  z-index: -101; /* Behind everything else */
   pointer-events: none;
-  z-index: 0; /* Behind the content */
-  opacity: 0.15;
-  mix-blend-mode: soft-light;
 }
 
-/* Increase grain visibility during transition and sticky states - NO LONGER NEEDED */
-/*
-.wordmark-transitioning ~ .grain-overlay,
-.wordmark-sticky ~ .grain-overlay {
-  opacity: 0.4;
+/* ===== SVG GRAIN/TURBULENCE LAYER ===== */
+
+.viewport-grain-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -99; /* Above texture, behind everything else */
+  opacity: 0; /* Start hidden */
+  mix-blend-mode: color-burn;
+  
+  /* Scroll-triggered visibility */
+  transition: opacity 0.8s ease-in-out;
+  
+  /* GPU acceleration */
+  will-change: opacity;
+  transform: translateZ(0);
 }
-*/
+
+.viewport-grain-overlay.visible {
+  opacity: 1.0;
+}
 
 /* Theme-aware grain coloring */
 :root.light-theme .main-content .grain-overlay {
@@ -29,87 +43,72 @@
 
 /* ===== CRAWLING TEXTURE LAYER ===== */
 
-.main-content .crawl-texture {
-  display: none; /* Temporarily disabled */
-  position: absolute;
+.viewport-background {
+  position: fixed;
   inset: 0;
-  /* Fallback pattern for testing */
-  background-image: linear-gradient(
-      45deg,
-      transparent 25%,
-      rgba(255, 255, 255, 0.1) 25%,
-      rgba(255, 255, 255, 0.1) 50%,
-      transparent 50%,
-      transparent 75%,
-      rgba(255, 255, 255, 0.1) 75%
-    ),
-    linear-gradient(
-      -45deg,
-      transparent 25%,
-      rgba(255, 255, 255, 0.05) 25%,
-      rgba(255, 255, 255, 0.05) 50%,
-      transparent 50%,
-      transparent 75%,
-      rgba(255, 255, 255, 0.05) 75%
-    );
-  background-size: 60px 60px, 40px 40px;
-  background-repeat: repeat;
-  background-position: 0 0;
-  opacity: 0.6; /* Always visible now */
-  z-index: 0; /* Behind the content */
+  width: 200%; /* Extended width for seamless looping */
+  height: 100vh;
+  background-image: url('../images/neomania-bg-texture.png');
+  background-repeat: repeat-x;
+  background-position: left center;
+  background-size: auto 100%;
+  opacity: 0; /* Start hidden */
+  z-index: -100; /* Behind everything */
   pointer-events: none;
-  animation: crawl-horizontal 240s linear infinite;
-
-  /* No longer needed */
-  /* transition: opacity 0.8s ease-in-out; */
+  animation: crawl-texture 400s linear infinite;
+  mix-blend-mode: screen;
+  
+  /* Scroll-triggered visibility */
+  transition: opacity 0.8s ease-in-out;
+  
+  /* GPU acceleration */
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 
-/* Show texture during transition and sticky states - NO LONGER NEEDED */
-/*
-.wordmark-transitioning ~ .crawl-texture,
-.wordmark-sticky ~ .crawl-texture {
-  opacity: 0.6;
-  animation: crawl-horizontal 240s linear infinite;
+.viewport-background.visible {
+  opacity: 1.0;
 }
-*/
 
-/* Horizontal crawling animation */
-@keyframes crawl-horizontal {
-  from {
-    background-position-x: 0;
+/* Remove old main-content texture styles */
+
+/* Horizontal crawling animation - adapted from reference */
+@keyframes crawl-texture {
+  0% {
+    transform: translateX(0%);
   }
-  to {
-    background-position-x: -200vw;
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-/* ===== RESPONSIVE TEXTURE SWITCHING ===== */
+/* ===== RESPONSIVE TEXTURE SCALING ===== */
 
-/* Mobile - smaller pattern */
+/* Mobile - smaller scale */
 @media (max-width: 640px) {
   .main-content .crawl-texture {
-    background-size: 40px 40px, 30px 30px;
+    background-size: auto 80%;
   }
 }
 
 /* Tablet */
 @media (min-width: 641px) and (max-width: 1279px) {
   .main-content .crawl-texture {
-    background-size: 50px 50px, 35px 35px;
+    background-size: auto 90%;
   }
 }
 
 /* Desktop */
 @media (min-width: 1280px) and (max-width: 1919px) {
   .main-content .crawl-texture {
-    background-size: 60px 60px, 40px 40px;
+    background-size: auto 100%;
   }
 }
 
 /* XL Desktop */
 @media (min-width: 1920px) {
   .main-content .crawl-texture {
-    background-size: 80px 80px, 50px 50px;
+    background-size: auto 110%;
   }
 }
 
@@ -143,28 +142,17 @@
 }
 
 /* ===== PERFORMANCE OPTIMIZATIONS ===== */
-
-.main-content .crawl-texture {
-  /* GPU acceleration for smooth animation */
-  will-change: background-position;
-  transform: translateZ(0);
-}
-
-.main-content .grain-overlay {
-  /* GPU acceleration for blend modes */
-  will-change: opacity;
-  transform: translateZ(0);
-}
+/* GPU acceleration properties moved inline above */
 
 /* ===== ACCESSIBILITY & REDUCED MOTION ===== */
 
 @media (prefers-reduced-motion: reduce) {
   .main-content .crawl-texture {
     animation: none !important;
-    background-position: 0 0 !important;
+    transform: translateX(0) !important;
   }
 
-  .main-content .grain-overlay animate {
+  .main-content .grain-overlay svg animate {
     animation-duration: 0s !important;
   }
 }
@@ -172,9 +160,14 @@
 /* ===== THEME INTEGRATION ===== */
 
 /* Light theme adjustments */
-:root.light-theme .main-content .crawl-texture {
-  opacity: 0.3;
+:root.light-theme .main-content .crawl-texture.visible {
+  opacity: 0.15;
   mix-blend-mode: multiply;
+}
+
+:root.light-theme .main-content .grain-overlay.visible {
+  opacity: 0.3;
+  mix-blend-mode: soft-light;
 }
 
 /*
@@ -185,8 +178,12 @@
 */
 
 /* Dark theme (default) */
-:root:not(.light-theme) .main-content .crawl-texture {
+:root:not(.light-theme) .main-content .crawl-texture.visible {
   mix-blend-mode: screen;
+}
+
+:root:not(.light-theme) .main-content .grain-overlay.visible {
+  mix-blend-mode: multiply;
 }
 
 /* ===== HIGH CONTRAST MODE ===== */

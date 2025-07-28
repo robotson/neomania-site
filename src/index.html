@@ -79,21 +79,35 @@ bodyClass: home-page
 {# This tall, invisible container provides the scrollable distance for the animation. #}
 <div class="scroll-container"></div>
 
+{# Solid background to prevent overscroll visibility #}
+<div class="viewport-solid-background"></div>
+
+{# Fixed viewport background texture #}
+<div class="viewport-background"></div>
+
+{# Fixed viewport grain overlay #}
+<svg class="viewport-grain-overlay" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <defs>
+    <filter id="grain">
+      <feTurbulence baseFrequency="1.5" numOctaves="4" result="noise">
+        <animate
+          attributeName="seed"
+          from="0"
+          to="100"
+          dur="10s"
+          repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix in="noise" type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="discrete" tableValues="0.05 0.2 0.4 0.6 0.8"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" filter="url(#grain)" opacity="1.0"/>
+</svg>
+
 {# The actual page content that scrolls up from underneath. #}
 <main id="main-content" class="main-content">
-  <div class="crawl-texture"></div>
-  <svg class="grain-overlay" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <defs>
-      <filter id="grain">
-        <feTurbulence baseFrequency="0.9" numOctaves="4" result="noise"/>
-        <feColorMatrix in="noise" type="saturate" values="0"/>
-        <feComponentTransfer>
-          <feFuncA type="discrete" tableValues="0.02 0.05 0.1 0.15 0.2"/>
-        </feComponentTransfer>
-      </filter>
-    </defs>
-    <rect width="100%" height="100%" filter="url(#grain)" opacity="0.25"/>
-  </svg>
 
   <div class="episode-list-container">
     {% include "components/episode-catalog.njk" %}

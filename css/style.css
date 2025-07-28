@@ -58,7 +58,7 @@ body.home-page {
 .main-content {
   position: relative;
   z-index: 2;
-  background-color: var(--bg-color);
+  background-color: transparent;
   margin: 0;
   padding: 0;
 }
