@@ -3,6 +3,63 @@ layout: base.njk
 bodyClass: "episode-page"
 ---
 
+<style>
+  /* Make all links in episode content monochromatic */
+  .episode-content a {
+    color: currentColor;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .episode-content a:hover {
+    opacity: 1;
+    text-decoration-thickness: 2px;
+  }
+  
+  .episode-platform-links a {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    opacity: 0.7;
+  }
+  .episode-platform-links a:hover {
+    opacity: 1;
+    background: white;
+    color: black;
+  }
+  
+  /* Fix icon alignment */
+  .episode-platform-links img {
+    display: block;
+  }
+  
+  /* On hover - invert white icons to black */
+  .episode-platform-links a:hover .platform-icon {
+    filter: invert(1);
+  }
+  
+  /* Footer home link styling */
+  .episode-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid currentColor;
+    opacity: 0.3;
+    text-align: center;
+  }
+  .episode-footer a {
+    color: currentColor;
+    text-decoration: none;
+    font-size: 0.875rem;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  .episode-footer a:hover {
+    opacity: 1;
+  }
+</style>
+
 <article class="content-pane">
   <header>
     <h1>{{ title }}</h1>
@@ -17,6 +74,26 @@ bodyClass: "episode-page"
     <audio controls src="{{ audioUrl }}" style="width: 100%;">
       Your browser does not support the audio element.
     </audio>
+  </div>
+
+  <div class="episode-platform-links" style="margin: 1.5rem 0; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+    <span style="font-weight: 500; font-size: 0.875rem; opacity: 0.7;">Listen:</span>
+    {% if spotifyUrl %}
+    <a href="{{ spotifyUrl }}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; text-decoration: none; border-radius: 20px; font-size: 0.8rem; font-weight: 400; transition: all 0.2s;">
+      <img src="/images/podcast-icons/Spotify_Primary_Logo_RGB_White.png" alt="" width="14" height="14" class="platform-icon">
+      <span>Spotify</span>
+    </a>
+    {% endif %}
+    {% if appleUrl %}
+    <a href="{{ appleUrl }}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; text-decoration: none; border-radius: 20px; font-size: 0.8rem; font-weight: 400; transition: all 0.2s;">
+      <img src="/images/podcast-icons/Apple_Podcasts_Icon_wht_sm_060623.svg" alt="" width="14" height="14" class="platform-icon">
+      <span>Apple</span>
+    </a>
+    {% endif %}
+    <a href="https://anchor.fm/s/ffb36578/podcast/rss" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; text-decoration: none; border-radius: 20px; font-size: 0.8rem; font-weight: 400; transition: all 0.2s;">
+      <img src="/images/podcast-icons/rss_simple_white.svg" alt="" width="14" height="14" class="platform-icon">
+      <span>RSS</span>
+    </a>
   </div>
 
   <div class="episode-content">
@@ -68,4 +145,8 @@ bodyClass: "episode-page"
     {% endif %}
   </section>
   {% endif %}
+  
+  <footer class="episode-footer">
+    <a href="https://neomania.net">← neomania.net</a>
+  </footer>
 </article> 

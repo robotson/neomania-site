@@ -1,6 +1,15 @@
 import fs from "fs";
 import episodeAnnotations from "./src/_data/episodeAnnotations.js";
 
+// Load platform links if they exist
+let platformLinks = {};
+try {
+  const platformLinksData = fs.readFileSync("_cache/platform-links.json", "utf8");
+  platformLinks = JSON.parse(platformLinksData);
+} catch (error) {
+  console.warn("Platform links not found, run scripts/fetch-apple-episodes.mjs to generate them");
+}
+
 /**
  * Generates a clean, URL-friendly slug from an episode title.
  * @param {string} title The original episode title.
@@ -50,6 +59,9 @@ export default function (eleventyConfig) {
       // Merge annotations if they exist for this episode
       const annotation = episodeAnnotations[episodeData.slug] || {};
       
+      // Get platform links for this episode
+      const episodePlatformLinks = platformLinks[episodeData.episodeNumber] || {};
+      
       // Merge annotation data into episode data
       Object.assign(episodeData, {
         ...episodeAnnotations._defaults,
@@ -73,6 +85,10 @@ export default function (eleventyConfig) {
         title: annotation.customTitle || episodeData.title,
         notes: annotation.expandedNotes || episodeData.summary,
         image: annotation.customImage || episodeData.image,
+        
+        // Platform links
+        spotifyUrl: episodePlatformLinks.spotify?.webUrl || null,
+        appleUrl: episodePlatformLinks.apple?.webUrl || null,
         
         // Computed fields
         hasCustomContent: !!(

@@ -4,6 +4,36 @@ All notable changes to the Neomania podcast website will be documented in this f
 
 ## [Unreleased] - v2.0.0
 
+### [2025-08-28] - Episode Platform Links & Monochromatic Design
+
+#### Added
+
+- **Episode 9**: "Cultural Fracking and World Running w/ @thejaymo" - Latest episode added to the site
+- **Platform Links on Episode Pages**: Integrated Spotify, Apple Podcasts, and RSS links on all episode pages
+  - Fetches real episode URLs from Spotify and Apple Podcasts APIs
+  - Minimal pill-style buttons with white icons for monochromatic aesthetic
+  - Hover states with inverted colors for interaction feedback
+- **API Integration Scripts**: Created scripts to fetch and cache platform-specific episode links
+  - `scripts/fetch-apple-episodes.mjs` - Fetches episode IDs from iTunes API
+  - `scripts/extract-platform-links.mjs` - Extracts Spotify links from RSS feed
+  - Platform links cached in `_cache/platform-links.json` for build-time use
+- **Footer Navigation**: Added subtle link back to neomania.net at bottom of episode pages
+
+#### Changed
+
+- **Monochromatic Link Styling**: All links in episode content now use currentColor instead of blue
+  - Subtle underlines with hover state for better visual consistency
+  - Matches the overall media zine aesthetic
+- **Platform Link Design**: Redesigned from colorful buttons to minimal white-bordered pills
+  - Uses white icon variants (Spotify_Primary_Logo_RGB_White.png, Apple_Podcasts_Icon_wht_sm_060623.svg)
+  - Consistent with dark theme throughout the site
+
+#### Technical Implementation
+
+- **Data Pipeline Enhancement**: Platform links integrated into Eleventy build process via `.eleventy.js`
+- **Icon Management**: Using existing podcast icon assets from `images/podcast-icons/`
+- **Episode Data**: All 9 episodes now have complete platform link metadata
+
 ### [2025-07-28] - Animated Background System & Episode Hover States
 
 #### Added
