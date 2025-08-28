@@ -35,9 +35,9 @@ bodyClass: "episode-page"
     display: block;
   }
   
-  /* On hover - invert white icons to black */
+  /* On hover - remove invert filter so icons become black */
   .episode-platform-links a:hover .platform-icon {
-    filter: invert(1);
+    filter: none !important;
   }
   
   /* Footer home link styling */
@@ -80,18 +80,18 @@ bodyClass: "episode-page"
     <span style="font-weight: 500; font-size: 0.875rem; opacity: 0.7;">Listen:</span>
     {% if spotifyUrl %}
     <a href="{{ spotifyUrl }}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; text-decoration: none; border-radius: 20px; font-size: 0.8rem; font-weight: 400; transition: all 0.2s;">
-      <img src="/images/podcast-icons/Spotify_Primary_Logo_RGB_White.png" alt="" width="14" height="14" class="platform-icon">
+      <img src="/images/podcast-icons/Spotify_Primary_Logo_RGB_Black.png" alt="" width="14" height="14" class="platform-icon" style="filter: invert(1);">
       <span>Spotify</span>
     </a>
     {% endif %}
     {% if appleUrl %}
     <a href="{{ appleUrl }}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; text-decoration: none; border-radius: 20px; font-size: 0.8rem; font-weight: 400; transition: all 0.2s;">
-      <img src="/images/podcast-icons/Apple_Podcasts_Icon_wht_sm_060623.svg" alt="" width="14" height="14" class="platform-icon">
+      <img src="/images/podcast-icons/Apple_Podcasts_Icon_blk_sm_060623.svg" alt="" width="14" height="14" class="platform-icon" style="filter: invert(1);">
       <span>Apple</span>
     </a>
     {% endif %}
     <a href="https://anchor.fm/s/ffb36578/podcast/rss" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; text-decoration: none; border-radius: 20px; font-size: 0.8rem; font-weight: 400; transition: all 0.2s;">
-      <img src="/images/podcast-icons/rss_simple_white.svg" alt="" width="14" height="14" class="platform-icon">
+      <img src="/images/podcast-icons/rss_simple_black.svg" alt="" width="14" height="14" class="platform-icon" style="filter: invert(1);">
       <span>RSS</span>
     </a>
   </div>
