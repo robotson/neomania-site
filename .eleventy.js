@@ -4,10 +4,16 @@ import episodeAnnotations from "./src/_data/episodeAnnotations.js";
 // Load platform links if they exist
 let platformLinks = {};
 try {
-  const platformLinksData = fs.readFileSync("_cache/platform-links.json", "utf8");
+  const platformLinksData = fs.readFileSync("src/_data/platformLinks.json", "utf8");
   platformLinks = JSON.parse(platformLinksData);
 } catch (error) {
-  console.warn("Platform links not found, run scripts/fetch-apple-episodes.mjs to generate them");
+  // Fallback to cache if exists
+  try {
+    const platformLinksData = fs.readFileSync("_cache/platform-links.json", "utf8");
+    platformLinks = JSON.parse(platformLinksData);
+  } catch (error) {
+    console.warn("Platform links not found, run scripts/fetch-apple-episodes.mjs to generate them");
+  }
 }
 
 /**

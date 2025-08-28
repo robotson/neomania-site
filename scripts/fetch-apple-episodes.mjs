@@ -74,8 +74,19 @@ async function fetchAppleEpisodes() {
     console.log(`\nApple episode data saved to: ${outputFile}`);
     
     // Now let's update our platform links with actual Apple IDs
-    const platformLinksFile = path.join(__dirname, '..', '_cache', 'platform-links.json');
-    const platformLinks = JSON.parse(fs.readFileSync(platformLinksFile, 'utf8'));
+    const platformLinksFile = path.join(__dirname, '..', 'src', '_data', 'platformLinks.json');
+    let platformLinks = {};
+    try {
+      platformLinks = JSON.parse(fs.readFileSync(platformLinksFile, 'utf8'));
+    } catch (error) {
+      // Try cache fallback
+      const cacheFile = path.join(__dirname, '..', '_cache', 'platform-links.json');
+      try {
+        platformLinks = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+      } catch (e) {
+        console.log('No existing platform links found, starting fresh');
+      }
+    }
     
     Object.keys(platformLinks).forEach(episodeNum => {
       const appleEpisode = episodeMap[parseInt(episodeNum)];
