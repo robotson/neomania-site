@@ -8,6 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!letters.length) return;
 
   const wordmarkEl = document.querySelector(".animated-wordmark");
+
+  // Detect Safari/WebKit engines (including iOS Chromium/Firefox shells)
+  const userAgent = navigator.userAgent;
+  const isWebKitSafari = /AppleWebKit/i.test(userAgent) &&
+    /Safari/i.test(userAgent) &&
+    !/Chrome|Chromium|OPR|Edg/i.test(userAgent);
+  const IS_SAFARI_ENGINE = isWebKitSafari || /(CriOS|FxiOS|EdgiOS|OPiOS)/i.test(userAgent);
   
   // Feature flag for performance optimizations (for easy rollback)
   const PERF_PATCH_ENABLED = window.__NEOMANIA_PERF_PATCH__ !== false;
@@ -15,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- STATE & CONFIGURATION ---
   let rafRunning = false;
   const scrollAnimationEnd = window.innerHeight; // Animation completes over 1x viewport height
+
+  // Once the hero starts scrolling on Safari/WebKit we lock into a lite profile
+  let safariScrollLock = false;
   
   // Glow throttling state
   let lastGlowUpdate = 0;
@@ -120,7 +130,15 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Update CSS custom properties for smooth transitions
     updateCSSProperties(progress);
-    
+
+    if (IS_SAFARI_ENGINE && !safariScrollLock && progress > 0.02) {
+      safariScrollLock = true;
+      document.body.classList.add("safari-wordmark-lite");
+      if (wordmarkEl) {
+        wordmarkEl.style.willChange = 'transform';
+      }
+    }
+
     // Start perpetual RAF if not running and in scroll range
     if (scrollY <= scrollAnimationEnd && !rafRunning) {
       rafRunning = true;
@@ -150,6 +168,10 @@ document.addEventListener("DOMContentLoaded", () => {
       wiggleAmplitude = 0;
     }
     
+    if (IS_SAFARI_ENGINE && safariScrollLock) {
+      wiggleAmplitude = 0;
+    }
+
     // Glow opacity fades as scroll progresses - throttled for performance
     let glowAlpha;
     const scrollY = window.scrollY;
@@ -192,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const scrollY = window.scrollY;
     const progress = Math.min(1, Math.max(0, scrollY / scrollAnimationEnd));
     const easedProgress = easeInOutCubic(progress);
+    const safariLiteActive = IS_SAFARI_ENGINE && safariScrollLock;
     
     // Calculate wiggle amplitude directly
     let wiggleAmplitude;
@@ -204,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Early exit for performance - stop RAF loop when no animation needed
-    if (wiggleAmplitude <= 0.001 && progress >= 0.5) {
+    if (!safariLiteActive && wiggleAmplitude <= 0.001 && progress >= 0.5) {
       if (wordmarkEl) {
         wordmarkEl.style.willChange = '';
       }
@@ -223,8 +246,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Animate Font Variation Settings with Wiggle
     const activeAxes = PERF_PATCH_ENABLED ? getActiveAxes(wiggleAmplitude) : Object.keys(AXES_CONFIG);
-    
+
     letters.forEach((letter, i) => {
+      if (safariLiteActive) {
+        const finalAxes = i === 0 ? FINAL_AXES_N : FINAL_AXES_COMMON;
+        const weightBase = (AXES_CONFIG.wght.min + AXES_CONFIG.wght.max) / 2;
+        const widthBase = (AXES_CONFIG.wdth.min + AXES_CONFIG.wdth.max) / 2;
+        const opszBase = (AXES_CONFIG.opsz.min + AXES_CONFIG.opsz.max) / 2;
+
+        const safariSettings = [
+          `"wght" ${Math.round(lerp(weightBase, RESTING_WGHT[i], easedProgress))}`,
+          `"wdth" ${Math.round(lerp(widthBase, finalAxes.wdth ?? widthBase, easedProgress))}`,
+          `"opsz" ${Math.round(lerp(opszBase, finalAxes.opsz ?? opszBase, easedProgress))}`,
+        ];
+
+        letter.style.fontVariationSettings = safariSettings.join(", ");
+        return;
+      }
+
       const finalSettings = {};
 
       // Primary animation step - move each axis value 
@@ -370,6 +409,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
+
+    if (IS_SAFARI_ENGINE) {
+      safariScrollLock = false;
+      document.body.classList.remove("safari-wordmark-lite");
+    }
 
     // Always clean up previous listeners
     window.removeEventListener("scroll", handleScroll);
