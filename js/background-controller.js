@@ -24,33 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Don't force show - let scroll trigger control visibility
 
   let isVisible = false;
-  let lastScrollY = -1;
 
-  function updateBackgroundVisibility() {
-    const scrollY = window.scrollY;
-    
-    // Only update if scroll position changed
-    if (scrollY === lastScrollY) return;
-    lastScrollY = scrollY;
+  function updateBackgroundVisibility(shouldBeVisible) {
+    if (shouldBeVisible === isVisible) return;
 
-    // Get the main content position relative to viewport
-    const contentRect = mainContent.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    
-    // Show background when main content is 30% visible from top
-    const showThreshold = viewportHeight * 0.7;
-    const shouldBeVisible = contentRect.top <= showThreshold;
+    isVisible = shouldBeVisible;
 
-    if (shouldBeVisible !== isVisible) {
-      isVisible = shouldBeVisible;
-      
-      if (isVisible) {
-        texture.classList.add('visible');
-        grainOverlay.classList.add('visible');
-      } else {
-        texture.classList.remove('visible');
-        grainOverlay.classList.remove('visible');
-      }
+    if (isVisible) {
+      texture.classList.add('visible');
+      grainOverlay.classList.add('visible');
+    } else {
+      texture.classList.remove('visible');
+      grainOverlay.classList.remove('visible');
     }
   }
 
@@ -62,22 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Throttled scroll listener for performance
-  let ticking = false;
-  function onScroll() {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        updateBackgroundVisibility();
-        ticking = false;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        updateBackgroundVisibility(entry.isIntersecting);
       });
-      ticking = true;
+    },
+    {
+      // Trigger visibility change when the main content reaches 70% of the viewport height
+      rootMargin: '0px 0px -30% 0px',
+      threshold: 0
     }
-  }
+  );
 
-  // Set up event listeners
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', updateBackgroundVisibility, { passive: true });
-
-  // Initial check
-  updateBackgroundVisibility();
+  observer.observe(mainContent);
 });
