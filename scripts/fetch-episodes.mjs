@@ -41,6 +41,16 @@ async function scaffoldEpisodes() {
   console.log("🏗️  Running episode scaffold...");
   const rawEpisodes = await fetchEpisodes();
 
+  // CACHE the raw RSS data to _cache/episodes.json
+  const cacheDir = path.join(process.cwd(), "_cache");
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
+  }
+  
+  const cacheFile = path.join(cacheDir, "episodes.json");
+  fs.writeFileSync(cacheFile, JSON.stringify({ episodes: rawEpisodes }, null, 2));
+  console.log(`📦 Cached ${rawEpisodes.length} episodes to ${cacheFile}`);
+
   // MERGE with annotations first to get the final data, including custom slugs
   const finalEpisodes = episodeAnnotations.merge(rawEpisodes);
 
