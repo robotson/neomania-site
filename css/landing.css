@@ -640,10 +640,20 @@
   filter: drop-shadow(0 0 8px rgba(255,255,255, var(--glow-alpha,0.8)));
   opacity: var(--wordmark-opacity, 1);
   transition: opacity .15s ease-out;
-  
+
   /* Optimized for transform-based scaling */
   -webkit-font-smoothing: antialiased;
   contain: layout;          /* drop 'paint' so shadows can spill */
+}
+
+body.safari-wordmark-lite .animated-wordmark .wordmark-text {
+  filter: none;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+}
+
+body.safari-wordmark-lite #wordmark-anchor {
+  filter: none;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
 }
 
 /*———— DEBUG INFO OVERLAY ————*/
