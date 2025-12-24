@@ -60,7 +60,14 @@ const fsSource = `
         float threshold = 1.0 - GRAIN_Density;
         float soft = 0.2; 
         
-        float visibility = smoothstep(threshold - soft, threshold + 0.1, n);
+        float visibility;
+        // Light Mode -> Binary "White or Nothing" (Hard Step)
+        // Dark Mode -> Smooth Clouds (Smooth Step)
+        if (uInvert < 0.5) {
+             visibility = step(threshold, n);
+        } else {
+             visibility = smoothstep(threshold - soft, threshold + 0.1, n);
+        }
         
         // DEBUG
         if (uDebug) {
@@ -74,13 +81,19 @@ const fsSource = `
         }
 
         // OUTPUT COLOR LOGIC
-        // uInvert = 0.0 -> White Grain (Dark Mode)
-        // uInvert = 1.0 -> Black Grain (Light Mode)
-        vec3 color = mix(vec3(1.0, 1.0, 1.0), vec3(0.0, 0.0, 0.0), uInvert);
+        // Force Strict Colors:
+        // uInvert < 0.5 -> Light Mode -> FORCE OFF-WHITE (0.957) to match #F4F4F4 Paper
+        // uInvert >= 0.5 -> Dark Mode -> FORCE PURE BLACK (0.0)
+        vec3 color = (uInvert < 0.5) ? vec3(0.957) : vec3(0.0);
         
-        float opacity = uScroll * visibility;
+        // SOLID SHADER STRATEGY:
+        // Remove uScroll from shader. Alpha is strictly based on Noise Visibility (0.0 or 1.0).
+        // Fading is handled entirely by CSS Layer Opacity.
+        float opacity = visibility;
         
-        gl_FragColor = vec4(color, opacity);
+        // Output PREMULTIPLIED Alpha
+        // vec4(rgb * a, a)
+        gl_FragColor = vec4(color * opacity, opacity);
     }
 `;
 
@@ -93,7 +106,12 @@ function initGrainShader() {
 
     if (debugMode) console.log('WebGL Grain: Debug Mode Active');
 
-    const gl = canvas.getContext('webgl', { alpha: true, depth: false, antialias: false });
+    const gl = canvas.getContext('webgl', {
+        alpha: true,
+        depth: false,
+        antialias: false,
+        premultipliedAlpha: true // USE_PREMUTLIPLIED_ALPHA: Fixes dark halo artifacts
+    });
 
     if (!gl) {
         console.warn('WebGL not supported, falling back to CSS grain.');
@@ -143,8 +161,9 @@ function initGrainShader() {
 
     function resize() {
         const dpr = window.devicePixelRatio || 1;
-        canvas.width = window.innerWidth * dpr;
-        canvas.height = window.innerHeight * dpr;
+        // Enforce Integer Dimensions to prevent sub-pixel blurring
+        canvas.width = Math.floor(window.innerWidth * dpr);
+        canvas.height = Math.floor(window.innerHeight * dpr);
         gl.viewport(0, 0, canvas.width, canvas.height);
     }
     window.addEventListener('resize', resize);

@@ -99,6 +99,13 @@ if (themeToggles.length > 0) {
 
 // Animation logic moved to wordmark-wiggle.js
 
+// Browser Detection (Safari specifically renders grain stronger/lighter)
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+if (isSafari) {
+  document.documentElement.classList.add('is-safari');
+  console.log("Browser: Safari detected - Applied .is-safari class");
+}
+
 // Email protection script with toast notification instead of alert
 const emailLink = document.getElementById("email-link");
 if (emailLink) {

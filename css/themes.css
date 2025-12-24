@@ -96,8 +96,8 @@ html {
 /* Light theme class */
 :root.light-theme {
   /* New Theme Tokens - Light Mode Overrides */
-  --grain-blend: soft-light;
-  /* Multiply Black Grain (via invert) onto White BG for subtle texture */
+  --grain-blend: normal;
+  /* Normal blend acts as "White Paint" - Safe now that Alpha is separate */
 
   --wordmark-color: #000000;
   /* Black text */
@@ -121,9 +121,11 @@ html {
 
 :root.light-theme #grain-canvas {
   /* filter: invert(1); -- Handled by WebGL uniform now */
-  opacity: calc(var(--p, 0) * 0.5);
-  /* Soft-light at 50% for subtle erosion */
+  opacity: calc(var(--p, 0) * 1.0);
+  /* Full Opacity (100%) - Camouflage Color prevents harshness */
 }
+
+/* Safari override removed - Unifying at 0.8 for Camouflage Grain */
 
 /* Dark theme overrides for grain canvas */
 :root:not(.light-theme) #grain-canvas {
