@@ -66,7 +66,8 @@ html {
 /* Default to dark theme */
 :root {
   /* New Theme Tokens */
-  --grain-blend: overlay;
+  --grain-blend: multiply;
+  /* Changed from overlay to screen for visibility on dark BG */
   --wordmark-color: #ffffff;
   --glow-color: rgba(255, 255, 255, 0.8);
 
@@ -122,6 +123,12 @@ html {
   /* filter: invert(1); -- Handled by WebGL uniform now */
   opacity: calc(var(--p, 0) * 0.5);
   /* Soft-light at 50% for subtle erosion */
+}
+
+/* Dark theme overrides for grain canvas */
+:root:not(.light-theme) #grain-canvas {
+  opacity: calc(var(--p, 0) * 1.0);
+  /* Multiply blend at 100% opacity */
 }
 
 /* Theme toggle styles */
