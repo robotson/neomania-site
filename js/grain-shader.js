@@ -162,9 +162,10 @@ function initGrainShader() {
             p = Math.max(p, 0.0);
         }
 
-        // Check Theme
-        const isLight = document.documentElement.classList.contains('light-theme');
-        const invertVal = isLight ? 1.0 : 0.0;
+        // Check Theme - USER REQUEST: Always use White Grain (0.0) so it "lightens" content
+        // const isLight = document.documentElement.classList.contains('light-theme');
+        // const invertVal = isLight ? 1.0 : 0.0;
+        const invertVal = 0.0;
 
         gl.useProgram(programInfo.program);
 

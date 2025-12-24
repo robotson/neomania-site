@@ -95,7 +95,7 @@ html {
 /* Light theme class */
 :root.light-theme {
   /* New Theme Tokens - Light Mode Overrides */
-  --grain-blend: multiply;
+  --grain-blend: soft-light;
   /* Multiply Black Grain (via invert) onto White BG for subtle texture */
 
   --wordmark-color: #000000;
@@ -120,8 +120,8 @@ html {
 
 :root.light-theme #grain-canvas {
   /* filter: invert(1); -- Handled by WebGL uniform now */
-  opacity: calc(var(--p, 0) * 0.08);
-  /* Reduced from 0.15 for subtlety */
+  opacity: calc(var(--p, 0) * 0.5);
+  /* Soft-light at 50% for subtle erosion */
 }
 
 /* Theme toggle styles */

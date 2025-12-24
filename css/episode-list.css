@@ -28,7 +28,8 @@ body:has(.episode-list-container) {
   width: 100%;
   max-width: 393px;
   margin: 2rem auto;
-  padding: 10rem 22px 0 22px; /* Add top padding to prevent scrolling too close to header */
+  padding: 10rem 22px 0 22px;
+  /* Add top padding to prevent scrolling too close to header */
   box-sizing: border-box;
   font-family: "Roboto Flex", sans-serif;
 }
@@ -70,13 +71,14 @@ body:has(.episode-list-container) {
 
 /* Episode Row: Direct grid item using subgrid */
 .episode-row {
-  grid-column: 1 / -1; /* Span all columns */
+  grid-column: 1 / -1;
+  /* Span all columns */
   display: grid;
   grid-template-columns: subgrid;
-  
+
   /* XS Layout: Multi-row stacked */
   grid-template-rows: auto 1px auto 17px auto;
-  
+
   padding: 12px 0 16px;
   border-bottom: 0.5px solid var(--text-level3);
 }
@@ -107,11 +109,18 @@ a.episode-row {
 }
 
 a.episode-row:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important; /* Subtle Figma hover background */
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  /* Subtle Figma hover background */
 }
 
-/* Add border separator on hover */
-a.episode-row:hover::before {
+/* Light Theme Hover Override */
+:root.light-theme a.episode-row:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  /* Light grey highlight */
+}
+
+/* Add border separator on hover - REMOVED (causes double border opacity issue) */
+/* a.episode-row:hover::before {
   content: "";
   position: absolute;
   top: 0;
@@ -121,7 +130,7 @@ a.episode-row:hover::before {
   background-color: var(--text-level3);
   opacity: 1;
   z-index: 1;
-}
+} */
 
 a.episode-row:hover .episode-title {
   opacity: 0.9;
@@ -136,7 +145,8 @@ a.episode-row:hover .episode-title {
   grid-column: 1;
   grid-row: 1;
   font-family: "Space Mono", monospace;
-  font-size: 10px; /* Base size */
+  font-size: 10px;
+  /* Base size */
   letter-spacing: 0.7px;
   text-transform: uppercase;
   color: var(--text-level2);
@@ -147,25 +157,33 @@ a.episode-row:hover .episode-title {
    The .episode-main container is dissolved, and its children
    (.episode-title, .episode-desc) are placed directly on the grid. */
 .episode-main {
-  display: contents; /* Dissolve the container */
+  display: contents;
+  /* Dissolve the container */
 }
 
 .episode-title {
-  grid-column: 2 / 9; /* Place title in columns 2-8 */
-  grid-row: 1;      /* Place title in the first row */
-  font-size: 13px; /* Base size */
+  grid-column: 2 / 9;
+  /* Place title in columns 2-8 */
+  grid-row: 1;
+  /* Place title in the first row */
+  font-size: 13px;
+  /* Base size */
   font-weight: 600;
   letter-spacing: 0.39px;
   line-height: 19px;
-  color: var(--text-level-1); /* Figma-aligned token */
+  color: var(--text-level-1);
+  /* Figma-aligned token */
   margin: 0;
   transition: opacity 0.2s ease;
 }
 
 .episode-desc {
-  grid-column: 2 / 9; /* Place description in columns 2-8 */
-  grid-row: 3; /* Place description in the third row */
-  font-size: 13px; /* XS Title size */
+  grid-column: 2 / 9;
+  /* Place description in columns 2-8 */
+  grid-row: 3;
+  /* Place description in the third row */
+  font-size: 13px;
+  /* XS Title size */
   font-weight: 300;
   line-height: 19px;
   color: var(--text-color);
@@ -177,7 +195,8 @@ a.episode-row:hover .episode-title {
   grid-column: 1;
   grid-row: 5;
   font-family: "Space Mono", monospace;
-  font-size: 10px; /* Base size */
+  font-size: 10px;
+  /* Base size */
   letter-spacing: 0.7px;
   text-transform: uppercase;
   color: var(--text-level2);
@@ -187,11 +206,13 @@ a.episode-row:hover .episode-title {
   grid-column: 2;
   grid-row: 5;
   font-family: "Space Mono", monospace;
-  font-size: 10px; /* Base size */
+  font-size: 10px;
+  /* Base size */
   letter-spacing: 0.7px;
   text-transform: uppercase;
   color: var(--text-level2);
 }
+
 .episode-date {
   grid-column: 4;
   grid-row: 5;
@@ -203,14 +224,17 @@ a.episode-row:hover .episode-title {
 }
 
 .episode-duration {
-  grid-column: 5 / 9; /* Span from col 5 to the end of the grid */
+  grid-column: 5 / 9;
+  /* Span from col 5 to the end of the grid */
   grid-row: 5;
   font-family: "Space Mono", monospace;
-  font-size: 10px; /* Base size */
+  font-size: 10px;
+  /* Base size */
   letter-spacing: 0.7px;
   text-transform: uppercase;
   color: var(--text-level2);
-  text-align: right; /* Align the text content to the right */
+  text-align: right;
+  /* Align the text content to the right */
 }
 
 /* Hide guest info when there's no guest */
@@ -243,40 +267,42 @@ a.episode-row:hover .episode-title {
    ========================================================================== */
 
 @media (min-width: 768px) {
+
   /* Update container for S breakpoint */
   .episode-list-container {
     max-width: 768px;
-    padding: 10rem 50px 0 50px; /* Maintain top padding for mobile header spacing */
+    padding: 10rem 50px 0 50px;
+    /* Maintain top padding for mobile header spacing */
   }
-  
+
   /* Update grid to 16 columns */
   .episode-list {
     grid-template-columns: repeat(16, 1fr);
   }
-  
+
   /* S Layout: Still stacked, but with 16 columns */
   .episode-row {
     grid-template-rows: auto 1px auto 13px auto;
     padding-top: 10px;
   }
-  
+
   /* Adjust column spans for 16-column grid */
   .episode-title {
     grid-column: 3 / 17;
   }
-  
+
   .episode-desc {
     grid-column: 3 / 17;
   }
-  
+
   .episode-guest-w {
     grid-column: 1;
   }
-  
+
   .episode-guest-name {
     grid-column: 3 / 8;
   }
-  
+
   .episode-date {
     grid-column: 13 / 15;
   }
@@ -285,13 +311,14 @@ a.episode-row:hover .episode-title {
   .episode-row.no-guest .episode-date {
     grid-column: 3;
   }
-  
+
   /* S Breakpoint Typography */
   .episode-title {
     font-size: 13.9px;
     font-style: normal;
     font-weight: 600;
-    line-height: 19.6px; /* 141.007% */
+    line-height: 19.6px;
+    /* 141.007% */
     letter-spacing: 0.42px;
     color: var(--text-level-1);
   }
@@ -300,7 +327,8 @@ a.episode-row:hover .episode-title {
     font-size: 13.9px;
     font-style: normal;
     font-weight: 300;
-    line-height: 19.6px; /* 141.007% */
+    line-height: 19.6px;
+    /* 141.007% */
     letter-spacing: 0.42px;
     color: var(--text-level-1);
   }
@@ -321,7 +349,8 @@ a.episode-row:hover .episode-title {
   }
 
   .episode-duration {
-    grid-column: 14 / 17; /* Span last 3 columns */
+    grid-column: 14 / 17;
+    /* Span last 3 columns */
     /* text-align: right is inherited from mobile-first styles */
   }
 }
@@ -331,34 +360,37 @@ a.episode-row:hover .episode-title {
    ========================================================================== */
 
 @media (min-width: 1024px) {
+
   /* Update container for M breakpoint */
   .episode-list-container {
     max-width: 1024px;
-    padding: 10rem 50px 0 50px; /* Maintain top padding for desktop header spacing */
+    padding: 10rem 50px 0 50px;
+    /* Maintain top padding for desktop header spacing */
   }
-  
+
   /* Update grid to 24 columns */
   .episode-list {
     grid-template-columns: repeat(24, 1fr);
-    column-gap: 14px; /* M breakpoint gutter spec */
+    column-gap: 14px;
+    /* M breakpoint gutter spec */
   }
-  
+
   /* CRITICAL SWITCH: Change to single row layout */
   .episode-row {
     grid-template-rows: auto;
     align-items: baseline;
     padding: 16px 0;
   }
-  
+
   /* Show original title, hide display title */
   .episode-title-display {
     display: none;
   }
-  
+
   .episode-title-original {
     display: inline;
   }
-  
+
   /* Hide mobile-specific guest elements on desktop */
   .episode-guest-w,
   .episode-guest-name {
@@ -370,9 +402,10 @@ a.episode-row:hover .episode-title {
     grid-column: 1 / 2;
     grid-row: 1;
   }
-  
+
   .episode-date {
-    display: block; /* Show the date on desktop */
+    display: block;
+    /* Show the date on desktop */
     grid-column: 4 / 6;
     grid-row: 1;
     font-family: "Space Mono", monospace;
@@ -382,40 +415,44 @@ a.episode-row:hover .episode-title {
     color: var(--text-level2);
     align-self: start;
   }
-  
+
   .episode-main {
-    grid-column: 7 / 22; /* Spans up to col 21 */
+    grid-column: 7 / 22;
+    /* Spans up to col 21 */
     grid-row: 1;
-    display: block; /* No longer 'contents' */
+    display: block;
+    /* No longer 'contents' */
     align-self: start;
   }
-  
+
   .episode-title {
     /* Unset mobile grid placement */
     grid-column: auto;
-    grid-row: auto;    
+    grid-row: auto;
     font-family: "Roboto Flex", sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
+    /* 142.857% */
     letter-spacing: 0.42px;
     color: var(--text-level-1);
     margin: 0;
   }
-  
+
   .episode-desc {
     /* Unset mobile grid placement */
     grid-column: auto;
-    grid-row: auto;    
+    grid-row: auto;
     font-family: "Roboto Flex", sans-serif;
     font-size: 14px;
     font-weight: 300;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
+    /* 142.857% */
     letter-spacing: 0.42px;
     color: var(--text-level-1);
   }
-  
+
   .episode-duration {
     grid-column: 22 / -1;
     grid-row: 1;
@@ -446,7 +483,7 @@ a.episode-row:hover .episode-title {
   .episode-list-container {
     max-width: 1280px;
   }
-  
+
   .episode-list {
     column-gap: 16px;
   }
@@ -456,11 +493,14 @@ a.episode-row:hover .episode-title {
   .episode-desc {
     font-size: 16px;
   }
+
   .episode-desc {
     font-weight: 300;
-    line-height: 22px; /* 137.5% */
+    line-height: 22px;
+    /* 137.5% */
     letter-spacing: 0.48px;
   }
+
   /* Metadata remains 11px from S breakpoint */
 
   /* L Breakpoint Metadata Styling */
@@ -491,7 +531,8 @@ a.episode-row:hover .episode-title {
 @media (min-width: 1920px) {
   .episode-list-container {
     max-width: 1920px;
-    padding: 10rem 60px 0 60px; /* Maintain top padding for XL header spacing */
+    padding: 10rem 60px 0 60px;
+    /* Maintain top padding for XL header spacing */
   }
 
   /* XL Episode Row Spacing */
@@ -504,28 +545,33 @@ a.episode-row:hover .episode-title {
   .episode-desc,
   .episode-title span {
     font-size: 20px;
-    letter-spacing: 0.60px; /* XL letter spacing */
+    letter-spacing: 0.60px;
+    /* XL letter spacing */
   }
 
   /* XL Title Weight + Spacing (lighter, but no slant) */
   .episode-title,
   .episode-title span {
-    font-variation-settings: "wght" 500; /* Lighter weight, no slant */
+    font-variation-settings: "wght" 500;
+    /* Lighter weight, no slant */
   }
-  
+
   .episode-title {
-    margin-bottom: 5px; /* Gap between title and subtitle */
+    margin-bottom: 5px;
+    /* Gap between title and subtitle */
   }
 
   /* XL Subtitle Weight + Slant (light and slanted) */
   .episode-desc {
-    font-variation-settings: "wght" 100, "slnt" -10; /* Light weight + slant */
+    font-variation-settings: "wght" 100, "slnt" -10;
+    /* Light weight + slant */
   }
 
   .episode-number,
   .episode-date,
   .episode-duration {
     font-size: 13px;
-    letter-spacing: 0.91px; /* XL metadata letter spacing */
+    letter-spacing: 0.91px;
+    /* XL metadata letter spacing */
   }
 }
