@@ -1,14 +1,10 @@
 /*———— CSS CUSTOM PROPERTIES ————*/
-body {
-  background-color: var(--bg-color);
-}
-
 :root {
   --header-height: 6.25rem;
   --hero-start-height: 100vh;
   /* Show content after ~70% of a viewport instead of the full 100% */
   --animation-scroll-range: 70vh;
-
+  
   /* Initialize animation properties to prevent undefined behavior */
   --hero-bg-opacity: 0;
   --hero-justify: center;
@@ -18,37 +14,31 @@ body {
   --nav-opacity: 0;
   --wiggle-amplitude: 1;
   --wordmark-opacity: 1;
-  --wordmark-opacity: 1;
 }
 
 /*———— LAYOUT CONTAINERS ————*/
 .fixed-hero-container {
   /* This container becomes sticky after scroll, contains the transforming content */
-  /* OPTIMIZATION: Use fixed instead of sticky to decouple from scroll layout completely */
-  position: fixed;
-  /* position: sticky; */
+  position: sticky;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
   z-index: 0;
   overflow: hidden;
-
+  
   /* GPU acceleration magic */
-  /* will-change: transform; */
+  will-change: transform;
   contain: layout;
-  transform: translate3d(0, 0, 0);
-  /* Force hardware acceleration */
-  isolation: isolate;
-  /* Create new stacking context */
-  backface-visibility: hidden;
-  /* GPU optimization */
+  transform: translate3d(0, 0, 0); /* Force hardware acceleration */
+  isolation: isolate; /* Create new stacking context */
+  backface-visibility: hidden; /* GPU optimization */
 }
 
 .scroll-container {
   /* This provides scroll distance for the animation - no longer removed by JS */
   height: var(--animation-scroll-range);
-  min-height: 480px;
-  /* optional guard for tiny phones */
+  min-height: 480px;          /* optional guard for tiny phones */
   width: 100%;
 }
 
@@ -62,19 +52,16 @@ body {
   /* Opacity controlled by CSS custom property */
   opacity: var(--content-opacity, 0);
   transition: opacity 0.2s ease-out;
-
+  
   /* GPU acceleration for smooth content fade */
   will-change: opacity;
-  transform: translate3d(0, 0, 0);
-  /* Hardware acceleration */
-  contain: layout paint;
-  /* Isolate content rendering */
-
+  transform: translate3d(0, 0, 0); /* Hardware acceleration */
+  contain: layout paint; /* Isolate content rendering */
+  
   /* MW-3: Skip layout until content is visible/needed */
-  /* content-visibility: auto; -- DISABLED FOR SAFARI STABILITY */
-  contain-intrinsic-size: 100vh;
-  /* Provide hint for size calculation */
-
+  content-visibility: auto;
+  contain-intrinsic-size: 100vh; /* Provide hint for size calculation */
+  
   /* QW-4: Disable pointer events when faded out for performance - handled by JS */
 }
 
@@ -85,8 +72,7 @@ body {
   justify-content: var(--hero-justify, center);
   align-items: var(--hero-align, center);
   padding: var(--hero-padding, 0 2rem);
-  position: relative;
-  /* For pseudo-element positioning */
+  position: relative; /* For pseudo-element positioning */
 }
 
 .main-hero::before {
@@ -96,12 +82,10 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: transparent;
-  /* mix-blend-mode: multiply; Removed to avoid over-darkening */
+  background: rgba(10, 10, 10, 1);
   opacity: var(--hero-bg-opacity, 0);
   transition: opacity 0.1s ease-out;
-  pointer-events: none;
-  /* Allow clicks to pass through */
+  pointer-events: none; /* Allow clicks to pass through */
 }
 
 .hero-container {
@@ -118,30 +102,19 @@ body {
 
 /* Wordmark stays independently centered */
 .animated-wordmark {
-  font-family: "Roboto Flex",
-    sans-serif;
-  /* font-family: sans-serif; */
+  font-family: "Roboto Flex", sans-serif;
   transition: all 0.1s ease-out;
-  z-index: 2000;
-  /* Always above header */
+  z-index: 2000; /* Always above header */
   position: relative;
-
+  
   /* GPU acceleration for font variations */
-  /* will-change: font-variation-settings,
-    font-size,
-    transform; */
-  transform: translate3d(0, 0, 0);
-  /* Hardware acceleration */
-  contain: layout style;
-  /* Fix 1a: Remove paint contain to prevent glow clipping */
-  overflow: visible;
-  /* Fix 1b: Allow glow to extend beyond bounds */
-  white-space: nowrap;
-  /* Fix 2a: Prevent text wrapping on narrow viewports */
-  backface-visibility: hidden;
-  /* Prevent texture thrashing */
-  isolation: isolate;
-  /* New compositing layer */
+  will-change: font-variation-settings, font-size, transform;
+  transform: translate3d(0, 0, 0); /* Hardware acceleration */
+  contain: layout style; /* Fix 1a: Remove paint contain to prevent glow clipping */
+  overflow: visible; /* Fix 1b: Allow glow to extend beyond bounds */
+  white-space: nowrap; /* Fix 2a: Prevent text wrapping on narrow viewports */
+  backface-visibility: hidden; /* Prevent texture thrashing */
+  isolation: isolate; /* New compositing layer */
 }
 
 /* Fixed header navigation - always at top, no layout impact */
@@ -150,91 +123,75 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 80px;
-  /* Fixed header height */
-
+  height: 80px; /* Fixed header height */
+  
   /* Use same responsive container as episode list */
   max-width: 393px;
   margin: 0 auto;
   padding: 0 22px;
   box-sizing: border-box;
-
+  
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   column-gap: 14px;
   align-items: center;
-
-  opacity: var(--nav-opacity, 1);
+  
+  opacity: var(--nav-opacity, 0);
   transition: opacity 0.2s ease-out;
   z-index: 1000;
-
+  
   /* QW-4: Disable pointer events when faded out for performance - handled by JS */
 }
 
 /* Responsive Display Logic */
 .header-nav--desktop {
-  display: none;
-  /* Hidden by default on mobile */
+  display: none; /* Hidden by default on mobile */
 }
 
 .header-nav--mobile {
-  display: block;
-  /* Change to block for vertical layout */
-  height: 200px;
-  /* Taller header to accommodate dots + wordmark */
-  min-height: 200px;
-  /* Ensure sufficient space */
+  display: block; /* Change to block for vertical layout */
+  height: 200px; /* Taller header to accommodate dots + wordmark */
+  min-height: 200px; /* Ensure sufficient space */
 }
 
 /* Individual navigation item positioning - XS (8 columns) */
 .header-nav--catalog {
-  grid-column: 1 / 3;
-  /* Cols 1-2 */
+  grid-column: 1 / 3; /* Cols 1-2 */
 }
 
 .header-nav--listen {
-  grid-column: 4 / 6;
-  /* Cols 4-5 */
+  grid-column: 4 / 6; /* Cols 4-5 */
 }
 
 .header-nav--connect {
-  grid-column: 7 / 9;
-  /* Cols 7-8 (3-4 from end) - original plan */
+  grid-column: 7 / 9; /* Cols 7-8 (3-4 from end) - original plan */
 }
 
 .header-nav--theme-toggle {
-  grid-column: 8 / 9;
-  /* Col 8 (end position) */
+  grid-column: 8 / 9; /* Col 8 (end position) */
   justify-self: end;
 }
 
 /* Absolutely position wordmark anchor relative to header */
 #wordmark-anchor {
   position: absolute;
-  display: inline-block;
-  /* makes height/width take effect */
-  font: 600 clamp(3rem, 5vw, 6rem)/1 "Roboto Flex", sans-serif;
-  /* medium viewport-based sizing */
-  letter-spacing: 0.1em;
-  /* matches animated wordmark */
+  display: inline-block;       /* makes height/width take effect */
+  font: 600 clamp(3rem, 5vw, 6rem)/1 "Roboto Flex", sans-serif; /* medium viewport-based sizing */
+  letter-spacing: 0.1em;       /* matches animated wordmark */
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
-  /* center both horizontally and vertically */
-  opacity: 0;
-  /* still invisible placeholder */
-  /* filter: drop-shadow(0 0 8px transparent); */
+  transform: translate(-50%, -50%); /* center both horizontally and vertically */
+  opacity: 0;                  /* still invisible placeholder */
+  filter: drop-shadow(0 0 8px transparent); /* invisible but counted - matches hero glow */
 }
 
 .header-nav-item {
   font-family: "Space Mono", monospace;
-  font-size: 10px;
-  /* Match XS episode metadata */
+  font-size: 10px; /* Match XS episode metadata */
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  letter-spacing: 0.7px;
-  /* Match episode metadata */
+  letter-spacing: 0.7px; /* Match episode metadata */
   text-transform: uppercase;
   text-decoration: none;
   color: var(--text-level3);
@@ -248,8 +205,7 @@ body {
 
 /* Mobile header positioning above existing wordmark (XS/SM) */
 .header-nav--mobile {
-  z-index: 2000;
-  /* Above the hero container */
+  z-index: 2000; /* Above the hero container */
 }
 
 .mobile-header-content {
@@ -257,8 +213,7 @@ body {
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 3rem;
-  /* Position dots at top with padding */
+  top: 3rem; /* Position dots at top with padding */
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -308,9 +263,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  /* Less dark so content shows through */
-  /* backdrop-filter: blur(10px); */
+  background: rgba(0, 0, 0, 0.3); /* Less dark so content shows through */
+  backdrop-filter: blur(10px);
 }
 
 .mobile-menu-content {
@@ -318,8 +272,7 @@ body {
   background: var(--bg-color);
   display: flex;
   flex-direction: column;
-  padding: 0;
-  /* Remove padding - let container handle it */
+  padding: 0; /* Remove padding - let container handle it */
   z-index: 1;
   justify-content: flex-start;
 }
@@ -329,10 +282,9 @@ body {
   width: 100%;
   max-width: 393px;
   margin: 0 auto;
-  padding: 22px 22px 0 22px;
-  /* Only top padding differs */
+  padding: 22px 22px 0 22px; /* Only top padding differs */
   box-sizing: border-box;
-
+  
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   column-gap: 14px;
@@ -352,15 +304,12 @@ body {
 .mobile-menu--close {
   grid-column: 8 / 9;
   justify-self: end;
-  z-index: 10;
-  /* Ensure it's above other elements */
+  z-index: 10; /* Ensure it's above other elements */
 }
 
 .mobile-wordmark-text {
-  /* font-family: "Roboto Flex", sans-serif; */
-  font-family: sans-serif;
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  /* Match main header style */
+  font-family: "Roboto Flex", sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2rem); /* Match main header style */
   font-weight: 400;
   color: var(--text-color);
   letter-spacing: 0.1em;
@@ -395,7 +344,7 @@ body {
   margin: 0 auto;
   padding: 0 22px;
   box-sizing: border-box;
-
+  
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -405,10 +354,8 @@ body {
 .mobile-menu-item {
   font-family: "Space Mono", monospace;
   font-size: 11px;
-  font-weight: 400;
-  /* Regular weight like metadata */
-  font-style: normal;
-  /* No italic */
+  font-weight: 400; /* Regular weight like metadata */
+  font-style: normal; /* No italic */
   text-transform: uppercase;
   letter-spacing: 0.07em;
   line-height: 1.4;
@@ -418,8 +365,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  text-align: center;
-  /* Center align */
+  text-align: center; /* Center align */
   padding: 0;
   transition: color 0.2s ease;
   display: block;
@@ -468,8 +414,7 @@ body {
 }
 
 .mobile-menu-nav .mobile-menu--theme svg {
-  display: none;
-  /* Hide the sun/moon icons, just show dot */
+  display: none; /* Hide the sun/moon icons, just show dot */
 }
 
 .mobile-menu-nav .mobile-menu--theme:hover {
@@ -489,8 +434,7 @@ body {
 .mobile-menu-submenu.is-visible {
   opacity: 1;
   visibility: visible;
-  max-height: 200px;
-  /* Adjust based on content */
+  max-height: 200px; /* Adjust based on content */
 }
 
 /* XS: Full screen modal */
@@ -500,7 +444,7 @@ body {
     height: 100%;
     border-radius: 0;
   }
-
+  
   /* XS: Smaller wordmark for mobile - now handled by JavaScript responsive system */
   /* .animated-wordmark .wordmark-text {
     font-size: clamp(1.5rem, 8vw, 3rem);
@@ -513,48 +457,41 @@ body {
     max-width: 768px;
     padding: 0 50px;
   }
-
+  
   .header-nav-item {
-    font-size: 11px;
-    /* Match S breakpoint episode metadata */
-    letter-spacing: 0.77px;
-    /* Match S breakpoint episode metadata */
+    font-size: 11px; /* Match S breakpoint episode metadata */
+    letter-spacing: 0.77px; /* Match S breakpoint episode metadata */
   }
-
+  
   .header-nav--mobile {
-    height: 250px;
-    /* Even taller for SM */
+    height: 250px; /* Even taller for SM */
     min-height: 250px;
   }
-
+  
   .mobile-header-content {
-    top: 28px;
-    /* Reduced top padding for SM */
+    top: 28px; /* Reduced top padding for SM */
   }
-
+  
   .mobile-menu-content {
     width: 500px;
     height: 400px;
-    border-radius: 22px;
-    /* Exact Figma spec */
+    border-radius: 22px; /* Exact Figma spec */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
-
+  
   /* Mobile menu header matches episode-list-container responsive sizing */
   .mobile-menu-header {
     max-width: 768px;
-    padding: 22px 50px 0 50px;
-    /* Match episode-list-container @768px */
+    padding: 22px 50px 0 50px; /* Match episode-list-container @768px */
     grid-template-columns: repeat(16, 1fr);
   }
-
+  
   .mobile-menu-nav {
     max-width: 768px;
-    padding: 0 50px;
-    /* Match episode-list-container @768px */
+    padding: 0 50px; /* Match episode-list-container @768px */
   }
 }
 
@@ -562,15 +499,13 @@ body {
 @media (min-width: 1024px) {
   .mobile-menu-header {
     max-width: 1024px;
-    padding: 22px 50px 0 50px;
-    /* Match episode-list-container @1024px */
+    padding: 22px 50px 0 50px; /* Match episode-list-container @1024px */
     grid-template-columns: repeat(24, 1fr);
   }
-
+  
   .mobile-menu-nav {
     max-width: 1024px;
-    padding: 0 50px;
-    /* Match episode-list-container @1024px */
+    padding: 0 50px; /* Match episode-list-container @1024px */
   }
 }
 
@@ -579,7 +514,7 @@ body {
     max-width: 1280px;
     /* padding stays same at 50px per episode-list-container */
   }
-
+  
   .mobile-menu-nav {
     max-width: 1280px;
     /* padding stays same at 50px per episode-list-container */
@@ -589,14 +524,12 @@ body {
 @media (min-width: 1920px) {
   .mobile-menu-header {
     max-width: 1920px;
-    padding: 22px 60px 0 60px;
-    /* Match episode-list-container @1920px */
+    padding: 22px 60px 0 60px; /* Match episode-list-container @1920px */
   }
-
+  
   .mobile-menu-nav {
     max-width: 1920px;
-    padding: 0 60px;
-    /* Match episode-list-container @1920px */
+    padding: 0 60px; /* Match episode-list-container @1920px */
   }
 }
 
@@ -605,48 +538,40 @@ body {
   .header-nav--desktop {
     display: grid;
   }
-
+  
   .header-nav--mobile {
     display: none;
   }
-
+  
   .header-nav {
     max-width: 1024px;
     padding: 0 50px;
     grid-template-columns: repeat(24, 1fr);
-    height: 80px;
-    /* Restore fixed height for desktop */
-    min-height: auto;
-    /* Reset min-height */
+    height: 80px; /* Restore fixed height for desktop */
+    min-height: auto; /* Reset min-height */
   }
-
+  
   .header-nav-item {
-    font-size: 10px;
-    /* Match M breakpoint episode metadata */
-    letter-spacing: 0.7px;
-    /* Match M breakpoint episode metadata */
+    font-size: 10px; /* Match M breakpoint episode metadata */
+    letter-spacing: 0.7px; /* Match M breakpoint episode metadata */
   }
-
-
+  
+  
   /* MD+ (24 columns) positioning */
   .header-nav--catalog {
-    grid-column: 1 / 3;
-    /* Cols 1-2 */
+    grid-column: 1 / 3; /* Cols 1-2 */
   }
-
+  
   .header-nav--listen {
-    grid-column: 4 / 6;
-    /* Cols 4-5 */
+    grid-column: 4 / 6; /* Cols 4-5 */
   }
-
+  
   .header-nav--connect {
-    grid-column: 20 / 22;
-    /* Cols 20-21 (5-6 from end) - original plan */
+    grid-column: 20 / 22; /* Cols 20-21 (5-6 from end) - original plan */
   }
-
+  
   .header-nav--theme-toggle {
-    grid-column: 24 / 25;
-    /* Col 24 (end position) */
+    grid-column: 24 / 25; /* Col 24 (end position) */
     justify-self: end;
   }
 }
@@ -656,14 +581,12 @@ body {
     max-width: 1280px;
     column-gap: 16px;
   }
-
+  
   .header-nav-item {
-    font-size: 11px;
-    /* Match L breakpoint episode metadata */
-    letter-spacing: 0.77px;
-    /* Match L breakpoint episode metadata */
+    font-size: 11px; /* Match L breakpoint episode metadata */
+    letter-spacing: 0.77px; /* Match L breakpoint episode metadata */
   }
-
+  
 }
 
 @media (min-width: 1920px) {
@@ -671,28 +594,29 @@ body {
     max-width: 1920px;
     padding: 0 60px;
   }
-
+  
   .header-nav-item {
-    font-size: 13px;
-    /* Match XL breakpoint episode metadata */
-    letter-spacing: 0.91px;
-    /* Match XL breakpoint episode metadata */
+    font-size: 13px; /* Match XL breakpoint episode metadata */
+    letter-spacing: 0.91px; /* Match XL breakpoint episode metadata */
   }
-
+  
 }
 
 /*———— WORDMARK SIZING ————*/
 .animated-wordmark {
   /* FLIP transform: First ⨉ Invert ⨉ Play */
   transform:
-    translate(calc(var(--p, 0) * var(--dx, 0px)),
-      calc(var(--p, 0) * var(--dy, 0px))) scale(calc(1 + var(--p, 0) * (var(--s, 1) - 1))) translateZ(0)
+    translate(
+      calc(var(--p, 0) * var(--dx, 0px)),
+      calc(var(--p, 0) * var(--dy, 0px))
+    )
+    scale(calc(1 + var(--p, 0) * (var(--s, 1) - 1)))
+    translateZ(0)
     /* Additional transforms can be appended by JS */
     var(--wiggle-transform, rotate(0deg));
-
-  transform-origin: center;
-  /* scale from center */
-
+  
+  transform-origin: center;     /* scale from center */
+  
   /* GPU optimization - will-change toggled by JS */
   backface-visibility: hidden;
   isolation: isolate;
@@ -703,28 +627,23 @@ body {
 /* Wordmark anchor placeholder in header - real glyph size */
 .nav-logo {
   font: 600 2rem/1 "Roboto Flex", sans-serif;
-  opacity: 0;
-  /* reserve space, stay invisible */
-  letter-spacing: 0.1em;
-  /* match animated wordmark spacing */
+  opacity: 0;           /* reserve space, stay invisible */
+  letter-spacing: 0.1em; /* match animated wordmark spacing */
 }
 
 .animated-wordmark .wordmark-text {
   /* Hero wordmark starting size - viewport responsive, starts larger than target */
-  font-size: clamp(4rem, 6vw, 8rem);
-  /* scales with viewport, bigger than anchor */
-  line-height: 1;
-  /* tighter box */
-  color: var(--wordmark-color, white);
+  font-size: clamp(4rem, 6vw, 8rem); /* scales with viewport, bigger than anchor */
+  line-height: 1;           /* tighter box */
+  color: white;
   /* GPU-friendly drop-shadow with opacity animation */
-  filter: drop-shadow(0 0 8px var(--glow-color));
+  filter: drop-shadow(0 0 8px rgba(255,255,255, var(--glow-alpha,0.8)));
   opacity: var(--wordmark-opacity, 1);
   transition: opacity .15s ease-out;
-
+  
   /* Optimized for transform-based scaling */
   -webkit-font-smoothing: antialiased;
-  contain: layout;
-  /* drop 'paint' so shadows can spill */
+  contain: layout;          /* drop 'paint' so shadows can spill */
 }
 
 /*———— DEBUG INFO OVERLAY ————*/
@@ -739,14 +658,13 @@ body {
   font-family: monospace;
   font-size: 12px;
   z-index: 9999;
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .debug-info h4 {
   margin: 0 0 0.5rem 0;
-  color: #00faff;
-  /* Cyan */
+  color: #00faff; /* Cyan */
   font-weight: normal;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 0.5rem;
@@ -764,8 +682,7 @@ body {
 }
 
 .status-grid .value {
-  color: #f5d76e;
-  /* Yellow */
+  color: #f5d76e; /* Yellow */
   font-weight: bold;
 }
 
@@ -788,8 +705,8 @@ body {
   position: fixed;
   top: 1rem;
   right: 1rem;
-  background: rgba(0, 0, 0, 0.9);
-  /* backdrop-filter: blur(10px); -- DISABLED FOR PERFORMANCE */
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #e0e0e0;
   padding: 0.75rem;
@@ -802,7 +719,6 @@ body {
   gap: 0.5rem;
   min-width: 180px;
 }
-
 .debug-panel__title {
   font-weight: bold;
   color: #00ffab;
@@ -810,12 +726,10 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 0.5rem;
 }
-
 .debug-panel__item {
   display: flex;
   justify-content: space-between;
 }
-
 .debug-panel__item span:first-child {
   color: #a0a0a0;
 }

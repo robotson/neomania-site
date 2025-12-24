@@ -3,27 +3,32 @@
 // Only writes CSS custom property, no DOM reads
 
 document.addEventListener('DOMContentLoaded', () => {
-  const root   = document.documentElement;
+  const root = document.documentElement;
   const runway = document.querySelector('.scroll-container'); // the spacer div
-  let   range  = runway ? runway.offsetHeight : window.innerHeight;
-  let   lastP  = -1;
+  let range = runway ? runway.offsetHeight : window.innerHeight;
+  let lastP = -1;
 
   function recalc() {         // on resize / orientation change
     range = runway ? runway.offsetHeight : window.innerHeight;
   }
 
-  function onScroll() {
+  let ticking = false;
+
+  function update() {
     // Map 0 → range px to progress 0 → 1
     const p = Math.min(1, Math.max(0, window.scrollY / range));
     if (p !== lastP) {
       root.style.setProperty('--p', p);
       lastP = p;
     }
+    ticking = false;
   }
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    root.style.setProperty('--p', 1);
-    return;
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });

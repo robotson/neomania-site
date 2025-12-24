@@ -3,24 +3,24 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Background controller loading...');
-  
+
   const texture = document.querySelector('.viewport-background');
   const grainOverlay = document.querySelector('.viewport-grain-overlay');
   const mainContent = document.querySelector('.main-content');
-  
+
   console.log('Elements found:', {
     texture: !!texture,
-    grainOverlay: !!grainOverlay, 
+    grainOverlay: !!grainOverlay,
     mainContent: !!mainContent
   });
-  
-  if (!texture || !grainOverlay || !mainContent) {
+
+  if (!texture || !mainContent) {
     console.warn('Background controller: Required elements not found', {
-      texture, grainOverlay, mainContent
+      texture, mainContent
     });
     return;
   }
-  
+
   // Don't force show - let scroll trigger control visibility
 
   let isVisible = false;
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateBackgroundVisibility() {
     const scrollY = window.scrollY;
-    
+
     // Only update if scroll position changed
     if (scrollY === lastScrollY) return;
     lastScrollY = scrollY;
@@ -36,20 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get the main content position relative to viewport
     const contentRect = mainContent.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    
-    // Show background when main content is 30% visible from top
-    const showThreshold = viewportHeight * 0.7;
+
+    // Show background when main content is higher up (scrolled more)
+    // Threshold 0.5 means when content is halfway up the screen
+    const showThreshold = viewportHeight * 0.5;
     const shouldBeVisible = contentRect.top <= showThreshold;
 
     if (shouldBeVisible !== isVisible) {
       isVisible = shouldBeVisible;
-      
+
       if (isVisible) {
         texture.classList.add('visible');
-        grainOverlay.classList.add('visible');
+        if (grainOverlay) grainOverlay.classList.add('visible');
       } else {
         texture.classList.remove('visible');
-        grainOverlay.classList.remove('visible');
+        if (grainOverlay) grainOverlay.classList.remove('visible');
       }
     }
   }

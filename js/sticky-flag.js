@@ -81,11 +81,11 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       wordmark: wordmarkRect
         ? {
-            fontSize: getComputedStyle(wordmark).fontSize,
-            position: wordmarkRect,
-            visible:
-              wordmarkRect.top < window.innerHeight && wordmarkRect.bottom > 0,
-          }
+          fontSize: getComputedStyle(wordmark).fontSize,
+          position: wordmarkRect,
+          visible:
+            wordmarkRect.top < window.innerHeight && wordmarkRect.bottom > 0,
+        }
         : null,
     };
 

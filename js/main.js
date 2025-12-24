@@ -15,7 +15,7 @@ function getThemeStats(action) {
         .matches
         ? "light"
         : "dark",
-      toggle: !!themeToggle,
+      toggleCount: document.querySelectorAll(".theme-toggle").length,
     },
     viewport: {
       width: window.innerWidth,
@@ -79,18 +79,22 @@ window
     }
   });
 
-if (themeToggle) {
-  console.log("🎨 THEME: Theme toggle found, adding click listener");
-  themeToggle.addEventListener("click", () => {
-    console.log("🎨 THEME: Toggle clicked");
-    document.documentElement.classList.toggle("light-theme");
-    const isLight = document.documentElement.classList.contains("light-theme");
-    localStorage.setItem("theme", isLight ? "light" : "dark");
-    console.log(`🎨 THEME: Switched to ${isLight ? "light" : "dark"} theme`);
-    console.log(JSON.stringify(getThemeStats("USER_TOGGLE"), null, 2));
+const themeToggles = document.querySelectorAll(".theme-toggle");
+
+if (themeToggles.length > 0) {
+  console.log(`🎨 THEME: Found ${themeToggles.length} theme toggles, adding click listeners`);
+  themeToggles.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      console.log("🎨 THEME: Toggle clicked");
+      document.documentElement.classList.toggle("light-theme");
+      const isLight = document.documentElement.classList.contains("light-theme");
+      localStorage.setItem("theme", isLight ? "light" : "dark");
+      console.log(`🎨 THEME: Switched to ${isLight ? "light" : "dark"} theme`);
+      console.log(JSON.stringify(getThemeStats("USER_TOGGLE"), null, 2));
+    });
   });
 } else {
-  console.log("⚠️ THEME: Theme toggle not found");
+  console.log("⚠️ THEME: No theme toggles found");
 }
 
 // Animation logic moved to wordmark-wiggle.js

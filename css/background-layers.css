@@ -8,7 +8,8 @@
   width: 100%;
   height: 100vh;
   background: var(--bg-color);
-  z-index: -101; /* Behind everything else */
+  z-index: -101;
+  /* Behind everything else */
   pointer-events: none;
 }
 
@@ -20,24 +21,26 @@
   width: 100%;
   height: 100vh;
   pointer-events: none;
-  z-index: -99; /* Above texture, behind everything else */
-  opacity: 0; /* Start hidden */
+  z-index: -99;
+  /* Above texture, behind everything else */
+  opacity: var(--p, 0);
+  /* Start hidden, controlled by scroll progress */
   mix-blend-mode: color-burn;
-  
-  /* Scroll-triggered visibility */
-  transition: opacity 0.8s ease-in-out;
-  
+
+  /* Scroll-triggered visibility - DISABLED */
+  /* transition: opacity 0.8s ease-in-out; */
+
   /* GPU acceleration */
   will-change: opacity;
   transform: translateZ(0);
 }
 
 .viewport-grain-overlay.visible {
-  opacity: 1.0;
+  opacity: var(--p, 1);
 }
 
 /* Theme-aware grain coloring */
-:root.light-theme .main-content .grain-overlay {
+:root.light-theme .viewport-grain-overlay {
   filter: invert(1);
 }
 
@@ -46,37 +49,39 @@
 .viewport-background {
   position: fixed;
   inset: 0;
-  width: 200%; /* Extended width for seamless looping */
+  width: 200%;
+  /* Extended width for seamless looping */
   height: 100vh;
   background-image: url('../images/neomania-bg-texture.png');
   background-repeat: repeat-x;
   background-position: left center;
   background-size: auto 100%;
-  opacity: 0; /* Start hidden */
-  z-index: -100; /* Behind everything */
+  background-size: auto 100%;
+  opacity: 0;
+  /* visible by default */
+  /* Start hidden, controlled by scroll progress */
+  z-index: -100;
+  /* Behind everything */
   pointer-events: none;
   animation: crawl-texture 400s linear infinite;
   mix-blend-mode: screen;
-  
-  /* Scroll-triggered visibility */
-  transition: opacity 0.8s ease-in-out;
-  
+  display: block;
+
   /* GPU acceleration */
   will-change: transform, opacity;
   transform: translateZ(0);
 }
 
 .viewport-background.visible {
-  opacity: 1.0;
+  opacity: var(--p, 1);
 }
 
-/* Remove old main-content texture styles */
-
-/* Horizontal crawling animation - adapted from reference */
+/* Horizontal crawling animation */
 @keyframes crawl-texture {
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -86,73 +91,43 @@
 
 /* Mobile - smaller scale */
 @media (max-width: 640px) {
-  .main-content .crawl-texture {
+  .viewport-background {
     background-size: auto 80%;
   }
 }
 
 /* Tablet */
 @media (min-width: 641px) and (max-width: 1279px) {
-  .main-content .crawl-texture {
+  .viewport-background {
     background-size: auto 90%;
   }
 }
 
 /* Desktop */
 @media (min-width: 1280px) and (max-width: 1919px) {
-  .main-content .crawl-texture {
+  .viewport-background {
     background-size: auto 100%;
   }
 }
 
 /* XL Desktop */
 @media (min-width: 1920px) {
-  .main-content .crawl-texture {
+  .viewport-background {
     background-size: auto 110%;
   }
 }
 
-/* ===== LAYER Z-INDEX MANAGEMENT ===== */
-
-/* Z-index stack (from back to front):
-   -3: Base background
-   -2: Crawling texture
-   -1: (reserved)
-    0: Default content
-    1: SVG grain overlay
-   10: Wordmark content
-  100: Sticky header
-  200: Theme toggle
-  300: Modals/overlays
-*/
-
-.main-hero {
-  position: relative;
-  z-index: 0;
-}
-
-.hero-container {
-  position: relative;
-  z-index: 10;
-}
-
-.main-content > .episode-list-container {
-  position: relative;
-  z-index: 1;
-}
-
-/* ===== PERFORMANCE OPTIMIZATIONS ===== */
-/* GPU acceleration properties moved inline above */
+/* ... Z-Index Management omitted ... */
 
 /* ===== ACCESSIBILITY & REDUCED MOTION ===== */
 
 @media (prefers-reduced-motion: reduce) {
-  .main-content .crawl-texture {
+  .viewport-background {
     animation: none !important;
     transform: translateX(0) !important;
   }
 
-  .main-content .grain-overlay svg animate {
+  .viewport-grain-overlay svg animate {
     animation-duration: 0s !important;
   }
 }
@@ -160,40 +135,38 @@
 /* ===== THEME INTEGRATION ===== */
 
 /* Light theme adjustments */
-:root.light-theme .main-content .crawl-texture.visible {
-  opacity: 0.15;
+:root.light-theme .viewport-background.visible {
+  opacity: calc(var(--p, 0) * 0.15);
   mix-blend-mode: multiply;
 }
 
-:root.light-theme .main-content .grain-overlay.visible {
+:root.light-theme .viewport-grain-overlay.visible {
   opacity: 0.3;
   mix-blend-mode: soft-light;
 }
 
-/*
-:root.light-theme .wordmark-transitioning ~ .crawl-texture,
-:root.light-theme .wordmark-sticky ~ .crawl-texture {
-  opacity: 0.4;
-}
-*/
-
 /* Dark theme (default) */
-:root:not(.light-theme) .main-content .crawl-texture.visible {
+:root:not(.light-theme) .viewport-background.visible {
+  opacity: calc(var(--p, 0) * 0.6);
+  /* Fade in from 0 to 0.6 based on scroll */
   mix-blend-mode: screen;
 }
 
-:root:not(.light-theme) .main-content .grain-overlay.visible {
-  mix-blend-mode: multiply;
+:root:not(.light-theme) .viewport-grain-overlay.visible {
+  opacity: var(--p, 0);
+  /* Fade in from 0 to 1 */
+  mix-blend-mode: overlay;
+  /* White grain on black needs Normal or Screen, not Multiply */
 }
 
 /* ===== HIGH CONTRAST MODE ===== */
 
 @media (prefers-contrast: high) {
-  .main-content .grain-overlay {
+  .viewport-grain-overlay {
     opacity: 0.1 !important;
   }
 
-  .main-content .crawl-texture {
+  .viewport-background {
     opacity: 0.2 !important;
   }
 }

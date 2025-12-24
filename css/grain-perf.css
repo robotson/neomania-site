@@ -1,0 +1,61 @@
+/* CSS-based efficient grain */
+.grain-overlay-css {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Z-index -99: Above background (-100), Behind Content (0) */
+    z-index: -99;
+    opacity: calc(var(--p, 0) * 1.0);
+
+    /* ROBUST IMPLEMENTATION: Black Overlay + CSS Mask */
+    /* This bypasses mix-blend-mode issues in Safari by physically masking a black layer */
+    /* Result: Black pixels where noise is present, Transparent elsewhere */
+
+    /* 1. The "Paint" (Black Hole) */
+    background-color: #000000;
+
+    /* 2. The "Brush" (Quantized Noise Mask) */
+    /* Updated for "Extreme" Contrast: Binary Threshold biased towards White (Transparent) */
+    /* tableValues='0 0 1' means darker 66% of noise is transparent, top 33% is black */
+    /* baseFrequency='1.5' for FINE dots (0.7 was too chunky/repetitive) */
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='0 0 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='0 0 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
+
+    /* 3. The Animation (Jitter the Mask) */
+    /* Slower: 2.0s steps(5) = ~2.5 FPS */
+    /* Mimics the slower "winking" feel of the original heavy render */
+    animation: grain-jitter 2.0s steps(5) infinite;
+
+    /* No blend mode needed - it is physically black pixels on top */
+    /* mix-blend-mode: normal; */
+}
+
+@keyframes grain-jitter {
+    0% {
+        -webkit-mask-position: 0px 0px;
+        mask-position: 0px 0px;
+    }
+
+    25% {
+        -webkit-mask-position: -63px 14px;
+        mask-position: -63px 14px;
+    }
+
+    50% {
+        -webkit-mask-position: 29px -82px;
+        mask-position: 29px -82px;
+    }
+
+    75% {
+        -webkit-mask-position: -41px -37px;
+        mask-position: -41px -37px;
+    }
+
+    100% {
+        -webkit-mask-position: 58px 19px;
+        mask-position: 58px 19px;
+    }
+}

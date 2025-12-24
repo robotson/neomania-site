@@ -9,13 +9,15 @@
     "serve": "eleventy --serve",
     "dev": "eleventy --serve --watch",
     "fetch-episodes": "node scripts/fetch-episodes.mjs",
+    "test:perf": "playwright test tests/performance.spec.js --project=webkit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@11ty/eleventy": "^3.0.0"
+    "@11ty/eleventy": "^3.0.0",
+    "@playwright/test": "^1.57.0"
   },
   "dependencies": {
     "rss-parser": "^3.13.0",
