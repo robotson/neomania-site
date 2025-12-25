@@ -42,6 +42,9 @@ body {
   /* Create new stacking context */
   backface-visibility: hidden;
   /* GPU optimization */
+
+  /* Fix: Prevent full-screen container from blocking interactions with content */
+  pointer-events: none;
 }
 
 .scroll-container {
@@ -70,6 +73,9 @@ body {
   contain: layout paint;
   isolation: isolate;
   /* Isolate content rendering */
+
+  /* Fix: Explicitly enable interactions */
+  pointer-events: auto;
 
   /* MW-3: Skip layout until content is visible/needed */
   /* content-visibility: auto; -- DISABLED FOR SAFARI STABILITY */

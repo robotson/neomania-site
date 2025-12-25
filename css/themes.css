@@ -66,8 +66,8 @@ html {
 /* Default to dark theme */
 :root {
   /* New Theme Tokens */
-  --grain-blend: multiply;
-  /* Changed from overlay to screen for visibility on dark BG */
+  --grain-blend: normal;
+  /* Changed to normal for "Camouflage" solid grain */
   --wordmark-color: #ffffff;
   --glow-color: rgba(255, 255, 255, 0.8);
 

@@ -60,14 +60,8 @@ const fsSource = `
         float threshold = 1.0 - GRAIN_Density;
         float soft = 0.2; 
         
-        float visibility;
-        // Light Mode -> Binary "White or Nothing" (Hard Step)
-        // Dark Mode -> Smooth Clouds (Smooth Step)
-        if (uInvert < 0.5) {
-             visibility = step(threshold, n);
-        } else {
-             visibility = smoothstep(threshold - soft, threshold + 0.1, n);
-        }
+        // Universal Binary "Digital Grit" (Hard Step)
+        float visibility = step(threshold, n);
         
         // DEBUG
         if (uDebug) {
