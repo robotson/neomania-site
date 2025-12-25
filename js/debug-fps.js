@@ -4,6 +4,13 @@
     const panel = document.getElementById('debug-panel');
     if (!panel) return;
 
+    // Toggle Visibility with Shift + D
+    document.addEventListener('keydown', (e) => {
+        if (e.shiftKey && (e.key === 'D' || e.key === 'd')) {
+            panel.classList.toggle('is-visible');
+        }
+    });
+
     const fpsItem = document.createElement('div');
     fpsItem.className = 'debug-panel__item';
     fpsItem.innerHTML = '<span>FPS:</span><span id="debug-fps">--</span>';

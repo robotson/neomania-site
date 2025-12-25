@@ -792,6 +792,8 @@ body {
 
 /*———— DEBUG PANEL ————*/
 .debug-panel {
+  display: none;
+  /* Hidden by default, toggled via Shift+D */
   position: fixed;
   top: 1rem;
   right: 1rem;
@@ -804,10 +806,15 @@ body {
   font-family: "SF Mono", "Consolas", monospace;
   font-size: 0.75rem;
   z-index: 1000;
-  display: flex;
+  /* display: flex; REMOVED - conflicts with display: none */
   flex-direction: column;
   gap: 0.5rem;
   min-width: 180px;
+}
+
+.debug-panel.is-visible {
+  display: flex;
+  /* Restore flex layout when visible */
 }
 
 .debug-panel__title {
@@ -825,6 +832,34 @@ body {
 
 .debug-panel__item span:first-child {
   color: #a0a0a0;
+}
+
+/* Light Theme Overrides for Debug Panel */
+:root.light-theme .debug-panel {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+:root.light-theme .debug-panel__title {
+  color: #008f5d;
+  /* Darker teal for contrast */
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+:root.light-theme .debug-panel__item span:first-child {
+  color: #666;
+}
+
+:root.light-theme .debug-info {
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+:root.light-theme .debug-info h4 {
+  color: #008f5d;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
 }
 
 .episode-list-container {

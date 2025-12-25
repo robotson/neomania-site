@@ -89,6 +89,11 @@ if (themeToggles.length > 0) {
       document.documentElement.classList.toggle("light-theme");
       const isLight = document.documentElement.classList.contains("light-theme");
       localStorage.setItem("theme", isLight ? "light" : "dark");
+
+      // Update Debug Panel
+      const debugTheme = document.getElementById("debug-theme");
+      if (debugTheme) debugTheme.textContent = isLight ? "Light" : "Dark";
+
       console.log(`🎨 THEME: Switched to ${isLight ? "light" : "dark"} theme`);
       console.log(JSON.stringify(getThemeStats("USER_TOGGLE"), null, 2));
     });
@@ -164,3 +169,10 @@ if (emailLink) {
 
 console.log("🚀 MAIN: All main.js initialization complete");
 console.log(JSON.stringify(getThemeStats("COMPLETE"), null, 2));
+
+// Initialize Debug Panel Theme State
+const debugTheme = document.getElementById("debug-theme");
+if (debugTheme) {
+  const isLight = document.documentElement.classList.contains("light-theme");
+  debugTheme.textContent = isLight ? "Light" : "Dark";
+}

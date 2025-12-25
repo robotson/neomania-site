@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (p !== lastP) {
       root.style.setProperty('--p', p);
       lastP = p;
+
+      // Update Debug Panel
+      const debugProgress = document.getElementById('debug-progress');
+      if (debugProgress) debugProgress.textContent = (p * 100).toFixed(1) + '%';
     }
     ticking = false;
   }

@@ -248,6 +248,10 @@ document.addEventListener("DOMContentLoaded", () => {
       updates['--wordmark-opacity'] = wordmarkOpacity;
       updates['--wiggle-amplitude'] = wiggleAmplitude.toFixed(3);
       updates['--wiggle-transform'] = wiggleTransform;
+
+      // Update Debug Panel
+      const debugWiggle = document.getElementById('debug-wiggle');
+      if (debugWiggle) debugWiggle.textContent = (wiggleAmplitude * 100).toFixed(1) + '%';
     }
 
     // Apply all updates in one batch
