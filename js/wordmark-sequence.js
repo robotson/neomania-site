@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     wdth: { min: 80, max: 120 },
     opsz: { min: 14, max: 120 },
     GRAD: { min: -100, max: 100 },
-    slnt: { min: -5, max: 0 },
+    slnt: { min: -10, max: 0 },
     XOPQ: { min: 60, max: 150 },
     XTRA: { min: 350, max: 550 },
     YOPQ: { min: 35, max: 120 },
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Math.random() < 0.5 ? -1 : 1,
       ])
     ),
-    speed: Math.random() * 0.003 + 0.004,
+    speed: Math.random() * 0.002 + 0.001,
   }));
 
   function lerp(a, b, t) {
