@@ -6,9 +6,8 @@
       "appUrl": "https://open.spotify.com/episode/e2tf68e"
     },
     "apple": {
-      "webUrl": "https://podcasts.apple.com/us/podcast/1-building-for-the-day-after-tomorrow-w-joetforhire/id1790739651?i=1000684146243&uo=4",
-      "episodeId": 1000684146243,
-      "trackName": "1. Building for the Day After Tomorrow w/ @joetforhire"
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_1",
+      "episodeId": null
     },
     "anchor": {
       "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/97015502/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-0-14%2F62eacf3e-029a-c112-0a80-c7ecd78006c2.mp3",
@@ -22,9 +21,8 @@
       "appUrl": "https://open.spotify.com/episode/e2tt5nt"
     },
     "apple": {
-      "webUrl": "https://podcasts.apple.com/us/podcast/2-from-printing-press-to-torment-nexus-w-ontologic/id1790739651?i=1000685213725&uo=4",
-      "episodeId": 1000685213725,
-      "trackName": "2. From Printing Press to Torment Nexus w/ @_ontologic"
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_2",
+      "episodeId": null
     },
     "anchor": {
       "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/97473725/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-0-23%2F0f91f914-ad85-1f14-5271-d57c68ce4dcc.mp3",
@@ -54,9 +52,8 @@
       "appUrl": "https://open.spotify.com/episode/e2v2ttl"
     },
     "apple": {
-      "webUrl": "https://podcasts.apple.com/us/podcast/4-radical-friendship-and-homie-futurism-w-aintershow/id1790739651?i=1000693881546&uo=4",
-      "episodeId": 1000693881546,
-      "trackName": "4. Radical Friendship and Homie Futurism w/ @AinterShow"
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_4",
+      "episodeId": null
     },
     "anchor": {
       "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/98710901/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-1-19%2Fe25ce6dc-8a6b-3311-4697-3a8aef94ac0f.mp3",
@@ -70,9 +67,8 @@
       "appUrl": "https://open.spotify.com/episode/e2vbc3o"
     },
     "apple": {
-      "webUrl": "https://podcasts.apple.com/us/podcast/5-midtopias-and-blue-sky-futures-w-lastnpcalex/id1790739651?i=1000695775945&uo=4",
-      "episodeId": 1000695775945,
-      "trackName": "5. Midtopias and Blue Sky Futures w/ LastNPCAlex"
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_5",
+      "episodeId": null
     },
     "anchor": {
       "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/98987576/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-1-25%2F7e728f07-b4f8-557b-eef9-f7e764b42078.mp3",
@@ -86,9 +82,8 @@
       "appUrl": "https://open.spotify.com/episode/e2vnjnv"
     },
     "apple": {
-      "webUrl": "https://podcasts.apple.com/us/podcast/6-memetic-alignment-and-vector-vibes-w-deepfates/id1790739651?i=1000697796219&uo=4",
-      "episodeId": 1000697796219,
-      "trackName": "6. Memetic Alignment and Vector Vibes w/ @deepfates"
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_6",
+      "episodeId": null
     },
     "anchor": {
       "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/99388607/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-2-5%2F7b8f5817-75ed-97a2-a03e-306a669cf57a.mp3",
@@ -102,28 +97,11 @@
       "appUrl": "https://open.spotify.com/episode/e30fb80"
     },
     "apple": {
-      "webUrl": "https://podcasts.apple.com/us/podcast/7-stochastic-funnerism-and-autonomous-media-w-somewheresy/id1790739651?i=1000700225650&uo=4",
-      "episodeId": 1000700225650,
-      "trackName": "7. Stochastic Funnerism and Autonomous Media w/ @somewheresy"
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_7",
+      "episodeId": null
     },
     "anchor": {
       "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/100166336/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-2-21%2F23704d16-b2c1-f6e8-b0c0-e8a0b9eba48d.mp3",
-      "rssUrl": "https://anchor.fm/s/ffb36578/podcast/rss"
-    }
-  },
-  "8": {
-    "spotify": {
-      "webUrl": "https://podcasters.spotify.com/pod/show/neomania/episodes/8--Field-Tape-Vibe-Camp-2025-e34ii5u",
-      "episodeId": "e34ii5u",
-      "appUrl": "https://open.spotify.com/episode/e34ii5u"
-    },
-    "apple": {
-      "webUrl": "https://podcasts.apple.com/us/podcast/8-field-tape-vibe-camp-2025/id1790739651?i=1000714030462&uo=4",
-      "episodeId": 1000714030462,
-      "trackName": "8. Field Tape: Vibe Camp 2025"
-    },
-    "anchor": {
-      "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/104466046/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-5-22%2Fca98c5ae-5ffc-8b6e-990c-08eb3f7ed3bc.mp3",
       "rssUrl": "https://anchor.fm/s/ffb36578/podcast/rss"
     }
   },
@@ -134,12 +112,41 @@
       "appUrl": "https://open.spotify.com/episode/e3796jn"
     },
     "apple": {
-      "webUrl": "https://podcasts.apple.com/us/podcast/9-cultural-fracking-and-world-running-w-thejaymo/id1790739651?i=1000723396200&uo=4",
-      "episodeId": 1000723396200,
-      "trackName": "9. Cultural Fracking and World Running w/ @thejaymo"
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_9",
+      "episodeId": null
     },
     "anchor": {
       "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/107305015/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-7-25%2F89333e35-ffb0-ed6c-9d7d-303eb845360a.mp3",
+      "rssUrl": "https://anchor.fm/s/ffb36578/podcast/rss"
+    }
+  },
+  "10": {
+    "spotify": {
+      "webUrl": "https://podcasters.spotify.com/pod/show/neomania/episodes/10--Capital-Bending-and-Gray-Market-Futures-w-Chairman-Birb-e38maed",
+      "episodeId": "e38maed",
+      "appUrl": "https://open.spotify.com/episode/e38maed"
+    },
+    "apple": {
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_10",
+      "episodeId": null
+    },
+    "anchor": {
+      "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/108783501/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2025-8-25%2Fc613a6af-d850-1403-3064-2d22de78ce3a.mp3",
+      "rssUrl": "https://anchor.fm/s/ffb36578/podcast/rss"
+    }
+  },
+  "11": {
+    "spotify": {
+      "webUrl": "https://podcasters.spotify.com/pod/show/neomania/episodes/11-DIY-Food-Futures-and-Synthetic-Ecology-w-cyber_plantae-e3hc64k",
+      "episodeId": "e3hc64k",
+      "appUrl": "https://open.spotify.com/episode/e3hc64k"
+    },
+    "apple": {
+      "webUrl": "https://podcasts.apple.com/us/podcast/neomania/id1790739651?i=EPISODE_11",
+      "episodeId": null
+    },
+    "anchor": {
+      "audioUrl": "https://anchor.fm/s/ffb36578/podcast/play/117888596/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-3-3%2F178c65e1-0cb6-1a29-c575-35408a3a1ad6.mp3",
       "rssUrl": "https://anchor.fm/s/ffb36578/podcast/rss"
     }
   }

@@ -14,7 +14,7 @@ const RSS_URL = "https://anchor.fm/s/ffb36578/podcast/rss";
 function generateSlug(title) {
   if (!title) return "";
 
-  const cleanedTitle = title.replace(/^\d+\.\s*/, "").replace(/\s+w\/.*$/i, ""); // Case-insensitive removal of " w/..."
+  const cleanedTitle = title.replace(/^\d+[.:]\s*/, "").replace(/\s+w\/.*$/i, ""); // Case-insensitive removal of " w/..."
 
   const slug = cleanedTitle
     .toLowerCase()
@@ -44,7 +44,7 @@ export const fetchEpisodes = async () => {
       displayTitle = originalTitle.replace(guestMatch[0], ""); // The title without the guest part
     }
     // Also strip the number prefix for the display title
-    displayTitle = displayTitle.replace(/^\d+\.\s*/, "");
+    displayTitle = displayTitle.replace(/^\d+[.:]\s*/, "");
 
     return {
       guid: item.guid,
@@ -56,7 +56,8 @@ export const fetchEpisodes = async () => {
       contentSnippet: item.contentSnippet,
       content: item.content,
       enclosure: item.enclosure,
-      episodeNumber: feed.items.length - index,
+      // Prefer the number in the title ("7." or "11:"); feed position breaks if an episode is removed
+      episodeNumber: parseInt(originalTitle.match(/^(\d+)[.:]/)?.[1], 10) || feed.items.length - index,
       slug: generateSlug(originalTitle),
       publishedDate: new Date(item.pubDate),
       audioUrl: item.enclosure?.url,

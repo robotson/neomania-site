@@ -2,109 +2,50 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Development Commands
+## Commands
 
-- `npm run dev` - Start development server with live reload (opens http://localhost:8080)
-- `npm run build` - Build site for production to `_site/` directory  
-- `npm run serve` - Serve built site without watching for changes
-- `npm run fetch-episodes` - Fetch episode data from RSS feed and cache to `_cache/`
+- `npm run dev` - Dev server with live reload (http://localhost:8080)
+- `npm run build` - Build to `_site/`
+- `npm run fetch-episodes` - Fetch RSS, cache to `_cache/episodes.json`, scaffold new episode dirs
+- `npm run test:perf` - Playwright perf test (WebKit)
 
-**Important**: For debugging, never run `serve` - the developer is already running `npm run dev`. Use `build` to test if the build works.
+**Important**: Never run `serve` or `dev` — the developer is already running `npm run dev`. Use `npm run build` to check the build.
 
-## Architecture Overview
+## Overview
 
-This is an **Eleventy static site** for a podcast called Neomania. The site uses a **two-phase data pipeline**:
-
-1. **Data Fetching** (manual): `npm run fetch-episodes` calls `fetchEpisodes()` from `src/_data/episodes.js` to pull RSS data and cache it
-2. **Site Building** (automatic): Eleventy reads cached data and merges it with episode annotations during build
-
-### Key Architecture Patterns
-
-- **ESM-only codebase**: All JS files use `import`/`export` syntax (never `require`/`module.exports`)
-- **Data layer separation**: Complex logic lives in `src/_data/*.js`, templates stay simple
-- **Episode enhancement**: RSS data gets merged with manual annotations from `episodeAnnotations.js`
-- **Collection-based episodes**: Episodes are generated from markdown files in `src/episodes/*/index.md`
-
-## Critical File Structure
+Eleventy 3 static site for the Neomania podcast (neomania.net). ESM-only (`import`/`export`, never `require`). Plain CSS and vanilla JS — no bundler, no preprocessor.
 
 ```
+.eleventy.js               # Config: episodes collection, filters, icon shortcode, slug generation
 src/_data/
-├── episodes.js          # RSS fetching logic + empty default export
-├── episodeAnnotations.js # Manual episode enhancements/corrections
-└── meta.js             # Site metadata
-
-src/episodes/XX/
-└── index.md            # Episode content files (drive the collections)
-
-.eleventy.js            # Main config with collections, filters, and slug generation
+├── episodes.js            # fetchEpisodes() RSS logic (default export is an unused empty array)
+├── episodeAnnotations.js  # Manual per-episode overrides, keyed by slug
+├── platformLinks.json     # Spotify/Apple URLs, keyed by episode number
+└── meta.js                # Build timestamp, used as ?v= cache-buster on scripts
+src/_layouts/              # base.njk, episode.njk
+src/_includes/components/  # hero, episode-catalog, nav, theme-toggle, debug-panel, ...
+src/_includes/icons/       # SVGs for the {% icon "name" %} shortcode
+src/episodes/NN/index.md   # One file per episode; drives the collection, permalink /ep/NN/
+scripts/                   # fetch-episodes, platform-link fetchers, catalog export
+css/, js/, images/         # Passthrough-copied as-is
 ```
 
-## Eleventy-Specific Rules
+## Episode Data Flow
 
-### Collections
-Episodes are built via the `episodes` collection in `.eleventy.js`, which:
-- Reads from `src/episodes/*/index.md` files
-- Generates slugs automatically via `generateSlug()`
-- Merges data with `episodeAnnotations.js` enhancements
-- Adds computed fields like `hasCustomContent`, `hasTranscript`
+1. `npm run fetch-episodes` pulls the RSS feed, caches it, and writes `src/episodes/NN/index.md` (frontmatter + Turndown-converted notes) **only for episodes that don't already have one** — existing files are never overwritten, so hand edits are safe.
+2. At build, the `episodes` collection in `.eleventy.js` reads those markdown files (not the cache), generates a slug from the title, and merges in `episodeAnnotations.js` (`_defaults` + per-slug overrides: `customTitle`, `expandedNotes`, `customSlug`, `guestDisplayName`, `guestPreposition`, `tags`, etc.) and `platformLinks.json`.
+3. Platform links are refreshed separately via `scripts/fetch-apple-episodes.mjs` and `scripts/extract-platform-links.mjs`.
 
-### Data Access in Templates
-- ESM default exports are accessed via `.default` in Nunjucks templates
-- Example: `{% for episode in episodes.default %}` (if using default export)
-- Collections are accessed directly: `{% for episode in collections.episodes %}`
+**Duplication to keep in sync:** `generateSlug()` exists in both `.eleventy.js` and `src/_data/episodes.js`, and the annotation merge exists in both `.eleventy.js` and `episodeAnnotations.merge()` (used by scripts). Change them together.
 
-### Nunjucks Syntax
-- Filters with arguments use parentheses: `{{ title | truncate(200) }}` 
-- Never use Liquid syntax: `{{ title | truncate: 200 }}` ❌
+## Templates
 
-## Frontend Architecture
+- Nunjucks only; filters with args use parentheses: `{{ title | truncate(200) }}` (never Liquid `truncate: 200`)
+- Episodes: `{% for post in collections.episodes %}` → fields on `post.data`
+- Custom filters: `formatDuration` ("HH:MM:SS" → "XHr Ymin"), `padStart`, `date` (supports `"MM/dd/yy"`)
 
-### Component Structure
-- Reusable components go in `src/_includes/components/`
-- Use `{% include "components/component-name.njk" %}` to render
-- Main layouts in `src/_includes/_layouts/`
+## Frontend
 
-### JavaScript Guidelines
-- All DOM manipulation must check element existence first:
-  ```javascript
-  const element = document.querySelector('.selector');
-  if (element) {
-    element.addEventListener('click', handler);
-  }
-  ```
-- Client-side JS files are in `/js/` and get copied via passthrough
-
-### Styling
-- CSS files in `/css/` get copied via passthrough copy
-- No preprocessor - plain CSS with modern features
-
-## Data Pipeline Details
-
-### Episode Data Flow
-1. `npm run fetch-episodes` → `fetchEpisodes()` → writes to `_cache/episodes.json`
-2. Build time → `.eleventy.js` reads episode markdown files
-3. Collection processing merges cached RSS data with annotations
-4. Result: Enhanced episode objects with all metadata
-
-### Episode Annotations System
-`episodeAnnotations.js` provides:
-- `_defaults` - Applied to all episodes
-- Per-episode overrides by slug key
-- Custom titles, expanded notes, transcripts, guest links, corrections
-- Computed flags like `hasCustomContent`
-
-## Common Patterns
-
-### Adding New Episodes
-1. RSS provides basic data via `npm run fetch-episodes`
-2. Create `src/episodes/XX/index.md` with frontmatter
-3. Add enhancements to `episodeAnnotations.js` if needed
-4. Slugs auto-generate from titles
-
-### Custom Filters Available
-- `formatDuration` - Converts "HH:MM:SS" to "XHr Ymin"
-- `padStart` - String padding (like JS padStart)
-- `date` - Date formatting including "MM/dd/yy"
-
-### Icon System
-Use `{% icon "icon-name" %}` shortcode to inline SVGs from `src/_includes/icons/`
+- Home page (`src/index.html`): fixed hero with animated wordmark that FLIPs into the nav on scroll, episode catalog scrolls up underneath; WebGL grain overlay (`js/grain-shader.js`); episode hover drives the background (`js/background-controller.js`); light/dark theme in `js/main.js`.
+- Scripts are loaded explicitly in `src/_layouts/base.njk` — a new JS file does nothing until added there.
+- DOM code must check elements exist before using them (`if (el) { ... }`).

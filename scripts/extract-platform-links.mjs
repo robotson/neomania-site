@@ -70,8 +70,8 @@ fs.writeFileSync(outputFile, JSON.stringify(platformLinks, null, 2));
 console.log(`\nPlatform links saved to: ${outputFile}`);
 
 // Also save to cache for backwards compatibility
-const cacheFile = path.join(__dirname, '..', '_cache', 'platform-links.json');
-fs.writeFileSync(cacheFile, JSON.stringify(platformLinks, null, 2));
+const platformCacheFile = path.join(__dirname, '..', '_cache', 'platform-links.json');
+fs.writeFileSync(platformCacheFile, JSON.stringify(platformLinks, null, 2));
 
 console.log('\nTo find your Apple Podcasts ID:');
 console.log('1. Search for "Neomania" on Apple Podcasts');

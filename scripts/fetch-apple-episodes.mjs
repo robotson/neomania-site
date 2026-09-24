@@ -40,7 +40,7 @@ async function fetchAppleEpisodes() {
     
     episodes.forEach((episode, index) => {
       // Extract episode number from title if possible
-      const titleMatch = episode.trackName.match(/^(\d+)\./);
+      const titleMatch = episode.trackName.match(/^(\d+)[.:]/);
       const episodeNum = titleMatch ? parseInt(titleMatch[1]) : null;
       
       const episodeInfo = {

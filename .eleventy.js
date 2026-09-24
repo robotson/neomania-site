@@ -24,7 +24,7 @@ try {
 function generateSlug(title) {
   if (!title) return "";
 
-  const cleanedTitle = title.replace(/^\d+\.\s*/, "").replace(/\s+w\/.*$/i, ""); // Case-insensitive removal of " w/..."
+  const cleanedTitle = title.replace(/^\d+[.:]\s*/, "").replace(/\s+w\/.*$/i, ""); // Case-insensitive removal of " w/..."
 
   const slug = cleanedTitle
     .toLowerCase()
