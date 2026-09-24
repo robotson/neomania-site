@@ -1,6 +1,6 @@
 ---
 layout: episode.njk
-title: "11: DIY Food Futures and Synthetic Ecology w/ @cyber_plantae"
+title: "11. DIY Food Futures and Synthetic Ecology w/ @cyber_plantae"
 displayTitle: "DIY Food Futures and Synthetic Ecology"
 guest: "@cyber_plantae"
 date: 2026-04-03T05:37:35.000Z
