@@ -1,7 +1,7 @@
 ---
 layout: episode.njk
-title: "3. Sex 3 and Superstimulus w/ Warren Chortle"
-displayTitle: "Sex 3 and Superstimulus"
+title: "3. Superstimulus and Sex 3 w/ Warren Chortle"
+displayTitle: "Superstimulus and Sex 3"
 guest: "Warren Chortle"
 date: 2025-01-30T00:10:43.000Z
 guid: 477e2679-22a7-4792-8345-6635e4e75130
